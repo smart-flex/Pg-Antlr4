@@ -8,7 +8,7 @@ options { tokenVocab=PgSQLIncludeLexer; }
 functionDefinition
     : CREATE FUNCTION identifier LPAREN RPAREN RETURNS VOID AS
       DECL_DOLLAR BEGIN (seq_of_statements)? END SEMI DECL_DOLLAR
-      LANGUAGE LANGUAGE_PG SEMI
+      LANGUAGE_IDENT SEMI
     ;
 
 identifier
@@ -43,3 +43,4 @@ functionParams
 functionParamList
     : identifier (COMMA identifier)*
     ;
+

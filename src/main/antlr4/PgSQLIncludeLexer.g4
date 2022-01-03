@@ -15,7 +15,8 @@ AS          :   [Aa][Ss];
 NULL        :   [Nn][Uu][Ll][Ll];
 PERFORM     :   [Pp][Ee][Rr][Ff][Oo][Rr][Mm];
 
-LANGUAGE_PG : '\'plpgsql\'';
+LANGUAGES : '\'plpgsql\'' | 'plpgsql';
+LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
 
 SEMI    : ';' ;
 LPAREN  : '(' ;
@@ -23,5 +24,6 @@ RPAREN  : ')' ;
 IDENTF  : ('a' .. 'z' | 'A' .. 'Z') ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_')* ;
 COMMA   : ',' ;
 
-DECL_DOLLAR : '$$';
+DECL_DOLLAR : '$$' || '$BODY$';
 
+WS  : [ \t\r\n]+ -> skip ;

@@ -1,0 +1,9 @@
+CREATE FUNCTION p01_void ()
+    RETURNS void AS
+$BODY$
+BEGIN
+
+END;
+$BODY$
+LANGUAGE plpgsql;
+

@@ -10,12 +10,14 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <antlr.version>4.9.2</antlr.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.9.2</version>
+            <version>${antlr.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -40,7 +42,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.9.2</version>
+                <version>${antlr.version}</version>
                 <configuration>
                     <sourceDirectory>${basedir}/src/main/antlr4</sourceDirectory>
                     <includes>
