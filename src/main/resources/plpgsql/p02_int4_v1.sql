@@ -1,0 +1,7 @@
+CREATE OR REPLACE FUNCTION p02_int4_v1()
+RETURNS int4
+LANGUAGE plpgsql AS $$
+BEGIN
+    RETURN 241;
+END; $$;
+

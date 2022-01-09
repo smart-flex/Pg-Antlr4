@@ -1,4 +1,4 @@
-CREATE FUNCTION p01_void ()
+CREATE FUNCTION p01_void_v1 ()
     RETURNS void AS
 $BODY$
 BEGIN
@@ -6,4 +6,3 @@ BEGIN
 END;
 $BODY$
 LANGUAGE plpgsql;
-

@@ -1,14 +1,25 @@
 parser grammar PgSQLIncludeParser;
 
+import PgSQLParserDataType, PgSQLParserExpression;
+
 @header {
 package ru.smartflex.tools.pg;
 }
 options { tokenVocab=PgSQLIncludeLexer; }
 
 functionDefinition
-    : CREATE FUNCTION identifier LPAREN RPAREN RETURNS VOID AS
-      DECL_DOLLAR BEGIN (seq_of_statements)? END SEMI DECL_DOLLAR
-      LANGUAGE_IDENT SEMI
+    : fuunctionCreateDef identifier LPAREN RPAREN functionReturns
+    (LANGUAGE_IDENT)?
+    AS
+    DECL_DOLLAR
+    BEGIN (seq_of_statements)? (return_statement)?
+    END
+    ( (SEMI DECL_DOLLAR LANGUAGE_IDENT SEMI)
+      |
+      (DECL_DOLLAR SEMI)
+      |
+      (SEMI DECL_DOLLAR SEMI)
+    )
     ;
 
 identifier
@@ -32,6 +43,9 @@ perform_statement
     : PERFORM functionInvocation
     ;
 
+return_statement
+    : RETURN expression SEMI;
+
 functionInvocation
     : identifier functionParams?
     ;
@@ -43,4 +57,10 @@ functionParams
 functionParamList
     : identifier (COMMA identifier)*
     ;
+
+fuunctionCreateDef
+    : CREATE (OR REPLACE)? FUNCTION;
+
+functionReturns
+    : RETURNS pg_type_enum;
 
