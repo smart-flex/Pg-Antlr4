@@ -109,6 +109,6 @@ fragment EXPONENT   : ('e') ('+' | '-')? ('0' .. '9') + ;
 PLUS    : '+' ;
 MINUS   : '-' ;
 NUM_INT : ('0' .. '9') +;
-
+STRING_LITERAL  : '\'' ('\'\'' | ~ ('\''))* '\'' ;
 
 WS  : [ \t\r\n]+ -> skip ;
