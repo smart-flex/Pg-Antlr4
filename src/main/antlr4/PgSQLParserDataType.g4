@@ -1,6 +1,6 @@
 parser grammar PgSQLParserDataType;
 
-pg_type_enum
+pgTypeEnum
     : SMALLINT
     | INT2
     | INTEGER

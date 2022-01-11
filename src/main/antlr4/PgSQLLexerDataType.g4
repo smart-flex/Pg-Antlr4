@@ -85,7 +85,7 @@ XML	:	[Xx][Mm][Ll];
 //Transaction IDs and snapshots
 TXID_SNAPSHOT	:	[Tt][Xx][Ii][Dd][_][Ss][Nn][Aa][Pp][Ss][Hh][Oo][Tt];
 
-// Pseudo-Types
+//Pseudo-Types
 VOID        :   [Vv][Oo][Ii][Dd];
 
 //any // TODO
@@ -99,6 +99,8 @@ VOID        :   [Vv][Oo][Ii][Dd];
 //record
 //trigger
 
+//Other types
+TABLE       :   [Tt][Aa][Bb][Ll][Ee];
 
 //expressions
 

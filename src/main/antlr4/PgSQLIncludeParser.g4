@@ -12,7 +12,7 @@ functionDefinition
     (LANGUAGE_IDENT)?
     AS
     DECL_DOLLAR
-    BEGIN (seq_of_statements)? (return_statement)?
+    BEGIN (seqOfStatements)? (returnStatement)?
     END
     ( (SEMI DECL_DOLLAR LANGUAGE_IDENT SEMI)
       |
@@ -26,25 +26,27 @@ identifier
    : IDENTF
    ;
 
-seq_of_statements
+seqOfStatements
     : (statement ';')+
     ;
 
 statement
-    : null_statement
-    | perform_statement
+    : nullStatement
+    | performStatement
     ;
 
-null_statement
+nullStatement
     : NULL
     ;
 
-perform_statement
+performStatement
     : PERFORM functionInvocation
     ;
 
-return_statement
-    : RETURN expression SEMI;
+returnStatement
+    : RETURN expression SEMI
+    | RETURN QUERY // TODO here has to be selectStatement rule
+    ;
 
 functionInvocation
     : identifier functionParams?
@@ -62,5 +64,24 @@ fuunctionCreateDef
     : CREATE (OR REPLACE)? FUNCTION;
 
 functionReturns
-    : RETURNS pg_type_enum;
+    : RETURNS pgTypeEnum
+    | RETURNS TABLE tableParams
+    ;
 
+tableParams
+    : LPAREN tableParamDefinitionList RPAREN
+    ;
+
+tableParamDefinitionList
+   : tableParamDefinition (COMMA tableParamDefinition)*
+   ;
+
+tableParamDefinition
+   : identifier pgTypeEnum
+   ;
+
+/*
+selectStatement
+   : (SELECT | WITH) etc....
+   ;
+*/

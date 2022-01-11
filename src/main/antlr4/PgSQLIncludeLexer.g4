@@ -1,6 +1,6 @@
 lexer grammar PgSQLIncludeLexer;
 
-import PgSQLLexerDataType, PgSQLLexerOperators, PgSQLLexerEnd;
+import PgSQLLexerDataType, PgSQLLexerOperators, PgSQLLexerSelect, PgSQLLexerEnd;
 
 @header {
 package ru.smartflex.tools.pg;
@@ -22,18 +22,11 @@ PERFORM     :   [Pp][Ee][Rr][Ff][Oo][Rr][Mm];
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
 
-
 SEMI    : ';' ;
 LPAREN  : '(' ;
 RPAREN  : ')' ;
 
-// WOW: IDENTF brokes VOID. VOID must be defined before IDENTF
-////IDENTF  : ('a' .. 'z' | 'A' .. 'Z') ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_')* ;
-//VOID        :   [Vv][Oo][Ii][Dd];
-
 COMMA   : ',' ;
-
 
 DECL_DOLLAR : '$$' | '$BODY$';
 
-//WS  : [ \t\r\n]+ -> skip ;
