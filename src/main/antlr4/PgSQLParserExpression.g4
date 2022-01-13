@@ -1,6 +1,6 @@
 parser grammar PgSQLParserExpression;
 
-expression
+constantExpression
     : string
     | intValue
     | realValue
@@ -29,3 +29,29 @@ sign
    : PLUS
    | MINUS;
 
+anonymousParameter
+   : ANONYMOUS_PAR;
+
+operators
+   : PLUS
+   | MINUS
+   | OR
+   | AND
+   | NOT
+   | IS
+   | (IS NULL)
+   | (IS NOT NULL)
+   | BETWEEN
+   | IN
+   | EQUAL
+   | NOT_EQUAL
+   | NOT_EQUAL2
+   | ASSIGN
+   | PERCENT
+   | ASTERISK
+   | DEVIDE
+   ;
+
+raiseStatement
+   : RAISE STRING_LITERAL SEMI
+   ;

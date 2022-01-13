@@ -8,13 +8,13 @@ package ru.smartflex.tools.pg;
 options { tokenVocab=PgSQLIncludeLexer; }
 
 functionDefinition
-    : fuunctionCreateDef identifier LPAREN RPAREN functionReturns
-    (LANGUAGE_IDENT)?
+    : fuunctionCreateDef identifier functionParamsDef functionReturns
+    (functionAttributes)*
     AS
     DECL_DOLLAR
     BEGIN (seqOfStatements)? (returnStatement)?
     END
-    ( (SEMI DECL_DOLLAR LANGUAGE_IDENT SEMI)
+    ( (SEMI DECL_DOLLAR functionAttributes SEMI)
       |
       (DECL_DOLLAR SEMI)
       |
@@ -27,24 +27,27 @@ identifier
    ;
 
 seqOfStatements
-    : (statement ';')+
+    : (statement)+
     ;
 
 statement
     : nullStatement
     | performStatement
+    | raiseStatement
+    | ifDef
     ;
 
 nullStatement
-    : NULL
+    : NULL SEMI
     ;
 
 performStatement
-    : PERFORM functionInvocation
+    : PERFORM functionInvocation SEMI
     ;
 
 returnStatement
-    : RETURN expression SEMI
+    : RETURN constantExpression SEMI
+    | RETURN anonymousParameter SEMI
     | RETURN QUERY // TODO here has to be selectStatement rule
     ;
 
@@ -80,6 +83,37 @@ tableParamDefinition
    : identifier pgTypeEnum
    ;
 
+functionParamsDef
+    : LPAREN functionParamDefinitionList RPAREN
+    ;
+
+functionParamDefinitionList
+    : functionParamDefinition (COMMA functionParamDefinition)*
+    ;
+
+functionParamDefinition
+    : identifier? pgTypeEnum
+    ;
+
+// Unfortunately, antlr4 does not allow permutation (to combain statements in any order)
+functionAttributes
+    : LANGUAGE_IDENT
+    | MD_NULL_1 
+    | MD_NULL_2 
+    | MD_NULL_3
+    ;
+
+ifDef
+    : IF complexExpression THEN
+      (seqOfStatements)?
+      END_IF SEMI
+    ;
+
+complexExpression
+    : (anonymousParameter | identifier | constantExpression)
+    operators?
+    (anonymousParameter | identifier | constantExpression)?
+    ;
 /*
 selectStatement
    : (SELECT | WITH) etc....

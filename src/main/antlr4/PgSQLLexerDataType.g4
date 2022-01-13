@@ -113,4 +113,6 @@ MINUS   : '-' ;
 NUM_INT : ('0' .. '9') +;
 STRING_LITERAL  : '\'' ('\'\'' | ~ ('\''))* '\'' ;
 
+ANONYMOUS_PAR : '$' ('0' .. '9') +;
+
 WS  : [ \t\r\n]+ -> skip ;

@@ -1,7 +1,8 @@
 CREATE OR REPLACE FUNCTION p04_int8_strict(int8)
 RETURNS int8
+LANGUAGE plpgsql 
 STRICT 
-LANGUAGE plpgsql AS $$
+AS $$
 BEGIN
     IF $1 IS NULL THEN
        RAISE 'Achtung: NULL argument';
