@@ -26,5 +26,7 @@ public class TestPgPlSql {
         testValidityPlPgSql("plpgsql\\p02_int4_v1.sql");
         testValidityPlPgSql("plpgsql\\p03_table.sql");
         testValidityPlPgSql("plpgsql\\p04_int8.sql");
+        testValidityPlPgSql("plpgsql\\p04_int8_null_input.sql");
+        testValidityPlPgSql("plpgsql\\p04_int8_strict.sql");
     }
 }
