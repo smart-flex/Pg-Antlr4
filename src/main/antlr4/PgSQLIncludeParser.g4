@@ -9,12 +9,12 @@ options { tokenVocab=PgSQLIncludeLexer; }
 
 functionDefinition
     : fuunctionCreateDef identifier functionParamsDef functionReturns
-    (functionAttributes)*
+    (seqOfFunctionAttributes)*
     AS
     DECL_DOLLAR
     BEGIN (seqOfStatements)? (returnStatement)?
     END
-    ( (SEMI DECL_DOLLAR functionAttributes SEMI)
+    ( (SEMI DECL_DOLLAR seqOfFunctionAttributes SEMI)
       |
       (DECL_DOLLAR SEMI)
       |
@@ -95,12 +95,13 @@ functionParamDefinition
     : identifier? pgTypeEnum
     ;
 
-// Unfortunately, antlr4 does not allow permutation (to combain statements in any order)
-functionAttributes
+seqOfFunctionAttributes
+    : (functionAttribute)+
+    ;
+
+functionAttribute
     : LANGUAGE_IDENT
-    | MD_NULL_1 
-    | MD_NULL_2 
-    | MD_NULL_3
+    | (MD_NULL_1 | MD_NULL_2 | MD_NULL_3)
     ;
 
 ifDef

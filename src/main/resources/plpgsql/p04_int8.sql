@@ -1,8 +1,7 @@
 CREATE OR REPLACE FUNCTION p04_int8(int8)
 RETURNS int8
-LANGUAGE plpgsql 
 CALLED ON NULL INPUT
-AS $$
+LANGUAGE plpgsql AS $$
 BEGIN
     IF $1 IS NULL THEN
        RAISE 'Achtung: NULL argument';
