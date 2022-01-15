@@ -22,6 +22,7 @@ public class TestPgPlSql {
         testValidityPlPgSql("plpgsql\\p01_void.sql");
         testValidityPlPgSql("plpgsql\\p01_void_v1.sql");
         testValidityPlPgSql("plpgsql\\p01_void_perform.sql");
+        testValidityPlPgSql("plpgsql\\p01_void_perform_v1.sql");
         testValidityPlPgSql("plpgsql\\p02_int4.sql");
         testValidityPlPgSql("plpgsql\\p02_int4_v1.sql");
         testValidityPlPgSql("plpgsql\\p03_table.sql");

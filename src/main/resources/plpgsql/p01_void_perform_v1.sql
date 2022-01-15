@@ -1,10 +1,10 @@
-CREATE FUNCTION p02_void_perform ()
+CREATE FUNCTION p02_void_perform_v1 ()
     RETURNS void AS
 $$
 BEGIN
 
-   NULL;
    PERFORM p01_void();
+   NULL;
 
 END;
 $$
