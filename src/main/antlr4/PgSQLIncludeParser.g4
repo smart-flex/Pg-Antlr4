@@ -12,6 +12,7 @@ functionDefinition
     (seqOfFunctionAttributes)*
     AS
     DECL_DOLLAR
+    DECLARE? variableDefinitions
     BEGIN (seqOfStatements)? (returnStatement)?
     END
     ( (SEMI DECL_DOLLAR seqOfFunctionAttributes SEMI)
@@ -48,7 +49,7 @@ performStatement
 returnStatement
     : RETURN constantExpression SEMI
     | RETURN anonymousParameter SEMI
-    | RETURN QUERY // TODO here has to be selectStatement rule
+    | RETURN QUERY QUERY_TEXT
     ;
 
 functionInvocation
@@ -112,9 +113,79 @@ ifDef
 
 complexExpression
     : (anonymousParameter | identifier | constantExpression)
-    operators?
-    (anonymousParameter | identifier | constantExpression)?
+      operators?
+      (anonymousParameter | identifier | constantExpression)?
     ;
+
+// types definition
+
+variableDefinitions
+    : (variableDefinition)*
+    ;
+
+variableDefinition
+   : identifier (CONSTANT)? dataType
+   ;
+
+dataType
+    : usualType
+    | booleanType
+    | cursorType
+    ;
+
+booleanType : BOOL_VAL_START BOOL_ASSIGN? BOOL_VAL? BOOL_VAL_END;
+
+usualType
+    : (   pgTypeEnum
+        | (identifier PERCENT ROWTYPE)
+        | (identifier DOT identifier PERCENT TYPE)
+      )
+      precisionClause?
+      NOT_NULL?
+      (DEFAULT | ASSIGN)?
+      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation)?
+      SEMI
+     ;
+
+precisionClause
+    : LPAREN NUM_INT (COMMA NUM_INT)* RPAREN
+    ;
+
+// cursor definition
+
+cursorType
+    : (REFCURSOR SEMI)
+    | (NO? SCROLL? CURSOR (FOR | IS) sqlQuery) 
+    | (CURSOR cursorParams? (FOR | IS) sqlQuery) 
+    ;
+
+sqlQuery
+    : QUERY_TEXT
+    ;
+
+cursorParams
+    : LPAREN cursorParamDefinitionList RPAREN
+    ;
+
+cursorParamDefinitionList
+   : cursorParamDefinition (COMMA cursorParamDefinition)*
+   ;
+
+cursorParamDefinition
+    : identifier pgTypeEnum
+    ;
+
+
+/*
+precisionPart
+    : LPAREN (unsignedInteger) (COMMA unsignedInteger)? RPAREN
+    ;
+
+unsignedInteger
+   : NUM_INT
+   ;
+*/
+
 /*
 selectStatement
    : (SELECT | WITH) etc....

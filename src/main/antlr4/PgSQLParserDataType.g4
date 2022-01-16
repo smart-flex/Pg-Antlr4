@@ -68,4 +68,5 @@ pgTypeEnum
 
     | TXID_SNAPSHOT
 
-    | VOID;
+    | VOID
+    | RECORD;

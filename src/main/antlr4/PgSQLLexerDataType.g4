@@ -96,7 +96,9 @@ VOID        :   [Vv][Oo][Ii][Dd];
 //cstring
 //internal
 //language_handler
-//record
+
+RECORD      :   [Rr][Ee][Cc][Oo][Rr][Dd];
+
 //trigger
 
 //Other types
@@ -104,15 +106,35 @@ TABLE       :   [Tt][Aa][Bb][Ll][Ee];
 
 //expressions
 
+// NUM_INT MUST BE before NUM_REAL or we got crash
+NUM_INT : ('0' .. '9') +;
+
 NUM_REAL    : ('0' .. '9') + (('.' ('0' .. '9') + (EXPONENT)?)? | EXPONENT) ;
 ESC_STRING_LITERAL    : [Ee] '\'' (~'\'')+ '\'';
 BIT_STRING_LITERAL    : ([Bb] | [Xx]) '\'' (~'\'')+ '\'';
 fragment EXPONENT   : ('e') ('+' | '-')? ('0' .. '9') + ;
 PLUS    : '+' ;
 MINUS   : '-' ;
-NUM_INT : ('0' .. '9') +;
 STRING_LITERAL  : '\'' ('\'\'' | ~ ('\''))* '\'' ;
 
 ANONYMOUS_PAR : '$' ('0' .. '9') +;
 
 WS  : [ \t\r\n]+ -> skip ;
+
+// boolean
+fragment
+TRUE_true   : [Tt][Rr][Uu][Ee];
+fragment
+BOOL_TRUE_frag   : TRUE_true | ('\'' TRUE_true '\'') | '\'t\'' | '\'y\'' | '\'yes\'' | '\'on\'' | '\'1\'' | '1';
+fragment
+FALSE_false : [Ff][Aa][Ll][Ss][Ee];
+fragment
+BOOL_FALSE_frag : FALSE_false | ('\'' FALSE_false '\'') | '\'f\'' | '\'n\'' | '\'no\'' |  '\'off\'' | '\'0\'' | '0';
+
+BOOL_VAL_START  : WS (BOOL | BOOLEAN)  -> pushMode(INSIDE_BOOL_VAL) ;
+
+mode INSIDE_BOOL_VAL;
+BOOL_VAL_END    : SEMI   -> popMode ;
+BOOL_ASSIGN     : ASSIGN ;
+BOOL_VAL        : (BOOL_TRUE_frag | BOOL_FALSE_frag);
+BOLL_WS         : [ \t\r\n]+ -> skip ;

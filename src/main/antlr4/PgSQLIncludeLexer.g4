@@ -20,6 +20,17 @@ NULL        :   [Nn][Uu][Ll][Ll];
 PERFORM     :   [Pp][Ee][Rr][Ff][Oo][Rr][Mm];
 RAISE       :   [Rr][Aa][Ii][Ss][Ee];
 
+DECLARE     :   [Dd][Ee][Cc][Ll][Aa][Rr][Ee];
+ROWTYPE     :   [Rr][Oo][Ww][Tt][Yy][Pp][Ee];
+CONSTANT    :   [Cc][Oo][Nn][Ss][Tt][Aa][Nn][Tt];
+NOT_NULL    :   [Nn][Oo][Tt]WS[Nn][Uu][Ll][Ll];
+DEFAULT     :   [Dd][Ee][Ff][Aa][Uu][Ll][Tt];
+TYPE        :   [Tt][Yy][Pp][Ee];
+CURSOR      :   [Cc][Uu][Rr][Ss][Oo][Rr];
+REFCURSOR   :   [Rr][Ee][Ff][Cc][Uu][Rr][Ss][Oo][Rr];
+NO          :   [Nn][Oo];
+SCROLL      :   [Ss][Cc][Rr][Oo][Ll][Ll];
+
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
 
@@ -36,6 +47,9 @@ LPAREN  : '(' ;
 RPAREN  : ')' ;
 
 COMMA   : ',' ;
+DOT     : '.';
+
+//QUERY_TEXT  : (FOR | IS) (IDENTF | DOT | ASTERISK | COMMA | LPAREN | RPAREN | .*?[;]) ;
 
 DECL_DOLLAR : '$$' | '$BODY$';
 
