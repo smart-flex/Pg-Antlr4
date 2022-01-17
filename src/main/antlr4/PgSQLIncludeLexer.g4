@@ -35,6 +35,7 @@ SCROLL      :   [Ss][Cc][Rr][Oo][Ll][Ll];
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
 
+// TODO add immutable and others
 //modes
 //CALLED ON NULL INPUT
 MD_NULL_1   :   [Cc][Aa][Ll][Ll][Ee][Dd] WS [Oo][Nn] WS [Nn][Uu][Ll][Ll] WS [Ii][Nn][Pp][Uu][Tt];

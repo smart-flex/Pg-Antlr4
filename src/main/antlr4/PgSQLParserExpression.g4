@@ -54,10 +54,16 @@ operators
    | PERCENT
    | ASTERISK
    | DEVIDE
+   | LESS_THAN
+   | GREATER_THAN
    ;
 
 // TODO to implement many cases: 38.8. Errors and Messages
 raiseStatement
    : (RAISE SEMI)
    | (RAISE NOTICE? STRING_LITERAL SEMI)
+   ;
+
+labelClause
+   : SHIFT_LEFT identifier SHIFT_RIGHT
    ;

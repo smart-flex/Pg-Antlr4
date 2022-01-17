@@ -12,6 +12,7 @@ functionDefinition
     (seqOfFunctionAttributes)*
     AS
     DECL_DOLLAR
+    labelClause?
     DECLARE? variableDefinitions
     BEGIN (seqOfStatements)? (returnStatement)?
     END
@@ -38,6 +39,9 @@ statement
     | returnStatement
     | ifDef
     | caseDef
+    | exitDef
+    | loopDef
+    | assignedStatement
     ;
 
 nullStatement
@@ -128,6 +132,25 @@ caseDef
         (ELSE (seqOfStatements)?)*
         END_CASE SEMI
       )
+    ;
+
+// 38.6.3. Simple Loops
+exitDef
+    : EXIT identifier?  
+      (WHEN complexExpression)
+      SEMI
+    ;
+
+loopDef
+    : labelClause?
+      LOOP (seqOfStatements)?
+      END_LOOP
+      identifier?
+      SEMI
+    ;
+
+assignedStatement
+    : identifier ASSIGN complexExpression SEMI
     ;
 
 complexExpression
