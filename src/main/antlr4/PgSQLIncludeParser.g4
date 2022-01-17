@@ -37,6 +37,7 @@ statement
     | raiseStatement
     | returnStatement
     | ifDef
+    | caseDef
     ;
 
 nullStatement
@@ -116,10 +117,37 @@ ifDef
       END_IF SEMI
     ;
 
+caseDef
+    : ( CASE complexExpression WHEN constantExpressionList THEN (seqOfStatements)?
+        (WHEN constantExpressionList THEN (seqOfStatements)?)*
+        (ELSE (seqOfStatements)?)*
+        END_CASE SEMI
+      )
+    | ( CASE WHEN complexExpression THEN (seqOfStatements)?
+        (WHEN complexExpression THEN (seqOfStatements)?)*
+        (ELSE (seqOfStatements)?)*
+        END_CASE SEMI
+      )
+    ;
+
 complexExpression
     : (anonymousParameter | identifier | constantExpression)
       operators?
-      (anonymousParameter | identifier | constantExpression)?
+      seqOfRightPartExpression?
+    ;
+
+seqOfRightPartExpression
+    : (rightPartExpression)+
+    ;
+
+rightPartExpression
+    : LPAREN
+    | anonymousParameter
+    | identifier
+    | constantExpression
+    | AND
+    | COMMA
+    | RPAREN
     ;
 
 // types definition

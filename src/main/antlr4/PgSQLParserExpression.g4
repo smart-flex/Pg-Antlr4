@@ -1,5 +1,9 @@
 parser grammar PgSQLParserExpression;
 
+constantExpressionList
+    : constantExpression (COMMA constantExpression)*
+    ;
+
 constantExpression
     : string
     | intValue
