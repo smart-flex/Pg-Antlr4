@@ -35,6 +35,7 @@ statement
     : nullStatement
     | performStatement
     | raiseStatement
+    | returnStatement
     | ifDef
     ;
 
@@ -49,6 +50,7 @@ performStatement
 returnStatement
     : RETURN constantExpression SEMI
     | RETURN anonymousParameter SEMI
+    | RETURN identifier SEMI
     | RETURN QUERY QUERY_TEXT
     ;
 
@@ -105,9 +107,12 @@ functionAttribute
     | (MD_NULL_1 | MD_NULL_2 | MD_NULL_3)
     ;
 
+// 38.6.2. Conditionals
 ifDef
     : IF complexExpression THEN
       (seqOfStatements)?
+      (ELSIF complexExpression THEN (seqOfStatements)?)?
+      (ELSE (seqOfStatements)?)?
       END_IF SEMI
     ;
 

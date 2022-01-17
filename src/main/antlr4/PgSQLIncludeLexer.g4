@@ -19,6 +19,7 @@ AS          :   [Aa][Ss];
 NULL        :   [Nn][Uu][Ll][Ll];
 PERFORM     :   [Pp][Ee][Rr][Ff][Oo][Rr][Mm];
 RAISE       :   [Rr][Aa][Ii][Ss][Ee];
+NOTICE      :   [Nn][Oo][Tt][Ii][Cc][Ee];
 
 DECLARE     :   [Dd][Ee][Cc][Ll][Aa][Rr][Ee];
 ROWTYPE     :   [Rr][Oo][Ww][Tt][Yy][Pp][Ee];

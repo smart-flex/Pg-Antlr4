@@ -1,5 +1,7 @@
 lexer grammar PgSQLLexerControl;
 
+//38.6.2. Conditionals
+
 IF                   :   [Ii][Ff];
 THEN                 :   [Tt][Hh][Ee][Nn];
 ELSE                 :   [Ee][Ll][Ss][Ee];

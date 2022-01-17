@@ -52,6 +52,8 @@ operators
    | DEVIDE
    ;
 
+// TODO to implement many cases: 38.8. Errors and Messages
 raiseStatement
-   : RAISE STRING_LITERAL SEMI
+   : (RAISE SEMI)
+   | (RAISE NOTICE? STRING_LITERAL SEMI)
    ;
