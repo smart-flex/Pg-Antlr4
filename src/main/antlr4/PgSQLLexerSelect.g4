@@ -7,7 +7,9 @@ SELECT_END  :   ~[;] ;
 
 QUERY       :   [Qq][Uu][Ee][Rr][Yy];
 
-QUERY_TEXT  :   (SELECT | WITH) .*? ';';
+QUERY_TEXT  :   (SELECT | WITH) .*? (LOOP | ';');
+
+
 
 // temporary rule: just to hide select .*?
 //SELECT_HIDE :  (SELECT | WITH) .*? ';' -> channel(HIDDEN);

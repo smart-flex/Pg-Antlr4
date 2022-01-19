@@ -42,6 +42,7 @@ statement
     | exitDef
     | loopDef
     | assignedStatement
+    | loopDefQuery
     ;
 
 nullStatement
@@ -149,14 +150,28 @@ loopDef
       SEMI
     ;
 
+loopDefQuery
+    : labelClause?
+      FOR identifier
+      IN sqlQuery
+      (seqOfStatements)?
+      END_LOOP
+      identifier?
+      SEMI
+    ;
+
 assignedStatement
     : identifier ASSIGN complexExpression SEMI
     ;
 
 complexExpression
-    : (anonymousParameter | identifier | constantExpression)
+    : (anonymousParameter | identifier | constantExpression | refExpression)
       operators?
       seqOfRightPartExpression?
+    ;
+
+refExpression
+    : identifier DOT identifier
     ;
 
 seqOfRightPartExpression
@@ -170,6 +185,7 @@ rightPartExpression
     | constantExpression
     | AND
     | COMMA
+    | refExpression
     | RPAREN
     ;
 
