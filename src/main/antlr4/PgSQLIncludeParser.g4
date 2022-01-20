@@ -43,6 +43,7 @@ statement
     | loopDef
     | assignedStatement
     | loopDefQuery
+    | executeStatement
     ;
 
 nullStatement
@@ -51,6 +52,10 @@ nullStatement
 
 performStatement
     : PERFORM functionInvocation SEMI
+    ;
+
+executeStatement
+    : EXECUTE functionInvocation SEMI
     ;
 
 returnStatement
@@ -69,7 +74,7 @@ functionParams
     ;
 
 functionParamList
-    : identifier (COMMA identifier)*
+    : (identifier | constantExpression) (COMMA (identifier | constantExpression))*
     ;
 
 fuunctionCreateDef
@@ -149,6 +154,8 @@ loopDef
       identifier?
       SEMI
     ;
+
+// 38.6.4. Looping Through Query Results
 
 loopDefQuery
     : labelClause?

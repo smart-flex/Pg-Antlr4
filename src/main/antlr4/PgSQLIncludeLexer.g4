@@ -31,6 +31,7 @@ CURSOR      :   [Cc][Uu][Rr][Ss][Oo][Rr];
 REFCURSOR   :   [Rr][Ee][Ff][Cc][Uu][Rr][Ss][Oo][Rr];
 NO          :   [Nn][Oo];
 SCROLL      :   [Ss][Cc][Rr][Oo][Ll][Ll];
+EXECUTE     :   [Ee][Xx][Ee][Cc][Uu][Tt][Ee];
 
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
