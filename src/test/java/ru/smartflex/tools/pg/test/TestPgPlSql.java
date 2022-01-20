@@ -36,5 +36,6 @@ public class TestPgPlSql {
         testValidityPlPgSql("plpgsql\\p06_int4_loop.sql");
         testValidityPlPgSql("plpgsql\\p06_int4_loop_query.sql");
         testValidityPlPgSql("plpgsql\\p01_void_execute.sql");
+        testValidityPlPgSql("plpgsql\\p06_int4_loop_execute.sql");
     }
 }

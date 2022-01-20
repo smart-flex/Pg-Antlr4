@@ -44,6 +44,7 @@ statement
     | assignedStatement
     | loopDefQuery
     | executeStatement
+    | loopDefExecute
     ;
 
 nullStatement
@@ -166,6 +167,20 @@ loopDefQuery
       identifier?
       SEMI
     ;
+
+loopDefExecute
+    : labelClause?
+      FOR identifier
+      IN EXECUTE string (USING complexExpressionList)?
+      LOOP (seqOfStatements)?
+      END_LOOP
+      identifier?
+      SEMI
+    ;
+
+complexExpressionList
+   : complexExpression (COMMA complexExpression)*
+   ;
 
 assignedStatement
     : identifier ASSIGN complexExpression SEMI
