@@ -45,6 +45,7 @@ statement
     | loopDefQuery
     | executeStatement
     | loopDefExecute
+    | blockStatement
     ;
 
 nullStatement
@@ -178,6 +179,25 @@ loopDefExecute
       SEMI
     ;
 
+// 38.2. Structure of PL/pgSQL 38.6.5. Trapping Errors
+blockStatement
+   : labelClause?
+     (DECLARE variableDefinitions)?
+     BEGIN
+     (seqOfStatements)?
+     ( EXCEPTION trappingErrorList )?
+     END identifier?
+     SEMI
+   ;
+
+trappingErrorList
+    : trappingError (trappingError)*
+    ;
+
+trappingError
+   : WHEN identifier THEN seqOfStatements
+   ;
+
 complexExpressionList
    : complexExpression (COMMA complexExpression)*
    ;
@@ -271,9 +291,6 @@ cursorParamDefinition
 
 
 /*
-precisionPart
-    : LPAREN (unsignedInteger) (COMMA unsignedInteger)? RPAREN
-    ;
 
 unsignedInteger
    : NUM_INT
