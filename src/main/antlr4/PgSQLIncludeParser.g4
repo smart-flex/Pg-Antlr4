@@ -46,6 +46,7 @@ statement
     | executeStatement
     | loopDefExecute
     | blockStatement
+    | cursorOpenStatement
     ;
 
 nullStatement
@@ -65,6 +66,7 @@ returnStatement
     | RETURN anonymousParameter SEMI
     | RETURN identifier SEMI
     | RETURN QUERY QUERY_TEXT
+    | RETURN rightPartExpressionList SEMI
     ;
 
 functionInvocation
@@ -85,6 +87,7 @@ fuunctionCreateDef
 functionReturns
     : RETURNS pgTypeEnum
     | RETURNS TABLE tableParams
+    | RETURNS REFCURSOR
     ;
 
 tableParams
@@ -206,6 +209,7 @@ assignedStatement
     : identifier ASSIGN complexExpression SEMI
     ;
 
+// Maybe to replace seqOfRightPartExpression by rightPartExpressionList
 complexExpression
     : (anonymousParameter | identifier | constantExpression | refExpression)
       operators?
@@ -220,12 +224,17 @@ seqOfRightPartExpression
     : (rightPartExpression)+
     ;
 
+rightPartExpressionList
+    : (rightPartExpression)*
+    ;
+
 rightPartExpression
     : LPAREN
     | anonymousParameter
     | identifier
     | constantExpression
     | AND
+    | PLUS
     | COMMA
     | refExpression
     | RPAREN
@@ -271,6 +280,11 @@ cursorType
     : (REFCURSOR SEMI)
     | (NO? SCROLL? CURSOR (FOR | IS) sqlQuery) 
     | (CURSOR cursorParams? (FOR | IS) sqlQuery) 
+    ;
+
+// 38.7.2.1. OPEN FOR query
+cursorOpenStatement
+    : OPEN identifier NO? SCROLL? FOR sqlQuery
     ;
 
 sqlQuery

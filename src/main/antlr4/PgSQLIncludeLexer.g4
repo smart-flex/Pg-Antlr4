@@ -33,6 +33,8 @@ NO          :   [Nn][Oo];
 SCROLL      :   [Ss][Cc][Rr][Oo][Ll][Ll];
 EXECUTE     :   [Ee][Xx][Ee][Cc][Uu][Tt][Ee];
 USING       :   [Uu][Ss][Ii][Nn][Gg];
+OPEN        :   [Oo][Pp][Ee][Nn];
+CLOSE       :   [Cc][Ll][Oo][Ss][Ee];
 
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;

@@ -17,6 +17,7 @@ CONTINUE             :   [Cc][Oo][Nn][Tt][Ii][Nn][Uu][Ee];
 WHILE                :   [Ww][Hh][Ii][Ll][Ee];
 FOR                  :   [Ff][Oo][Rr];
 
+//38.6.5. Trapping Errors
 EXCEPTION            :   [Ee][Xx][Cc][Ee][Pp][Tt][Ii][Oo][Nn];
 
 WS  : [ \t\r\n]+ -> skip ;
