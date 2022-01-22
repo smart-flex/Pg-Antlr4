@@ -27,14 +27,17 @@ realValue
    : sign? NUM_REAL ;
 
 intValue
-   : sign? NUM_INT ;
+   : sign? NUM_INT
+   ;
 
 sign
    : PLUS
-   | MINUS;
+   | MINUS
+   ;
 
 anonymousParameter
-   : ANONYMOUS_PAR;
+   : ANONYMOUS_PAR
+   ;
 
 operators
    : PLUS
@@ -62,8 +65,24 @@ operators
 raiseStatement
    : (RAISE SEMI)
    | (RAISE NOTICE? STRING_LITERAL SEMI)
+   | (RAISE NOTICE? STRING_LITERAL COMMA identifier (DOT identifier)? SEMI)
    ;
 
 labelClause
    : SHIFT_LEFT identifier SHIFT_RIGHT
    ;
+
+// 38.7.3.1. FETCH
+fetchDirection
+   : NEXT
+   | PRIOR
+   | FIRST
+   | LAST
+   | (ABSOLUTE NUM_INT)
+   | (RELATIVE NUM_INT)
+   | NUM_INT
+   | ALL
+   | FORWARD
+   | BACKWARD
+   ;
+

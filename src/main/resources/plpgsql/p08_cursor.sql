@@ -1,4 +1,4 @@
-CREATE FUNCTION p01_cursor()
+CREATE FUNCTION p08_cursor()
     RETURNS refcursor AS
 $$
 DECLARE

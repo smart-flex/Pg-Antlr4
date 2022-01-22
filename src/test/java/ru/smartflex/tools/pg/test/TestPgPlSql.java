@@ -9,8 +9,10 @@ import static junit.framework.TestCase.assertEquals;
 
 public class TestPgPlSql {
 
+    private static int amount = 1;
+
     private void testValidityPlPgSql(String pgSql) {
-        System.out.println("*** " + pgSql);
+        System.out.println(String.format("*** %2d *** " + pgSql, amount++));
         PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(pgSql);
         wrapper.functionDefinition();
 
@@ -40,5 +42,6 @@ public class TestPgPlSql {
         testValidityPlPgSql("plpgsql\\p07_void_block.sql");
         testValidityPlPgSql("plpgsql\\p02_int4_v2.sql");
         testValidityPlPgSql("plpgsql\\p08_cursor.sql");
+        testValidityPlPgSql("plpgsql\\p08_cursor_full.sql");
     }
 }

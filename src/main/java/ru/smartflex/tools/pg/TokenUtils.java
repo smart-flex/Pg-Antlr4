@@ -64,7 +64,7 @@ public class TokenUtils {
     }
 
     public static void main(String[] s) {
-        String fileName = System.getProperty("user.dir") + "\\src\\main\\resources\\lang.src\\control.txt";
+        String fileName = System.getProperty("user.dir") + "\\src\\main\\resources\\lang.src\\fetch.txt";
         generateTokens(fileName);
     }
 }

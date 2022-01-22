@@ -7,7 +7,7 @@ SELECT_END  :   ~[;] ;
 
 QUERY       :   [Qq][Uu][Ee][Rr][Yy];
 
-QUERY_TEXT  :   (SELECT | WITH) .*? (LOOP | ';');
+QUERY_TEXT  :   (SELECT | WITH) (STRING_LITERAL |.)*? (LOOP | ';');
 
 
 

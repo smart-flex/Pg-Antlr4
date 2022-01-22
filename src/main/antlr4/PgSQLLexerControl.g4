@@ -20,4 +20,26 @@ FOR                  :   [Ff][Oo][Rr];
 //38.6.5. Trapping Errors
 EXCEPTION            :   [Ee][Xx][Cc][Ee][Pp][Tt][Ii][Oo][Nn];
 
+//38.7.3.1. FETCH
+FETCH                :   [Ff][Ee][Tt][Cc][Hh];
+INTO                 :   [Ii][Nn][Tt][Oo];
+FROM                 :   [Ff][Rr][Oo][Mm];
+MOVE                 :   [Mm][Oo][Vv][Ee];
+
+NEXT                 :   [Nn][Ee][Xx][Tt];
+PRIOR                :   [Pp][Rr][Ii][Oo][Rr];
+FIRST                :   [Ff][Ii][Rr][Ss][Tt];
+LAST                 :   [Ll][Aa][Ss][Tt];
+ABSOLUTE             :   [Aa][Bb][Ss][Oo][Ll][Uu][Tt][Ee];
+RELATIVE             :   [Rr][Ee][Ll][Aa][Tt][Ii][Vv][Ee];
+ALL                  :   [Aa][Ll][Ll];
+FORWARD              :   [Ff][Oo][Rr][Ww][Aa][Rr][Dd];
+BACKWARD             :   [Bb][Aa][Cc][Kk][Ww][Aa][Rr][Dd];
+
+/* the following constructions does not work in Pg 8.4
+FORWARD count
+FORWARD ALL
+BACKWARD count
+BACKWARD ALL
+*/
 WS  : [ \t\r\n]+ -> skip ;

@@ -47,6 +47,9 @@ statement
     | loopDefExecute
     | blockStatement
     | cursorOpenStatement
+    | cursorCloseStatement
+    | fetchStatement
+    | moveStatement
     ;
 
 nullStatement
@@ -165,7 +168,7 @@ loopDef
 loopDefQuery
     : labelClause?
       FOR identifier
-      IN sqlQuery
+      IN (sqlQuery | identifier cursorParamList LOOP)
       (seqOfStatements)?
       END_LOOP
       identifier?
@@ -279,19 +282,44 @@ precisionClause
 cursorType
     : (REFCURSOR SEMI)
     | (NO? SCROLL? CURSOR (FOR | IS) sqlQuery) 
-    | (CURSOR cursorParams? (FOR | IS) sqlQuery) 
+    | (CURSOR cursorParamsDef? (FOR | IS) sqlQuery) 
     ;
 
-// 38.7.2.1. OPEN FOR query
+// 38.7.2.1. OPEN FOR query; 38.7.2.2. OPEN FOR EXECUTE
 cursorOpenStatement
-    : OPEN identifier NO? SCROLL? FOR sqlQuery
+    : (OPEN identifier NO? SCROLL? FOR sqlQuery)
+    | (OPEN identifier NO? SCROLL? FOR EXECUTE string SEMI)
+    | (OPEN identifier cursorParamList SEMI)
+    ;
+
+// 38.7.3.4. CLOSE
+cursorCloseStatement
+    : CLOSE identifier SEMI
+    ;
+
+// 38.7.3.1. FETCH
+fetchStatement
+    : FETCH (fetchDirection (FROM | IN))? identifier (INTO identifier)? SEMI
+    ;
+
+// 38.7.3.2. MOVE
+moveStatement
+    : MOVE (fetchDirection (FROM | IN))? identifier SEMI
     ;
 
 sqlQuery
     : QUERY_TEXT
     ;
 
-cursorParams
+cursorParamList
+    : LPAREN cursorParam (COMMA cursorParam)* RPAREN
+    ;
+
+cursorParam
+    : (identifier | constantExpression | anonymousParameter)
+    ;
+
+cursorParamsDef
     : LPAREN cursorParamDefinitionList RPAREN
     ;
 
