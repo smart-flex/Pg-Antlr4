@@ -70,6 +70,7 @@ returnStatement
     | RETURN identifier SEMI
     | RETURN QUERY QUERY_TEXT
     | RETURN rightPartExpressionList SEMI
+    | RETURN NEXT identifier SEMI
     ;
 
 functionInvocation
@@ -81,16 +82,18 @@ functionParams
     ;
 
 functionParamList
-    : (identifier | constantExpression) (COMMA (identifier | constantExpression))*
+    : ((identifier | constantExpression) (COMMA (identifier | constantExpression))*)
+    | functionInvocation
     ;
 
 fuunctionCreateDef
     : CREATE (OR REPLACE)? FUNCTION;
 
 functionReturns
-    : RETURNS pgTypeEnum
+    : RETURNS (pgTypeEnum | identifier)
     | RETURNS TABLE tableParams
     | RETURNS REFCURSOR
+    | RETURNS SETOF identifier
     ;
 
 tableParams
@@ -163,7 +166,7 @@ loopDef
       SEMI
     ;
 
-// 38.6.4. Looping Through Query Results
+// 38.6.4. Looping Through Query Results; 38.7.4. Looping Through a Cursor's Result
 
 loopDefQuery
     : labelClause?
@@ -214,7 +217,7 @@ assignedStatement
 
 // Maybe to replace seqOfRightPartExpression by rightPartExpressionList
 complexExpression
-    : (anonymousParameter | identifier | constantExpression | refExpression)
+    : (functionInvocation | anonymousParameter | identifier | constantExpression | refExpression)
       operators?
       seqOfRightPartExpression?
     ;

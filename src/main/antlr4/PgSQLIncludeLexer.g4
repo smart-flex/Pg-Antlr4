@@ -35,6 +35,7 @@ EXECUTE     :   [Ee][Xx][Ee][Cc][Uu][Tt][Ee];
 USING       :   [Uu][Ss][Ii][Nn][Gg];
 OPEN        :   [Oo][Pp][Ee][Nn];
 CLOSE       :   [Cc][Ll][Oo][Ss][Ee];
+SETOF       :   [Ss][Ee][Tt][Oo][Ff];
 
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;

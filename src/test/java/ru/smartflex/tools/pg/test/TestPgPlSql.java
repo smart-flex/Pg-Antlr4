@@ -43,5 +43,6 @@ public class TestPgPlSql {
         testValidityPlPgSql("plpgsql\\p02_int4_v2.sql");
         testValidityPlPgSql("plpgsql\\p08_cursor.sql");
         testValidityPlPgSql("plpgsql\\p08_cursor_full.sql");
+        testValidityPlPgSql("plpgsql\\p09_call.sql");
     }
 }
