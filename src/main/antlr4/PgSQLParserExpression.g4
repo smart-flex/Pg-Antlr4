@@ -59,6 +59,7 @@ operators
    | DEVIDE
    | LESS_THAN
    | GREATER_THAN
+   | CONCAT
    ;
 
 // TODO to implement many cases: 38.8. Errors and Messages

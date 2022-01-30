@@ -25,3 +25,14 @@ ASTERISK    :   '*';
 DEVIDE      :   '/';
 SHIFT_LEFT  :   '<<';
 SHIFT_RIGHT :   '>>';
+
+// 9.4. String Functions and Operators
+
+CONCAT      :   '||';
+
+
+// other
+
+TYPE_CAST
+   : '::'
+   ;

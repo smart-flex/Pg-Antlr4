@@ -1,6 +1,6 @@
 lexer grammar PgSQLIncludeLexer;
 
-import PgSQLLexerDataType, PgSQLLexerOperators, PgSQLLexerControl, PgSQLLexerSelect, PgSQLLexerEnd;
+import PgSQLLexerDataType, PgSQLLexerOperators, PgSQLLexerControl, PgSQLLexerSql, PgSQLLexerEnd;
 
 @header {
 package ru.smartflex.tools.pg;
@@ -55,8 +55,6 @@ RPAREN  : ')' ;
 
 COMMA   : ',' ;
 DOT     : '.';
-
-//QUERY_TEXT  : (FOR | IS) (IDENTF | DOT | ASTERISK | COMMA | LPAREN | RPAREN | .*?[;]) ;
 
 DECL_DOLLAR : '$$' | '$BODY$';
 

@@ -50,6 +50,8 @@ statement
     | cursorCloseStatement
     | fetchStatement
     | moveStatement
+    | selectStatement
+    | updateStatement
     ;
 
 nullStatement
@@ -68,7 +70,7 @@ returnStatement
     : RETURN constantExpression SEMI
     | RETURN anonymousParameter SEMI
     | RETURN identifier SEMI
-    | RETURN QUERY QUERY_TEXT
+    | RETURN QUERY inlineQuery
     | RETURN rightPartExpressionList SEMI
     | RETURN NEXT identifier SEMI
     ;
@@ -82,7 +84,7 @@ functionParams
     ;
 
 functionParamList
-    : ((identifier | constantExpression) (COMMA (identifier | constantExpression))*)
+    : ((identifier | constantExpression | string | anonymousParameter | refExpression) (COMMA (identifier | constantExpression | string | anonymousParameter | refExpression))*)
     | functionInvocation
     ;
 
@@ -171,7 +173,7 @@ loopDef
 loopDefQuery
     : labelClause?
       FOR identifier
-      IN (sqlQuery | identifier cursorParamList LOOP)
+      IN (inlineQuery | identifier cursorParamList LOOP)
       (seqOfStatements)?
       END_LOOP
       identifier?
@@ -284,13 +286,13 @@ precisionClause
 
 cursorType
     : (REFCURSOR SEMI)
-    | (NO? SCROLL? CURSOR (FOR | IS) sqlQuery) 
-    | (CURSOR cursorParamsDef? (FOR | IS) sqlQuery) 
+    | (NO? SCROLL? CURSOR (FOR | IS) inlineQuery) 
+    | (CURSOR cursorParamsDef? (FOR | IS) inlineQuery) 
     ;
 
 // 38.7.2.1. OPEN FOR query; 38.7.2.2. OPEN FOR EXECUTE
 cursorOpenStatement
-    : (OPEN identifier NO? SCROLL? FOR sqlQuery)
+    : (OPEN identifier NO? SCROLL? FOR inlineQuery)
     | (OPEN identifier NO? SCROLL? FOR EXECUTE string SEMI)
     | (OPEN identifier cursorParamList SEMI)
     ;
@@ -310,8 +312,39 @@ moveStatement
     : MOVE (fetchDirection (FROM | IN))? identifier SEMI
     ;
 
-sqlQuery
-    : QUERY_TEXT
+selectStatement
+    : (WITH RECURSIVE? identifier AS .*? SEMI)
+      |
+      (SELECT queryColClauseList INTO intoList FROM? (functionInvocation | .*?) SEMI)
+    ;
+
+updateStatement
+    : UPDATE_TEXT
+    ;
+
+inlineQuery
+    : SELECT queryColClauseList (FROM | WHERE)? .*? (LOOP | ';')
+    ;
+
+queryColClauseList
+    : (ALL | DISTINCT (ON LPAREN intoList RPAREN)? )? 
+      queryColClause (COMMA queryColClause)*
+    ;
+
+queryColClause
+    : (queryColumnAs operators?)* (AS identifier)?
+    ;
+
+queryColumnAs
+    : (functionInvocation | castClause | cursorParam | ASTERISK | STRING_LITERAL)
+    ;
+
+castClause
+    : cursorParam TYPE_CAST pgTypeEnum
+    ;
+
+intoList
+    : identifier (COMMA identifier)*
     ;
 
 cursorParamList
