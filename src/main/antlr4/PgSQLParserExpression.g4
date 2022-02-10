@@ -56,7 +56,7 @@ operators
    | ASSIGN
    | PERCENT
    | ASTERISK
-   | DEVIDE
+   | DIVIDE
    | LESS_THAN
    | GREATER_THAN
    | CONCAT

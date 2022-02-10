@@ -25,7 +25,7 @@ functionDefinition
     ;
 
 functionTitle
-   : fuunctionCreateDef identifier functionParamsDef functionReturns
+   : functionCreateDef identifier functionParamsDef functionReturns
    ;
 
 identifier
@@ -92,7 +92,7 @@ functionParamList
     | functionInvocation
     ;
 
-fuunctionCreateDef
+functionCreateDef
     : CREATE (OR REPLACE)? FUNCTION;
 
 functionReturns

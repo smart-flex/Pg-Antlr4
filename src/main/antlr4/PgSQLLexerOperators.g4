@@ -22,7 +22,7 @@ ASSIGN       :   ':=';
 
 PERCENT     :   '%';
 ASTERISK    :   '*';
-DEVIDE      :   '/';
+DIVIDE      :   '/';
 SHIFT_LEFT  :   '<<';
 SHIFT_RIGHT :   '>>';
 
