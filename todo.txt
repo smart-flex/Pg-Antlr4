@@ -1,0 +1,6 @@
+1) add rest of sql lexem
+2) parsing each file -- DONE
+3) write result to pojo -- partially DONE
+4) create nested dependencies (build tree)
+5) generates output from down to up
+6) writes output
