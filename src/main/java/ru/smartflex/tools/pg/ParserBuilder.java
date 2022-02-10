@@ -10,12 +10,15 @@ public class ParserBuilder {
         return ParserBuilder.class.getClassLoader().getResourceAsStream(name);
     }
 
-
     public static PgSQLIncludeParserWrapper makeParser(String resourceName) {
+        InputStream is = getSqlBody(resourceName);
+        return makeParser(is);
+    }
+
+    public static PgSQLIncludeParserWrapper makeParser(InputStream is) {
         PgSQLIncludeParserWrapper wrapper = null;
 
         try {
-            InputStream is = getSqlBody(resourceName);
             CharStream сharStream = CharStreams.fromStream(is);
             PgSQLIncludeLexerWrapper lexer = new PgSQLIncludeLexerWrapper(сharStream);
 

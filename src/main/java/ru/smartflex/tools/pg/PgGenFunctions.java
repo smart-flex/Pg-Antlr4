@@ -1,35 +1,56 @@
 package ru.smartflex.tools.pg;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class PgGenFunctions {
 
+    private static final int THREAD_AMOUNT = 2;
+
     public void genFromEnum(Stream<PgPlSQLEnums> stream) {
 
+        Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
+            String sql = pgEum.getSqlName();
+            return PgGenFunctions.class.getClassLoader().getResourceAsStream(sql);
+        };
+
+        genFromIs(stream.map(funcIStream));
     }
-    public void genFromIs(Stream<InputStream> streaam) {
-        // parsing each file
-        // write result to pojo
-        // create nested dependencies
-        // generates output from down to up
-        // writes output
 
+    public void genFromIs(Stream<InputStream> stream) {
 
-        /*        System.out.println(String.format("*** %2d *** " + pgSql, amount++));
-        PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(pgSql);
-        PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
+        List<Future<PgParsingResult>> listAns = new ArrayList();
 
-        PgSQLIncludeListener listener = new PgSQLIncludeListener(wrapper);
+        ExecutorService service = Executors.newFixedThreadPool(THREAD_AMOUNT);
 
-        PgSqlIncludeListener listener2 = new PgSqlIncludeListener();
+        stream.forEach(is -> {
+            Future<PgParsingResult> fut = service.submit(new ThreadPgParser(is));
+            listAns.add(fut);
+        });
 
-        ParseTreeWalker.DEFAULT.walk(listener2, func);
+        Stream<Future<PgParsingResult>> streamFut = listAns.stream();
+        List<PgParsingResult> listResult = new ArrayList();
+        streamFut.forEach(fut -> {
+            PgParsingResult result;
+            try {
+                result = fut.get();
 
-        System.out.println(func.toStringTree(Arrays.asList(wrapper.getRuleNames())));
+                // TODO remove
+                System.out.println("##### " + result);
 
- */
-//        System.out.println(listener.toString());
+                listResult.add(result);
+            } catch (Exception e) {
 
+            }
+
+        });
+
+        service.shutdown();
     }
 }

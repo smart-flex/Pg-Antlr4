@@ -2,10 +2,15 @@ package ru.smartflex.tools.pg;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeParserListener {
+    private PgParsingResult pgParsingResult;
+
+    public PgSqlIncludeListener(PgParsingResult pgParsingResult) {
+        this.pgParsingResult = pgParsingResult;
+    }
+
     @Override
     public void enterFunctionDefinition(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionDefinitionContext ctx) {
 
@@ -18,9 +23,8 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
 
     @Override
     public void enterFunctionTitle(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionTitleContext ctx) {
-        ctx.identifier().getText();
 
-        System.out.println("++++ "+ctx.getText()+ "  *** "+ctx.identifier().getText() );
+        pgParsingResult.setFunctionName(ctx.identifier().getText());
 
     }
 
@@ -130,12 +134,12 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
     }
 
     @Override
-    public void enterFuunctionCreateDef(ru.smartflex.tools.pg.PgSQLIncludeParser.FuunctionCreateDefContext ctx) {
+    public void enterFunctionCreateDef(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionCreateDefContext ctx) {
 
     }
 
     @Override
-    public void exitFuunctionCreateDef(ru.smartflex.tools.pg.PgSQLIncludeParser.FuunctionCreateDefContext ctx) {
+    public void exitFunctionCreateDef(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionCreateDefContext ctx) {
 
     }
 

@@ -21,9 +21,17 @@ public class TestPgPlSql {
     }
 
     @Test
-    public void testSamples() {
+    public void testParsing() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
         stream.forEach(c -> testValidityPlPgSql(c.getSqlName()));
     }
 
+    @Test
+    public void testGenerating() {
+        System.out.println();
+        System.out.println();
+
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
+        new PgGenFunctions().genFromEnum(stream);
+    }
 }
