@@ -8,7 +8,7 @@ package ru.smartflex.tools.pg;
 options { tokenVocab=PgSQLIncludeLexer; }
 
 functionDefinition
-    : fuunctionCreateDef identifier functionParamsDef functionReturns
+    : functionCreateDef identifier functionParamsDef functionReturns
     (seqOfFunctionAttributes)*
     AS
     DECL_DOLLAR
@@ -88,7 +88,7 @@ functionParamList
     | functionInvocation
     ;
 
-fuunctionCreateDef
+functionCreateDef
     : CREATE (OR REPLACE)? FUNCTION;
 
 functionReturns
