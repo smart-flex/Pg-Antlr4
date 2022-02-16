@@ -63,11 +63,11 @@ nullStatement
     ;
 
 performStatement
-    : PERFORM functionInvocationsList SEMI
+    : PERFORM functionInvocation SEMI
     ;
 
 executeStatement
-    : EXECUTE functionInvocationsList SEMI
+    : EXECUTE functionInvocation SEMI
     ;
 
 returnStatement
@@ -79,7 +79,7 @@ returnStatement
     | RETURN NEXT identifier SEMI
     ;
 
-functionInvocationsList
+functionInvocation
     : identifier functionParams?
     ;
 
@@ -89,7 +89,7 @@ functionParams
 
 functionParamList
     : ((identifier | constantExpression | string | anonymousParameter | refExpression) (COMMA (identifier | constantExpression | string | anonymousParameter | refExpression))*)
-    | functionInvocationsList
+    | functionInvocation
     ;
 
 functionCreateDef
@@ -159,7 +159,7 @@ caseDef
 
 // 38.6.3. Simple Loops
 exitDef
-    : EXIT identifier?  
+    : EXIT identifier?
       (WHEN complexExpression)
       SEMI
     ;
@@ -223,7 +223,7 @@ assignedStatement
 
 // Maybe to replace seqOfRightPartExpression by rightPartExpressionList
 complexExpression
-    : (functionInvocationsList | anonymousParameter | identifier | constantExpression | refExpression)
+    : (functionInvocation | anonymousParameter | identifier | constantExpression | refExpression)
       operators?
       seqOfRightPartExpression?
     ;
@@ -278,7 +278,7 @@ usualType
       precisionClause?
       NOT_NULL?
       (DEFAULT | ASSIGN)?
-      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocationsList)?
+      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation)?
       SEMI
      ;
 
@@ -290,8 +290,8 @@ precisionClause
 
 cursorType
     : (REFCURSOR SEMI)
-    | (NO? SCROLL? CURSOR (FOR | IS) inlineQuery) 
-    | (CURSOR cursorParamsDef? (FOR | IS) inlineQuery) 
+    | (NO? SCROLL? CURSOR (FOR | IS) inlineQuery)
+    | (CURSOR cursorParamsDef? (FOR | IS) inlineQuery)
     ;
 
 // 38.7.2.1. OPEN FOR query; 38.7.2.2. OPEN FOR EXECUTE
@@ -319,7 +319,7 @@ moveStatement
 selectStatement
     : (WITH RECURSIVE? identifier AS .*? SEMI)
       |
-      (SELECT queryColClauseList INTO intoList FROM? (functionInvocationsList | .*?) SEMI)
+      (SELECT queryColClauseList INTO intoList FROM? (functionInvocation | .*?) SEMI)
     ;
 
 updateStatement
@@ -331,7 +331,7 @@ inlineQuery
     ;
 
 queryColClauseList
-    : (ALL | DISTINCT (ON LPAREN intoList RPAREN)? )? 
+    : (ALL | DISTINCT (ON LPAREN intoList RPAREN)? )?
       queryColClause (COMMA queryColClause)*
     ;
 
@@ -340,7 +340,7 @@ queryColClause
     ;
 
 queryColumnAs
-    : (functionInvocationsList | castClause | cursorParam | ASTERISK | STRING_LITERAL)
+    : (functionInvocation | castClause | cursorParam | ASTERISK | STRING_LITERAL)
     ;
 
 castClause
