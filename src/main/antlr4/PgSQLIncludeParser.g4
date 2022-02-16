@@ -63,11 +63,11 @@ nullStatement
     ;
 
 performStatement
-    : PERFORM functionInvocation SEMI
+    : PERFORM functionInvocationsList SEMI
     ;
 
 executeStatement
-    : EXECUTE functionInvocation SEMI
+    : EXECUTE functionInvocationsList SEMI
     ;
 
 returnStatement
@@ -79,7 +79,7 @@ returnStatement
     | RETURN NEXT identifier SEMI
     ;
 
-functionInvocation
+functionInvocationsList
     : identifier functionParams?
     ;
 
@@ -89,7 +89,7 @@ functionParams
 
 functionParamList
     : ((identifier | constantExpression | string | anonymousParameter | refExpression) (COMMA (identifier | constantExpression | string | anonymousParameter | refExpression))*)
-    | functionInvocation
+    | functionInvocationsList
     ;
 
 functionCreateDef
@@ -223,7 +223,7 @@ assignedStatement
 
 // Maybe to replace seqOfRightPartExpression by rightPartExpressionList
 complexExpression
-    : (functionInvocation | anonymousParameter | identifier | constantExpression | refExpression)
+    : (functionInvocationsList | anonymousParameter | identifier | constantExpression | refExpression)
       operators?
       seqOfRightPartExpression?
     ;
@@ -278,7 +278,7 @@ usualType
       precisionClause?
       NOT_NULL?
       (DEFAULT | ASSIGN)?
-      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation)?
+      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocationsList)?
       SEMI
      ;
 
@@ -319,7 +319,7 @@ moveStatement
 selectStatement
     : (WITH RECURSIVE? identifier AS .*? SEMI)
       |
-      (SELECT queryColClauseList INTO intoList FROM? (functionInvocation | .*?) SEMI)
+      (SELECT queryColClauseList INTO intoList FROM? (functionInvocationsList | .*?) SEMI)
     ;
 
 updateStatement
@@ -340,7 +340,7 @@ queryColClause
     ;
 
 queryColumnAs
-    : (functionInvocation | castClause | cursorParam | ASTERISK | STRING_LITERAL)
+    : (functionInvocationsList | castClause | cursorParam | ASTERISK | STRING_LITERAL)
     ;
 
 castClause

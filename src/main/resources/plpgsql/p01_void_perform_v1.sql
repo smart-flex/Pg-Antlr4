@@ -1,4 +1,4 @@
-CREATE FUNCTION p02_void_perform_v1 ()
+CREATE FUNCTION p01_void_perform_v1 ()
     RETURNS void AS
 $$
 BEGIN
