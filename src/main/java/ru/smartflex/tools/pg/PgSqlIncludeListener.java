@@ -105,7 +105,7 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
 
     @Override
     public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-
+        pgParsingResult.addElementToFunctionInvocationsList(ctx.identifier().getText());
     }
 
     @Override

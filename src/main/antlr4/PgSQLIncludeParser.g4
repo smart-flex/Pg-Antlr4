@@ -159,7 +159,7 @@ caseDef
 
 // 38.6.3. Simple Loops
 exitDef
-    : EXIT identifier?  
+    : EXIT identifier?
       (WHEN complexExpression)
       SEMI
     ;
@@ -290,8 +290,8 @@ precisionClause
 
 cursorType
     : (REFCURSOR SEMI)
-    | (NO? SCROLL? CURSOR (FOR | IS) inlineQuery) 
-    | (CURSOR cursorParamsDef? (FOR | IS) inlineQuery) 
+    | (NO? SCROLL? CURSOR (FOR | IS) inlineQuery)
+    | (CURSOR cursorParamsDef? (FOR | IS) inlineQuery)
     ;
 
 // 38.7.2.1. OPEN FOR query; 38.7.2.2. OPEN FOR EXECUTE
@@ -331,7 +331,7 @@ inlineQuery
     ;
 
 queryColClauseList
-    : (ALL | DISTINCT (ON LPAREN intoList RPAREN)? )? 
+    : (ALL | DISTINCT (ON LPAREN intoList RPAREN)? )?
       queryColClause (COMMA queryColClause)*
     ;
 
