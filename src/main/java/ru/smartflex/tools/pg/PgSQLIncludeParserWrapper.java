@@ -33,7 +33,7 @@ public class PgSQLIncludeParserWrapper extends ru.smartflex.tools.pg.PgSQLInclud
         this.lexer = lexer;
     }
 
-    public boolean isErrorHappened() {
+    public boolean isParsingErrorHappened() {
         boolean fok = false;
 
         if (lexer != null) {

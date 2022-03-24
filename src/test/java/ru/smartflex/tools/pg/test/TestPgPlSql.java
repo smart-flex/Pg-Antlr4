@@ -17,7 +17,7 @@ public class TestPgPlSql {
         PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(pgSql);
         PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
 
-        assertEquals(false, wrapper.isErrorHappened());
+        assertEquals(false, wrapper.isParsingErrorHappened());
     }
 
     @Test

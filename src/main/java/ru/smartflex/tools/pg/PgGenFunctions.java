@@ -46,11 +46,15 @@ public class PgGenFunctions {
 
                 listResult.add(result);
             } catch (Exception e) {
-
+                // TODO transfer exception to logger or something else
             }
 
         });
 
         service.shutdown();
+
+        PgGenResultBag pgGenResultBag = new PgGenResultBag();
+
+        listResult.stream().forEach(res -> pgGenResultBag.addResult(res));
     }
 }

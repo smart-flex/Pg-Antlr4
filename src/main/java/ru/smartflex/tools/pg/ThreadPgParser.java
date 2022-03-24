@@ -16,12 +16,21 @@ public class ThreadPgParser implements Callable<PgParsingResult> {
     public PgParsingResult call() throws Exception {
         PgParsingResult pgParsingResult = new PgParsingResult();
 
-        PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(is);
-        ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
+        try (InputStream ist = is;) {
 
-        PgSqlIncludeListener listener = new PgSqlIncludeListener(pgParsingResult);
+            PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(ist);
+            ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
 
-        ParseTreeWalker.DEFAULT.walk(listener, func);
+            PgSqlIncludeListener listener = new PgSqlIncludeListener(pgParsingResult);
+
+            ParseTreeWalker.DEFAULT.walk(listener, func);
+
+            pgParsingResult.setParsingErrorHappened(wrapper.isParsingErrorHappened());
+
+        } catch (Exception e) {
+            pgParsingResult.setParsingErrorHappened(true);
+            // TODO transfer exception to logger or something else
+        }
 
         is.close();
 

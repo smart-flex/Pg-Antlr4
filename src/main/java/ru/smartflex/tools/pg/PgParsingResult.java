@@ -6,6 +6,7 @@ public class PgParsingResult {
 
     private String functionName;
     private ArrayList<String> functionInvocationsList = new ArrayList<>();
+    private boolean parsingErrorHappened = false;
 
     public PgParsingResult() {
     }
@@ -20,6 +21,14 @@ public class PgParsingResult {
 
     public void addElementToFunctionInvocationsList(String currentInvocation) {
         functionInvocationsList.add(currentInvocation);
+    }
+
+    public void setParsingErrorHappened(boolean parsingErrorHappened) {
+        this.parsingErrorHappened = parsingErrorHappened;
+    }
+
+    public boolean isParsingErrorHappened() {
+        return parsingErrorHappened;
     }
 
     @Override
