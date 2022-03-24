@@ -23,7 +23,7 @@ public class ThreadPgParser implements Callable<PgParsingResult> {
 
         ParseTreeWalker.DEFAULT.walk(listener, func);
 
-        //is.close();
+        is.close();
 
         return pgParsingResult;
     }

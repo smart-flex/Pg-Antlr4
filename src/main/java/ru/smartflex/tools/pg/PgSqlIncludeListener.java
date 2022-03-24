@@ -105,6 +105,7 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
 
     @Override
     public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
+        System.out.println("+++ "+ctx.identifier().getText());
         pgParsingResult.addElementToFunctionInvocationsList(ctx.identifier().getText());
     }
 
@@ -114,17 +115,8 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
     }
 
     @Override
-    public void enterFunctionParams(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamsContext ctx) {
-
-    }
-
-    @Override
-    public void exitFunctionParams(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamsContext ctx) {
-
-    }
-
-    @Override
     public void enterFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx) {
+        System.out.println("+++ "+ctx);
 
     }
 

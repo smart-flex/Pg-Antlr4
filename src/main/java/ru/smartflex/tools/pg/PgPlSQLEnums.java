@@ -41,4 +41,9 @@ public enum PgPlSQLEnums {
         Stream<PgPlSQLEnums> stream = Stream.of(PgPlSQLEnums.values());
         return stream;
     }
+
+    public static Stream<PgPlSQLEnums> getPlPgSQLResources(String sqlName) {
+        Stream<PgPlSQLEnums> stream = Stream.of(PgPlSQLEnums.values()).filter(pge -> pge.getSqlName().contains(sqlName));
+        return stream;
+    }
 }

@@ -27,11 +27,18 @@ public class TestPgPlSql {
     }
 
     @Test
-    public void testGenerating() {
+    public void testGeneratingAll() {
         System.out.println();
         System.out.println();
 
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
+        new PgGenFunctions().genFromEnum(stream);
+    }
+
+    @Test
+    public void testGeneratingOne() {
+        //p01_void_perform.sql
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql");
         new PgGenFunctions().genFromEnum(stream);
     }
 }
