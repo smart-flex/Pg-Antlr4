@@ -11,7 +11,7 @@ public class PgGenResultBag {
 
     List<PgParsingResult> resultList = new ArrayList<>();
 
-    void addResult(PgParsingResult result) {
+    public void addResult(PgParsingResult result) {
 
         if (!result.isParsingErrorHappened()) {
             return;

@@ -41,4 +41,17 @@ public class TestPgPlSql {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql");
         new PgGenFunctions().genFromEnum(stream);
     }
+
+    @Test
+    public void testMakeTree() {
+        /*
+        PgParsingResult pr1 = new PgParsingResult();
+        pr1.setFunctionName("func_1");
+
+        PgGenResultBag bag = new PgGenResultBag();
+        bag.addResult(pr1);
+*/
+
+        // TODO make tree
+    }
 }
