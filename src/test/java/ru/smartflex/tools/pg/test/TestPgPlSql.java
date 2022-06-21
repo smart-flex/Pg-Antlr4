@@ -43,6 +43,12 @@ public class TestPgPlSql {
     }
 
     @Test
+    public void testGeneratingTwo() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql");
+        new PgGenFunctions().genFromEnum(stream);
+    }
+
+    @Test
     public void testMakeTree() {
         /*
         PgParsingResult pr1 = new PgParsingResult();

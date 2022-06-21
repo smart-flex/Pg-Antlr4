@@ -21,7 +21,7 @@ public class ThreadPgParser implements Callable<PgParsingResult> {
             PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(ist);
             ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
 
-            PgSqlIncludeListener listener = new PgSqlIncludeListener(pgParsingResult);
+            PgSqlIncludeListenerResult listener = new PgSqlIncludeListenerResult(pgParsingResult);
 
             ParseTreeWalker.DEFAULT.walk(listener, func);
 

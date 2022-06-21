@@ -4,12 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeParserListener {
-    private PgParsingResult pgParsingResult;
-
-    public PgSqlIncludeListener(PgParsingResult pgParsingResult) {
-        this.pgParsingResult = pgParsingResult;
-    }
+public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeParserListener {
 
     @Override
     public void enterFunctionDefinition(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionDefinitionContext ctx) {
@@ -22,11 +17,7 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
     }
 
     @Override
-    public void enterFunctionTitle(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionTitleContext ctx) {
-
-        pgParsingResult.setFunctionName(ctx.identifier().getText());
-
-    }
+    public abstract void enterFunctionTitle(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionTitleContext ctx);
 
     @Override
     public void exitFunctionTitle(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionTitleContext ctx) {
@@ -104,10 +95,7 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
     }
 
     @Override
-    public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-        System.out.println("+++ "+ctx.identifier().getText());
-        pgParsingResult.addElementToFunctionInvocationsList(ctx.identifier().getText());
-    }
+    public abstract void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx);
 
     @Override
     public void exitFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
@@ -115,10 +103,7 @@ public class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQLIncludeP
     }
 
     @Override
-    public void enterFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx) {
-        System.out.println("+++ "+ctx);
-
-    }
+    public abstract void enterFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx);
 
     @Override
     public void exitFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx) {
