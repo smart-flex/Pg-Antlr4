@@ -37,6 +37,11 @@ OPEN        :   [Oo][Pp][Ee][Nn];
 CLOSE       :   [Cc][Ll][Oo][Ss][Ee];
 SETOF       :   [Ss][Ee][Tt][Oo][Ff];
 
+// parameters IN (exists already), OUT, INOUT, or VARIADIC
+OUT         :   [Oo][Uu][Tt];
+INOUT       :   [Ii][Nn][Oo][Uu][Tt];
+VARIADIC    :   [Vv][Aa][Rr][Ii][Aa][Dd][Ii][Cc];
+
 LANGUAGES : '\'plpgsql\'' | 'plpgsql';
 LANGUAGE_IDENT : LANGUAGE WS LANGUAGES;
 

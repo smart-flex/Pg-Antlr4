@@ -129,7 +129,7 @@ functionParamDefinitionList
     ;
 
 functionParamDefinition
-    : identifier? pgTypeEnum
+    : argMode? identifier? pgTypeEnum
     ;
 
 seqOfFunctionAttributes
@@ -375,6 +375,10 @@ cursorParamDefinitionList
 
 cursorParamDefinition
     : identifier pgTypeEnum
+    ;
+
+argMode
+    : (IN | OUT | INOUT | VARIADIC)
     ;
 
 

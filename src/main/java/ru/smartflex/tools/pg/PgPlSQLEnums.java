@@ -24,6 +24,8 @@ public enum PgPlSQLEnums {
     P06_INT4_LOOP_EXECUTE("plpgsql\\p06_int4_loop_execute.sql"),
     P07_VOID_BLOCK("plpgsql\\p07_void_block.sql"),
     P02_INT4_V2("plpgsql\\p02_int4_v2.sql"),
+    P02_INT4_V2_INT4("plpgsql\\p02_int4_v2_int4.sql"),
+    P02_INT4_INOUT("plpgsql\\p02_int4_inout.sql"),
     P08_CURSOR("plpgsql\\p08_cursor.sql"),
     P08_CURSOR_FULL("plpgsql\\p08_cursor_full.sql"),
     P09_CALL("plpgsql\\p09_call.sql");
