@@ -102,10 +102,26 @@ functionCreateDef
     : CREATE (OR REPLACE)? FUNCTION;
 
 functionReturns
-    : RETURNS (pgTypeEnum | identifier)
-    | RETURNS TABLE tableParams
-    | RETURNS REFCURSOR
-    | RETURNS SETOF identifier
+    : functionReturnsUsualType
+    | functionReturnsTable
+    | functionReturnsRefcursor
+    | functionReturnsSetOf
+    ;
+
+functionReturnsUsualType
+    : RETURNS (pgTypeEnum | tableRefColumnType)
+    ;
+
+functionReturnsTable
+    : RETURNS TABLE tableParams
+    ;
+
+functionReturnsRefcursor
+    : RETURNS REFCURSOR
+    ;
+
+functionReturnsSetOf
+    : RETURNS SETOF identifier
     ;
 
 tableParams
@@ -279,7 +295,7 @@ booleanType : BOOL_VAL_START BOOL_ASSIGN? BOOL_VAL? BOOL_VAL_END;
 usualType
     : (   pgTypeEnum
         | (identifier PERCENT ROWTYPE)
-        | (identifier DOT identifier PERCENT TYPE)
+        | tableRefColumnType
       )
       precisionClause?
       NOT_NULL?
@@ -287,6 +303,10 @@ usualType
       (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation)?
       SEMI
      ;
+
+tableRefColumnType
+    : identifier DOT identifier PERCENT TYPE
+    ;
 
 precisionClause
     : LPAREN NUM_INT (COMMA NUM_INT)* RPAREN

@@ -13,7 +13,7 @@ public class PgGenResultBag {
 
     public void addResult(PgParsingResult result) {
 
-        if (!result.isParsingErrorHappened()) {
+        if (result.isParsingErrorHappened()) {
             return;
         }
 
@@ -23,5 +23,9 @@ public class PgGenResultBag {
         } finally {
             lock.unlock();
         }
+    }
+
+    public PgParsingResult getResult() {
+        return resultList.get(0);
     }
 }

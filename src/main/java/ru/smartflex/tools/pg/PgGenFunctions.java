@@ -13,17 +13,17 @@ public class PgGenFunctions {
 
     private static final int THREAD_AMOUNT = 2;
 
-    public void genFromEnum(Stream<PgPlSQLEnums> stream) {
+    public PgGenResultBag genFromEnum(Stream<PgPlSQLEnums> stream) {
 
         Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
             String sql = pgEum.getSqlName();
             return PgGenFunctions.class.getClassLoader().getResourceAsStream(sql);
         };
 
-        genFromIs(stream.map(funcIStream));
+        return genFromIs(stream.map(funcIStream));
     }
 
-    public void genFromIs(Stream<InputStream> stream) {
+    public PgGenResultBag genFromIs(Stream<InputStream> stream) {
 
         List<Future<PgParsingResult>> listAns = new ArrayList();
 
@@ -41,9 +41,6 @@ public class PgGenFunctions {
             try {
                 result = fut.get();
 
-                // TODO remove
-                System.out.println("##### " + result);
-
                 listResult.add(result);
             } catch (Exception e) {
                 // TODO transfer exception to logger or something else
@@ -56,5 +53,7 @@ public class PgGenFunctions {
         PgGenResultBag pgGenResultBag = new PgGenResultBag();
 
         listResult.stream().forEach(res -> pgGenResultBag.addResult(res));
+
+        return pgGenResultBag;
     }
 }

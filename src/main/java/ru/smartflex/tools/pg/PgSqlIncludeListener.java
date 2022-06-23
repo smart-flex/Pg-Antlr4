@@ -780,4 +780,57 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     }
 
+
+    @Override
+    public void enterFunctionReturnsRefcursor(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsRefcursorContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionReturnsRefcursor(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsRefcursorContext ctx) {
+
+    }
+
+    @Override
+    public void enterFunctionReturnsSetOf(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsSetOfContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionReturnsSetOf(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsSetOfContext ctx) {
+
+    }
+
+
+    @Override
+    public void enterFunctionReturnsTable(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsTableContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionReturnsTable(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsTableContext ctx) {
+
+    }
+
+
+    @Override
+    public void enterTableRefColumnType(ru.smartflex.tools.pg.PgSQLIncludeParser.TableRefColumnTypeContext ctx) {
+
+    }
+
+    @Override
+    public void exitTableRefColumnType(ru.smartflex.tools.pg.PgSQLIncludeParser.TableRefColumnTypeContext ctx) {
+
+    }
+
+    @Override
+    public void enterFunctionReturnsUsualType(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsUsualTypeContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionReturnsUsualType(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsUsualTypeContext ctx) {
+
+    }
+
 }

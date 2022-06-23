@@ -49,6 +49,50 @@ public class TestPgPlSql {
     }
 
     @Test
+    public void testParsingReturnSeToF() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p09_call.sql");
+        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResult result = pgGenResultBag.getResult();
+        PgFuncDefined funcDef = result.getFuncDefined();
+        PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
+        assertEquals(PgFuncDefined.ReturnTypeEnum.SETOF, retType);
+        assertEquals("t09_yyyymm", funcDef.getDataTypeName());
+    }
+
+    @Test
+    public void testParsingReturnRefcursor() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p08_cursor.sql");
+        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResult result = pgGenResultBag.getResult();
+        PgFuncDefined funcDef = result.getFuncDefined();
+        PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
+        assertEquals(PgFuncDefined.ReturnTypeEnum.REFCURSOR, retType);
+    }
+
+    @Test
+    public void testParsingReturnTable() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p03_table.sql");
+        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResult result = pgGenResultBag.getResult();
+        PgFuncDefined funcDef = result.getFuncDefined();
+        PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
+        assertEquals(PgFuncDefined.ReturnTypeEnum.TABLE, retType);
+        assertEquals("quantity", funcDef.getTableRetParameter(0).getParName());
+        assertEquals("numeric", funcDef.getTableRetParameter(1).getParType());
+    }
+
+    @Test
+    public void testParsingReturnUsual() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void.sql");
+        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResult result = pgGenResultBag.getResult();
+        PgFuncDefined funcDef = result.getFuncDefined();
+        PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
+        assertEquals(PgFuncDefined.ReturnTypeEnum.USUAL, retType);
+        assertEquals("void", funcDef.getDataTypeName());
+    }
+
+    @Test
     public void testMakeTree() {
         /*
         PgParsingResult pr1 = new PgParsingResult();
