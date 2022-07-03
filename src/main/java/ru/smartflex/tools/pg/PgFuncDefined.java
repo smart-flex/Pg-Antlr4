@@ -76,9 +76,9 @@ public class PgFuncDefined {
     }
 
     class FuncParameter {
-        String argMode = null;
-        String argName = null;
-        String argType = null;
+        String argMode;
+        String argName;
+        String argType;
 
         public FuncParameter(String argMode, String argName, String argType) {
             this.argMode = argMode;

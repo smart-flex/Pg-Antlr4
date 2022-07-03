@@ -44,7 +44,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
             // TABLE
             if (ctx.functionReturns().functionReturnsTable() != null) {
-                List<ru.smartflex.tools.pg.PgSQLIncludeParser.TableParamDefinitionContext> list =  ctx.functionReturns().functionReturnsTable().tableParams().tableParamDefinitionList().tableParamDefinition();
+                List<ru.smartflex.tools.pg.PgSQLIncludeParser.TableParamDefinitionContext> list = ctx.functionReturns().functionReturnsTable().tableParams().tableParamDefinitionList().tableParamDefinition();
                 for (ru.smartflex.tools.pg.PgSQLIncludeParser.TableParamDefinitionContext par : list) {
                     String parName = par.identifier().getText();
                     String parType = par.pgTypeEnum().getText();
@@ -67,13 +67,14 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
     }
 
     public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-        System.out.println("+++ " + ctx.identifier().getText());
-        pgParsingResult.addElementToFunctionInvocationsList(ctx.identifier().getText());
-    }
+        pgParsingResult.addFunctionInvocationsName(ctx.identifier().getText(), ctx.start.getLine(),
+                ctx.start.getCharPositionInLine(), ctx.stop.getLine(), ctx.stop.getCharPositionInLine());
 
-    public void enterFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx) {
-        System.out.println("+++ " + ctx);
+        PgFuncInvoked funcInvoked = pgParsingResult.getLastFunctionInvoked();
 
+        for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocationParamList().functionInvocationParameter()) {
+            funcInvoked.addParameter(par.getText());
+        }
     }
 
 }

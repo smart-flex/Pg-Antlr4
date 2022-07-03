@@ -80,22 +80,15 @@ returnStatement
     ;
 
 functionInvocation
-    : identifier LPAREN functionParamList? RPAREN
+    : identifier LPAREN functionInvocationParamList? RPAREN
     ;
 
-/* to delete
-functionInvocation
-    : identifier functionParams?
+functionInvocationParamList
+    : functionInvocationParameter (COMMA functionInvocationParameter)*
     ;
 
-functionParams
-    : LPAREN functionParamList? RPAREN
-    ;
-*/
-
-functionParamList
-    : ((identifier | constantExpression | string | anonymousParameter | refExpression) (COMMA (identifier | constantExpression | string | anonymousParameter | refExpression))*)
-    | functionInvocation
+functionInvocationParameter
+    : (identifier | constantExpression | string | anonymousParameter | refExpression | functionInvocation)
     ;
 
 functionCreateDef

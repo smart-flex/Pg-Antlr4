@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class PgParsingResult {
 
     private PgFuncDefined funcDefined = null;
-    private ArrayList<String> functionInvocationsList = new ArrayList<>();
+    private ArrayList<PgFuncInvoked> functionInvocationsList = new ArrayList<>();
     private boolean parsingErrorHappened = false;
 
     PgParsingResult() {
@@ -39,8 +39,12 @@ public class PgParsingResult {
         funcDefined.addFuncParameter(argMode, argName, argType);
     }
 
-    void addElementToFunctionInvocationsList(String currentInvocation) {
-        functionInvocationsList.add(currentInvocation);
+    void addFunctionInvocationsName(String funcName, int lineStart, int colStart, int lineEnd, int colEnd) {
+        functionInvocationsList.add(new PgFuncInvoked(funcName, lineStart, colStart, lineEnd, colEnd));
+    }
+
+    PgFuncInvoked getLastFunctionInvoked() {
+        return functionInvocationsList.get(functionInvocationsList.size() - 1);
     }
 
     void setParsingErrorHappened(boolean parsingErrorHappened) {

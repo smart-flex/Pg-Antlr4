@@ -103,14 +103,6 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
     }
 
     @Override
-    public abstract void enterFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx);
-
-    @Override
-    public void exitFunctionParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamListContext ctx) {
-
-    }
-
-    @Override
     public void enterFunctionCreateDef(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionCreateDefContext ctx) {
 
     }
@@ -830,6 +822,26 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     @Override
     public void exitFunctionReturnsUsualType(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionReturnsUsualTypeContext ctx) {
+
+    }
+
+    @Override
+    public void enterFunctionInvocationParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParamListContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionInvocationParamList(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParamListContext ctx) {
+
+    }
+
+    @Override
+    public void enterFunctionInvocationParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext ctx) {
+
+    }
+
+    @Override
+    public void exitFunctionInvocationParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext ctx) {
 
     }
 
