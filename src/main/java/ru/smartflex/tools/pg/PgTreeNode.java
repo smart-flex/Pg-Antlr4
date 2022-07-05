@@ -3,14 +3,25 @@ package ru.smartflex.tools.pg;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PgTreeNode<T> {
+public class PgTreeNode {
     private static final String ROOT_NODE_NAME = "^--ROOT--*";
 
+    private PgFuncDefined funcDefined = null;
+    private PgFuncInvoked funcInvoked = null;
     private String pgFuncName;
-    private T invokeInfo;
-    private List<PgTreeNode<T>> childList = new ArrayList<>();
+    private List<PgTreeNode> childList = new ArrayList<>();
 
     private PgTreeNode() {
+    }
+
+    public PgTreeNode(PgFuncDefined funcDefined) {
+        this.funcDefined = funcDefined;
+        this.pgFuncName = funcDefined.getFuncName();
+    }
+
+    public PgTreeNode(PgFuncInvoked funcInvoked) {
+        this.funcInvoked = funcInvoked;
+        this.pgFuncName = funcInvoked.getFuncName();
     }
 
     public PgTreeNode(String nameNode) {
@@ -23,7 +34,7 @@ public class PgTreeNode<T> {
         return root;
     }
 
-    public void addChild(PgTreeNode<T> child) {
+    public void addChild(PgTreeNode child) {
         childList.add(child);
     }
 
@@ -46,16 +57,16 @@ public class PgTreeNode<T> {
         System.out.println(String.format("%" + depth + "s", node.getPgFuncName()));
 
         for (int i = 0; i < node.childList.size(); i++) {
-            PgTreeNode<T> nd = (PgTreeNode<T>) node.childList.get(i);
+            PgTreeNode nd = node.childList.get(i);
             drawTree(nd, depth + 10);
         }
 
     }
 
-    private boolean moveDownToPut(PgTreeNode node, List<PgTreeNode<T>> list) {
+    private boolean moveDownToPut(PgTreeNode node, List<PgTreeNode> list) {
         boolean fok = false;
         for (int i = 0; i < list.size(); i++) {
-            PgTreeNode<T> nd = list.get(i);
+            PgTreeNode nd = list.get(i);
             if (nd.equals(node)) {
                 fok = replaceNode(nd, node);
             } else if (isCanReplaceChildNode(nd, node)) {
@@ -74,7 +85,7 @@ public class PgTreeNode<T> {
      */
     private boolean isCanReplaceChildNode(PgTreeNode srcNode, PgTreeNode destNode) {
         for (int i = 0; i < destNode.childList.size(); i++) {
-            PgTreeNode<T> nd = (PgTreeNode<T>) destNode.childList.get(i);
+            PgTreeNode nd = destNode.childList.get(i);
             if (nd.equals(srcNode)) {
                 checkForChildren(srcNode);
                 return true;

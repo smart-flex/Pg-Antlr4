@@ -25,7 +25,11 @@ public class PgGenResultBag {
         }
     }
 
-    public PgParsingResult getResult() {
+    public PgParsingResult getResultFirst() {
         return resultList.get(0);
+    }
+
+    public List<PgParsingResult> getResultList() {
+        return resultList;
     }
 }

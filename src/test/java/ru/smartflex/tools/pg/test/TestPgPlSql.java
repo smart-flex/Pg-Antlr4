@@ -2,7 +2,6 @@ package ru.smartflex.tools.pg.test;
 
 import org.junit.Test;
 import ru.smartflex.tools.pg.*;
-import ru.smartflex.tools.pg.PgSQLIncludeParser;
 
 import java.util.stream.Stream;
 
@@ -50,7 +49,7 @@ public class TestPgPlSql {
     public void testParsingReturnSeToF() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p09_call.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResult();
+        PgParsingResult result = pgGenResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.SETOF, retType);
@@ -61,7 +60,7 @@ public class TestPgPlSql {
     public void testParsingReturnRefcursor() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p08_cursor.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResult();
+        PgParsingResult result = pgGenResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.REFCURSOR, retType);
@@ -71,7 +70,7 @@ public class TestPgPlSql {
     public void testParsingReturnTable() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p03_table.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResult();
+        PgParsingResult result = pgGenResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.TABLE, retType);
@@ -83,7 +82,7 @@ public class TestPgPlSql {
     public void testParsingReturnUsual() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResult();
+        PgParsingResult result = pgGenResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.USUAL, retType);
@@ -95,8 +94,20 @@ public class TestPgPlSql {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql",
                 "p02_int4_v2.sql", "p02_int4_v2_int4.sql", "p02_int4_inout.sql", "p01_void.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResult();
 
+        PgTreeNode root = PgTreeNode.createRoot();
+        for (PgParsingResult res : pgGenResultBag.getResultList()) {
+            PgFuncDefined funcDefined = res.getFuncDefined();
+            PgTreeNode node = new PgTreeNode(funcDefined);
+
+            for (PgFuncInvoked inv : res.getFunctionInvocationsList()) {
+                PgTreeNode child = new PgTreeNode(inv);
+                node.addChild(child);
+            }
+            root.putInPlaceNode(node);
+        }
+
+        root.drawTree();
     }
 
     @Test

@@ -1,11 +1,12 @@
 package ru.smartflex.tools.pg;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PgParsingResult {
 
     private PgFuncDefined funcDefined = null;
-    private ArrayList<PgFuncInvoked> functionInvocationsList = new ArrayList<>();
+    private List<PgFuncInvoked> functionInvocationsList = new ArrayList<>();
     private boolean parsingErrorHappened = false;
 
     PgParsingResult() {
@@ -45,6 +46,10 @@ public class PgParsingResult {
 
     PgFuncInvoked getLastFunctionInvoked() {
         return functionInvocationsList.get(functionInvocationsList.size() - 1);
+    }
+
+    public List<PgFuncInvoked> getFunctionInvocationsList() {
+        return functionInvocationsList;
     }
 
     void setParsingErrorHappened(boolean parsingErrorHappened) {

@@ -22,6 +22,10 @@ public class PgFuncInvoked {
         this.colEnd = colEnd;
     }
 
+    String getFuncName() {
+        return funcName;
+    }
+
     void addParameter(String value) {
         paramList.add(new FuncInvokedParameter((value)));
     }
