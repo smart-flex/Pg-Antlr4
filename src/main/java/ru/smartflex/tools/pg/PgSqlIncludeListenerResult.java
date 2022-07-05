@@ -72,6 +72,10 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
         PgFuncInvoked funcInvoked = pgParsingResult.getLastFunctionInvoked();
 
+        if (ctx.functionInvocationParamList() == null) {
+            return;
+        }
+
         for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocationParamList().functionInvocationParameter()) {
             funcInvoked.addParameter(par.getText());
         }

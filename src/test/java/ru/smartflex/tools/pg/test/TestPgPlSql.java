@@ -15,7 +15,7 @@ public class TestPgPlSql {
     private void testValidityPlPgSql(String pgSql) {
         System.out.println(String.format("*** %2d *** " + pgSql, amount++));
         PgSQLIncludeParserWrapper wrapper = ParserBuilder.makeParser(pgSql);
-        PgSQLIncludeParser.FunctionDefinitionContext func = wrapper.functionDefinition();
+        wrapper.functionDefinition();
 
         assertEquals(false, wrapper.isParsingErrorHappened());
     }
@@ -28,8 +28,7 @@ public class TestPgPlSql {
 
     @Test
     public void testGeneratingAll() {
-        System.out.println();
-        System.out.println();
+        System.out.println("\n\n");
 
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
         new PgGenFunctions().genFromEnum(stream);
@@ -37,7 +36,6 @@ public class TestPgPlSql {
 
     @Test
     public void testGeneratingOne() {
-        //p01_void_perform.sql
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql");
         new PgGenFunctions().genFromEnum(stream);
     }
@@ -90,6 +88,15 @@ public class TestPgPlSql {
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.USUAL, retType);
         assertEquals("void", funcDef.getDataTypeName());
+    }
+
+    @Test
+    public void testGeneratingOut() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql",
+                "p02_int4_v2.sql", "p02_int4_v2_int4.sql", "p02_int4_inout.sql", "p01_void.sql");
+        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResult result = pgGenResultBag.getResult();
+
     }
 
     @Test

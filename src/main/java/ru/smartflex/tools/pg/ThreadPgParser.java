@@ -29,6 +29,7 @@ public class ThreadPgParser implements Callable<PgParsingResult> {
 
         } catch (Exception e) {
             pgParsingResult.setParsingErrorHappened(true);
+            e.printStackTrace();
             // TODO transfer exception to logger or something else
         }
 

@@ -1,5 +1,7 @@
 package ru.smartflex.tools.pg;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public enum PgPlSQLEnums {
@@ -49,4 +51,14 @@ public enum PgPlSQLEnums {
         Stream<PgPlSQLEnums> stream = Stream.of(PgPlSQLEnums.values()).filter(pge -> pge.getSqlName().contains(sqlName));
         return stream;
     }
+
+    public static Stream<PgPlSQLEnums> getPlPgSQLResources(String... sqlNames) {
+        List<String> list = Arrays.asList(sqlNames);
+        for (int i=0; i<list.size(); i++) {
+            list.set(i, "plpgsql\\" + list.get(i));
+        }
+        Stream<PgPlSQLEnums> stream = Stream.of(PgPlSQLEnums.values()).filter(pge -> list.contains(pge.getSqlName()));
+        return stream;
+    }
+
 }
