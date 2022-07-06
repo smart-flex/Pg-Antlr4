@@ -14,7 +14,7 @@ public class PgFuncDefined {
         this.funcName = funcName;
     }
 
-    String getFuncName() {
+    public String getFuncName() {
         return funcName;
     }
 

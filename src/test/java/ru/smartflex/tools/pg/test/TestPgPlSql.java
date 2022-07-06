@@ -91,8 +91,8 @@ public class TestPgPlSql {
 
     @Test
     public void testGeneratingOut() {
-        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql",
-                "p02_int4_v2.sql", "p02_int4_v2_int4.sql", "p02_int4_inout.sql", "p01_void.sql");
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_int4_v2_int4.sql",
+                "p02_int4_v2.sql", "p02_void_perform.sql", "p02_int4_inout.sql", "p01_void.sql");
         PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
 
         PgTreeNode root = PgTreeNode.createRoot();
@@ -104,9 +104,14 @@ public class TestPgPlSql {
                 PgTreeNode child = new PgTreeNode(inv);
                 node.addChild(child);
             }
+            System.out.println("******* " + funcDefined.getFuncName());
+            node.drawTree();
+
             root.putInPlaceNode(node);
+
         }
 
+        root.packTree();
         root.drawTree();
     }
 

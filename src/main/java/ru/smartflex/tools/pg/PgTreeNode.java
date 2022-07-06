@@ -1,6 +1,7 @@
 package ru.smartflex.tools.pg;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PgTreeNode {
@@ -50,15 +51,29 @@ public class PgTreeNode {
     }
 
     public void drawTree() {
-        drawTree(this, 10);
+        drawTree(this, 10, 0);
     }
 
-    private void drawTree(PgTreeNode node, int depth) {
-        System.out.println(String.format("%" + depth + "s", node.getPgFuncName()));
+    public void packTree() {
+        Iterator<PgTreeNode> iter = childList.iterator();
+        while (iter.hasNext()) {
+            PgTreeNode node = iter.next();
+            if (node.childList.size() == 0) {
+                iter.remove();
+            }
+        }
+    }
+
+    private void drawTree(PgTreeNode node, int depth, int indexNested) {
+        if (indexNested == 0) {
+            System.out.println(String.format("%" + depth + "s", node.getPgFuncName()));
+        } else {
+            System.out.println(String.format("%" + depth + "s", String.valueOf(indexNested) + ": " + node.getPgFuncName()));
+        }
 
         for (int i = 0; i < node.childList.size(); i++) {
             PgTreeNode nd = node.childList.get(i);
-            drawTree(nd, depth + 10);
+            drawTree(nd, depth + 10, indexNested + 1);
         }
 
     }
