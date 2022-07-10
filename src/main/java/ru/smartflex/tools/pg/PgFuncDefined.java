@@ -9,13 +9,21 @@ public class PgFuncDefined {
     private String dataTypeName;
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
+    private String funcBody;
 
-    PgFuncDefined(String funcName) {
-        this.funcName = funcName;
+    PgFuncDefined() {
     }
 
     public String getFuncName() {
         return funcName;
+    }
+
+    void setFuncName(String funcName) {
+        this.funcName = funcName;
+    }
+
+    void setFuncBody(String funcBody) {
+        this.funcBody = funcBody;
     }
 
     void addFuncParameter(String argMode, String argName, String argType) {

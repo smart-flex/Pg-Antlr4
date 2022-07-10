@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PgParsingResult {
 
-    private PgFuncDefined funcDefined = null;
+    private PgFuncDefined funcDefined = new PgFuncDefined();
     private List<PgFuncInvoked> functionInvocationsList = new ArrayList<>();
     private boolean parsingErrorHappened = false;
 
@@ -13,7 +13,11 @@ public class PgParsingResult {
     }
 
     void setFunctionName(String functionName) {
-        funcDefined = new PgFuncDefined(functionName);
+        funcDefined.setFuncName(functionName);
+    }
+
+    void setFuncBody(String funcBody) {
+        funcDefined.setFuncBody(funcBody);
     }
 
     void setFuncReturnSetOf(String dataTypeName) {
