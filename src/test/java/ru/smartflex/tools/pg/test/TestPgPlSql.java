@@ -30,26 +30,26 @@ public class TestPgPlSql {
         System.out.println("\n\n");
 
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
-        new PgGenFunctions().genFromEnum(stream);
+        new PgParseFunctions().oarseFromEnum(stream);
     }
 
     @Test
     public void testGeneratingOne() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql");
-        new PgGenFunctions().genFromEnum(stream);
+        new PgParseFunctions().oarseFromEnum(stream);
     }
 
     @Test
     public void testGeneratingTwo() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql");
-        new PgGenFunctions().genFromEnum(stream);
+        new PgParseFunctions().oarseFromEnum(stream);
     }
 
     @Test
     public void testParsingReturnSeToF() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p09_call.sql");
-        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResultFirst();
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.SETOF, retType);
@@ -59,8 +59,8 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnRefcursor() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p08_cursor.sql");
-        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResultFirst();
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.REFCURSOR, retType);
@@ -69,8 +69,8 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnTable() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p03_table.sql");
-        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResultFirst();
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.TABLE, retType);
@@ -81,8 +81,8 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnUsual() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void.sql");
-        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
-        PgParsingResult result = pgGenResultBag.getResultFirst();
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
         assertEquals(PgFuncDefined.ReturnTypeEnum.USUAL, retType);
@@ -93,10 +93,10 @@ public class TestPgPlSql {
     public void testGeneratingOut() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_int4_v2_int4.sql",
                 "p02_int4_v2.sql", "p02_void_perform.sql", "p02_int4_inout.sql", "p01_void.sql");
-        PgGenResultBag pgGenResultBag = new PgGenFunctions().genFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
 
         PgTreeNode root = PgTreeNode.createRoot();
-        for (PgParsingResult res : pgGenResultBag.getResultList()) {
+        for (PgParsingResult res : pgParsingResultBag.getResultList()) {
             PgFuncDefined funcDefined = res.getFuncDefined();
             PgTreeNode node = new PgTreeNode(funcDefined);
 

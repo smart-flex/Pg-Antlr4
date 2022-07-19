@@ -9,21 +9,21 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class PgGenFunctions {
+public class PgParseFunctions {
 
     private static final int THREAD_AMOUNT = 2;
 
-    public PgGenResultBag genFromEnum(Stream<PgPlSQLEnums> stream) {
+    public PgParsingResultBag oarseFromEnum(Stream<PgPlSQLEnums> stream) {
 
         Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
             String sql = pgEum.getSqlName();
-            return PgGenFunctions.class.getClassLoader().getResourceAsStream(sql);
+            return PgParseFunctions.class.getClassLoader().getResourceAsStream(sql);
         };
 
-        return genFromIs(stream.map(funcIStream));
+        return parseFromIs(stream.map(funcIStream));
     }
 
-    public PgGenResultBag genFromIs(Stream<InputStream> stream) {
+    public PgParsingResultBag parseFromIs(Stream<InputStream> stream) {
 
         List<Future<PgParsingResult>> listAns = new ArrayList();
 
@@ -50,10 +50,10 @@ public class PgGenFunctions {
 
         service.shutdown();
 
-        PgGenResultBag pgGenResultBag = new PgGenResultBag();
+        PgParsingResultBag pgParsingResultBag = new PgParsingResultBag();
 
-        listResult.stream().forEach(res -> pgGenResultBag.addResult(res));
+        listResult.stream().forEach(res -> pgParsingResultBag.addResult(res));
 
-        return pgGenResultBag;
+        return pgParsingResultBag;
     }
 }

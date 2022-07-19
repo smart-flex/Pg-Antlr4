@@ -51,7 +51,19 @@ public class PgTreeNode {
     }
 
     public void drawTree() {
-        drawTree(this, 10, 0);
+        PgTreeNodeWalker ptw = new PgTreeNodeWalker(this, new PrintTreeBag(10, 0));
+
+        ITreeHandler<PgTreeNodeWalker> ith = (a) -> {
+            if (((PrintTreeBag) a.getInfo()).indexNested == 0) {
+                System.out.println(String.format("%" + ((PrintTreeBag) a.getInfo()).depth + "s", a.getNode().getPgFuncName()));
+            } else {
+                System.out.println(String.format("%" + ((PrintTreeBag) a.getInfo()).depth + "s",
+                        ((PrintTreeBag) a.getInfo()).indexNested) + ": " + a.getNode().getPgFuncName());
+            }
+            return;
+        };
+
+        walkingTree(ptw, ith, this);
     }
 
     public void packTree() {
@@ -64,20 +76,49 @@ public class PgTreeNode {
         }
     }
 
-    private void drawTree(PgTreeNode node, int depth, int indexNested) {
-        if (indexNested == 0) {
-            System.out.println(String.format("%" + depth + "s", node.getPgFuncName()));
-        } else {
-            System.out.println(String.format("%" + depth + "s", String.valueOf(indexNested) + ": " + node.getPgFuncName()));
+    public void walkingTree(PgTreeNodeWalker ptw, ITreeHandler th, PgTreeNode node) {
+        ITreeHandler<PgTreeNodeWalker> thr = th;
+        thr.apply(ptw);
+
+        if (node.childList.size() == 0) {
+            return;
         }
+
+        ITreeState statePrev = ptw.getInfo();
+        ITreeState stateNextLevel = statePrev.doState();
 
         for (int i = 0; i < node.childList.size(); i++) {
             PgTreeNode nd = node.childList.get(i);
-            drawTree(nd, depth + 10, indexNested + 1);
+            PgTreeNodeWalker ptwNext = new PgTreeNodeWalker(nd, stateNextLevel);
+            walkingTree(ptwNext, th, nd);
         }
-
     }
 
+    class PrintTreeBag implements ITreeState {
+        int depth;
+        int indexNested;
+
+        public PrintTreeBag(int depth, int indexNested) {
+            this.depth = depth;
+            this.indexNested = indexNested;
+        }
+
+        @Override
+        public ITreeState doState() {
+            depth += 10;
+            indexNested++;
+            return new PrintTreeBag(depth, indexNested);
+        }
+    }
+
+    /*
+        делаю метод прохода по дереву сверху вниз
+        в методе возможно нужен аналез выхода на первый уровень
+        делаю лямбду которая печатает дерево
+
+        потом делаю лямду которая занимается поиском нужного тела и его вставкой
+        сделать хинты для принуждения выбора тела ф-ции
+    */
     private boolean moveDownToPut(PgTreeNode node, List<PgTreeNode> list) {
         boolean fok = false;
         for (int i = 0; i < list.size(); i++) {
