@@ -44,12 +44,10 @@ public class PgParsingResult {
         funcDefined.addFuncParameter(argMode, argName, argType);
     }
 
-    void addFunctionInvocationsName(String funcName, int lineStart, int colStart, int lineEnd, int colEnd) {
-        functionInvocationsList.add(new PgFuncInvoked(funcName, lineStart, colStart, lineEnd, colEnd));
-    }
-
-    PgFuncInvoked getLastFunctionInvoked() {
-        return functionInvocationsList.get(functionInvocationsList.size() - 1);
+    PgFuncInvoked addFunctionInvocationsName(String funcName, int lineStart, int colStart, int lineEnd, int colEnd) {
+        PgFuncInvoked invoked = new PgFuncInvoked(funcName, lineStart, colStart, lineEnd, colEnd);
+        functionInvocationsList.add(invoked);
+        return invoked;
     }
 
     public List<PgFuncInvoked> getFunctionInvocationsList() {

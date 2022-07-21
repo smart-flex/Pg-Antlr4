@@ -13,7 +13,7 @@ public class PgParseFunctions {
 
     private static final int THREAD_AMOUNT = 2;
 
-    public PgParsingResultBag oarseFromEnum(Stream<PgPlSQLEnums> stream) {
+    public PgParsingResultBag parseFromEnum(Stream<PgPlSQLEnums> stream) {
 
         Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
             String sql = pgEum.getSqlName();

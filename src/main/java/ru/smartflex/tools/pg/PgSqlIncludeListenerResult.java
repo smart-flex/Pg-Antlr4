@@ -67,10 +67,8 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
     }
 
     public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-        pgParsingResult.addFunctionInvocationsName(ctx.identifier().getText(), ctx.start.getLine(),
+        PgFuncInvoked funcInvoked = pgParsingResult.addFunctionInvocationsName(ctx.identifier().getText(), ctx.start.getLine(),
                 ctx.start.getCharPositionInLine(), ctx.stop.getLine(), ctx.stop.getCharPositionInLine());
-
-        PgFuncInvoked funcInvoked = pgParsingResult.getLastFunctionInvoked();
 
         if (ctx.functionInvocationParamList() == null) {
             return;

@@ -77,8 +77,7 @@ public class PgTreeNode {
     }
 
     public void walkingTree(PgTreeNodeWalker ptw, ITreeHandler th, PgTreeNode node) {
-        ITreeHandler<PgTreeNodeWalker> thr = th;
-        thr.apply(ptw);
+        th.apply(ptw);
 
         if (node.childList.size() == 0) {
             return;
@@ -105,9 +104,7 @@ public class PgTreeNode {
 
         @Override
         public ITreeState doState() {
-            depth += 10;
-            indexNested++;
-            return new PrintTreeBag(depth, indexNested);
+            return new PrintTreeBag(depth + 10, indexNested + 1);
         }
     }
 

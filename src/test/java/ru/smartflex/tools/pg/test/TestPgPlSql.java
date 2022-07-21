@@ -30,25 +30,25 @@ public class TestPgPlSql {
         System.out.println("\n\n");
 
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources();
-        new PgParseFunctions().oarseFromEnum(stream);
+        new PgParseFunctions().parseFromEnum(stream);
     }
 
     @Test
     public void testGeneratingOne() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql");
-        new PgParseFunctions().oarseFromEnum(stream);
+        new PgParseFunctions().parseFromEnum(stream);
     }
 
     @Test
     public void testGeneratingTwo() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_void_perform.sql");
-        new PgParseFunctions().oarseFromEnum(stream);
+        new PgParseFunctions().parseFromEnum(stream);
     }
 
     @Test
     public void testParsingReturnSeToF() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p09_call.sql");
-        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
         PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
@@ -59,7 +59,7 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnRefcursor() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p08_cursor.sql");
-        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
         PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
@@ -69,7 +69,7 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnTable() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p03_table.sql");
-        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
         PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
@@ -81,7 +81,7 @@ public class TestPgPlSql {
     @Test
     public void testParsingReturnUsual() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void.sql");
-        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
         PgParsingResult result = pgParsingResultBag.getResultFirst();
         PgFuncDefined funcDef = result.getFuncDefined();
         PgFuncDefined.ReturnTypeEnum retType = funcDef.getReturnType();
@@ -93,7 +93,7 @@ public class TestPgPlSql {
     public void testGeneratingOut() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_int4_v2_int4.sql",
                 "p02_int4_v2.sql", "p02_void_perform.sql", "p02_int4_inout.sql", "p01_void.sql");
-        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().oarseFromEnum(stream);
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
 
         PgTreeNode root = PgTreeNode.createRoot();
         for (PgParsingResult res : pgParsingResultBag.getResultList()) {
