@@ -12,6 +12,8 @@ public class PgTreeNode {
     private String pgFuncName;
     private List<PgTreeNode> childList = new ArrayList<>();
 
+    private PgTreeNode parentNode = null;
+
     private PgTreeNode() {
     }
 
@@ -20,7 +22,8 @@ public class PgTreeNode {
         this.pgFuncName = funcDefined.getFuncName();
     }
 
-    public PgTreeNode(PgFuncInvoked funcInvoked) {
+    public PgTreeNode(PgTreeNode parentNode, PgFuncInvoked funcInvoked) {
+        this.parentNode = parentNode;
         this.funcInvoked = funcInvoked;
         this.pgFuncName = funcInvoked.getFuncName();
     }
@@ -175,5 +178,17 @@ public class PgTreeNode {
 
     public String getPgFuncName() {
         return pgFuncName;
+    }
+
+    PgFuncInvoked getFuncInvoked() {
+        return funcInvoked;
+    }
+
+    PgTreeNode getParentNode() {
+        return parentNode;
+    }
+
+    PgFuncDefined getFuncDefined() {
+        return funcDefined;
     }
 }

@@ -10,6 +10,7 @@ public class PgFuncDefined {
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
+    private PgFuncBodyPartBag funcBodyPartBag = new PgFuncBodyPartBag();
 
     PgFuncDefined() {
     }
@@ -47,6 +48,10 @@ public class PgFuncDefined {
     void setFuncReturnUsual(String dataTypeName) {
         returnType = ReturnTypeEnum.USUAL;
         this.dataTypeName = dataTypeName;
+    }
+
+    PgFuncBodyPartBag getFuncBodyPartBag() {
+        return funcBodyPartBag;
     }
 
     public TableRetParameter getTableRetParameter(int i) {

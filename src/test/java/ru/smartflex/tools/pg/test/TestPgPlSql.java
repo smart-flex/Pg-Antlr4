@@ -95,23 +95,7 @@ public class TestPgPlSql {
                 "p02_int4_v2.sql", "p02_void_perform.sql", "p02_int4_inout.sql", "p01_void.sql");
         PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
 
-        PgTreeNode root = PgTreeNode.createRoot();
-        for (PgParsingResult res : pgParsingResultBag.getResultList()) {
-            PgFuncDefined funcDefined = res.getFuncDefined();
-            PgTreeNode node = new PgTreeNode(funcDefined);
-
-            for (PgFuncInvoked inv : res.getFunctionInvocationsList()) {
-                PgTreeNode child = new PgTreeNode(inv);
-                node.addChild(child);
-            }
-            System.out.println("******* " + funcDefined.getFuncName());
-            node.drawTree();
-
-            root.putInPlaceNode(node);
-
-        }
-
-        root.packTree();
+        PgTreeNode root = ParserHelper.makeTree(pgParsingResultBag);
         root.drawTree();
     }
 
