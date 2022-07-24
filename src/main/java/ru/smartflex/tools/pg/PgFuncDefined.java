@@ -10,7 +10,7 @@ public class PgFuncDefined {
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
-    private PgFuncBodyPartBag funcBodyPartBag = new PgFuncBodyPartBag();
+    private PgFuncBodyPartBag funcBodyPartBag = new PgFuncBodyPartBag(this);
 
     PgFuncDefined() {
     }
@@ -25,6 +25,10 @@ public class PgFuncDefined {
 
     void setFuncBody(String funcBody) {
         this.funcBody = funcBody;
+    }
+
+    String getFuncBody() {
+        return funcBody;
     }
 
     void addFuncParameter(String argMode, String argName, String argType) {

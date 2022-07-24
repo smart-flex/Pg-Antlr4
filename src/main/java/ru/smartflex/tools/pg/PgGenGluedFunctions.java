@@ -25,8 +25,9 @@ public class PgGenGluedFunctions {
             PgFuncInvoked funcInvoked = w.getNode().getFuncInvoked();
             if (funcInvoked != null) {
                 // это chield, формируем хвост
-                надо дописать 9проработать) первначальное наполнение bodypart
-                        и дальнейше наполнение шаг за шагом (уменьшение хвоста)
+                //надо дописать 9проработать) первначальное наполнение bodypart
+                //                        и дальнейше наполнение шаг за шагом (уменьшение хвоста)
+                //
                 PgFuncBodyPartBag.FuncBodyPart lastBodyPart = ParserHelper.getLastFuncBodyPart(w.getNode());
 
             }
