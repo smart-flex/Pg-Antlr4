@@ -1,5 +1,11 @@
 package ru.smartflex.tools.pg;
 
+import java.io.BufferedReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+
 public class ParserHelper {
 
     public static PgTreeNode makeTree(PgParsingResultBag pgParsingResultBag) {
@@ -30,5 +36,26 @@ public class ParserHelper {
         }
 
         return funcDefined.getFuncBodyPartBag().getLastFuncBodyPart();
+    }
+
+    static void makeNewBodyPart(PgFuncInvoked funcInvoked,  PgTreeNode node) {
+        PgFuncDefined funcDefined = node.getParentNode().getFuncDefined();
+        PgFuncBodyPartBag.FuncBodyPart lastBodyPart = ParserHelper.getLastFuncBodyPart(node);
+
+        int rowOffsetBody = lastBodyPart.getRowOffsetBody();
+        int lineStart = funcInvoked.getLineStart() - rowOffsetBody;
+        int lineEnd = funcInvoked.getLineEnd() - rowOffsetBody;
+//todo насытить p02_void_perform комментами-ловушками // -- и пр.
+        Reader reader = new StringReader(lastBodyPart.getFuncPart());
+        Stream<String> lines = new BufferedReader(reader).lines();
+        AtomicInteger idLine = new AtomicInteger(0);
+        lines.forEach(line -> {
+
+            idLine.incrementAndGet();
+        });
+
+
+
+
     }
 }

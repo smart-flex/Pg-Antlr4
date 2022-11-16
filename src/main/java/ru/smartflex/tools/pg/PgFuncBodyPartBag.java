@@ -28,10 +28,19 @@ public class PgFuncBodyPartBag {
 
     class FuncBodyPart {
 
-        String funcPart;
+        private String funcPart;
+        private int rowOffsetBody = 0;
 
         FuncBodyPart(String funcPart) {
             this.funcPart = funcPart;
+        }
+
+        int getRowOffsetBody() {
+            return rowOffsetBody;
+        }
+
+        String getFuncPart() {
+            return funcPart;
         }
     }
 }

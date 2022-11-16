@@ -30,6 +30,22 @@ public class PgFuncInvoked {
         paramList.add(new FuncInvokedParameter((value)));
     }
 
+    int getLineStart() {
+        return lineStart;
+    }
+
+    int getColStart() {
+        return colStart;
+    }
+
+    int getLineEnd() {
+        return lineEnd;
+    }
+
+    int getColEnd() {
+        return colEnd;
+    }
+
     class FuncInvokedParameter {
         private String value;
 
