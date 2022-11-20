@@ -1,6 +1,7 @@
 package ru.smartflex.tools.pg;
 
 @FunctionalInterface
-public interface ITreeHandler<A> {
-    void apply(A a);
+public interface ITreeHandler<PgTreeNodeWalker> {
+    void apply(ru.smartflex.tools.pg.PgTreeNodeWalker a);
+
 }

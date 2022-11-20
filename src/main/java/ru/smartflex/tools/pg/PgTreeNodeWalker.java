@@ -1,19 +1,40 @@
 package ru.smartflex.tools.pg;
 
+import java.util.List;
+
 public class PgTreeNodeWalker {
     private PgTreeNode node;
-    private ITreeState info;
+    private ITreeState state;
 
-    public PgTreeNodeWalker(PgTreeNode node, ITreeState info) {
+    PgTreeNodeWalker(PgTreeNode node, ITreeState state) {
         this.node = node;
-        this.info = info;
+        this.state = state;
     }
 
-    public PgTreeNode getNode() {
+    PgTreeNodeWalker next(PgTreeNode nodeNext) {
+        PgTreeNodeWalker next = null;
+
+        ITreeState statePrev = getState();
+        ITreeState stateNextLevel = statePrev.doState();
+
+        next = new PgTreeNodeWalker(nodeNext, stateNextLevel);
+
+        return next;
+    }
+
+    boolean isChildEmpty() {
+        return node.getChildListsize() == 0 ? true : false;
+    }
+
+    List<PgTreeNode> getChildList() {
+        return node.getChildList();
+    }
+
+    PgTreeNode getNode() {
         return node;
     }
 
-    public ITreeState getInfo() {
-        return info;
+    ITreeState getState() {
+        return state;
     }
 }

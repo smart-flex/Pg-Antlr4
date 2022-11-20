@@ -38,6 +38,14 @@ public class PgTreeNode {
         return root;
     }
 
+    int getChildListsize() {
+        return childList.size();
+    }
+
+    List<PgTreeNode> getChildList() {
+        return childList;
+    }
+
     public void addChild(PgTreeNode child) {
         childList.add(child);
     }
@@ -54,19 +62,20 @@ public class PgTreeNode {
     }
 
     public void drawTree() {
-        PgTreeNodeWalker ptw = new PgTreeNodeWalker(this, new PrintTreeBag(10, 0));
+        PgTreeNodeWalker ptw = new PgTreeNodeWalker(this, new PrintTreeStateNode(10, 0));
 
         ITreeHandler<PgTreeNodeWalker> ith = (a) -> {
-            if (((PrintTreeBag) a.getInfo()).indexNested == 0) {
-                System.out.println(String.format("%" + ((PrintTreeBag) a.getInfo()).depth + "s", a.getNode().getPgFuncName()));
+            if (((PrintTreeStateNode) a.getState()).indexNested == 0) {
+                System.out.println(String.format("%" + ((PrintTreeStateNode) a.getState()).depth + "s",
+                        a.getNode().getPgFuncName()));
             } else {
-                System.out.println(String.format("%" + ((PrintTreeBag) a.getInfo()).depth + "s",
-                        ((PrintTreeBag) a.getInfo()).indexNested) + ": " + a.getNode().getPgFuncName());
+                System.out.println(String.format("%" + ((PrintTreeStateNode) a.getState()).depth + "s",
+                        ((PrintTreeStateNode) a.getState()).indexNested) + ": " + a.getNode().getPgFuncName());
             }
             return;
         };
 
-        walkingTree(ptw, ith, this);
+        walkingTree(ptw, ith);
     }
 
     public void packTree() {
@@ -79,35 +88,32 @@ public class PgTreeNode {
         }
     }
 
-    public void walkingTree(PgTreeNodeWalker ptw, ITreeHandler th, PgTreeNode node) {
+    public void walkingTree(PgTreeNodeWalker ptw, ITreeHandler th) {
         th.apply(ptw);
 
-        if (node.childList.size() == 0) {
+        if (ptw.isChildEmpty()) {
             return;
         }
 
-        ITreeState statePrev = ptw.getInfo();
-        ITreeState stateNextLevel = statePrev.doState();
-
-        for (int i = 0; i < node.childList.size(); i++) {
-            PgTreeNode nd = node.childList.get(i);
-            PgTreeNodeWalker ptwNext = new PgTreeNodeWalker(nd, stateNextLevel);
-            walkingTree(ptwNext, th, nd);
+        for (PgTreeNode nd : ptw.getChildList()) {
+            PgTreeNodeWalker ptwNext = ptw.next(nd);
+            walkingTree(ptwNext, th);
         }
+
     }
 
-    class PrintTreeBag implements ITreeState {
+    class PrintTreeStateNode implements ITreeState {
         int depth;
         int indexNested;
 
-        public PrintTreeBag(int depth, int indexNested) {
+        public PrintTreeStateNode(int depth, int indexNested) {
             this.depth = depth;
             this.indexNested = indexNested;
         }
 
         @Override
         public ITreeState doState() {
-            return new PrintTreeBag(depth + 10, indexNested + 1);
+            return new PrintTreeStateNode(depth + 10, indexNested + 1);
         }
     }
 
