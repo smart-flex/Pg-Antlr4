@@ -3,6 +3,8 @@ package ru.smartflex.tools.pg;
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -10,6 +12,8 @@ public class ParserHelper {
 
     public static PgTreeNode makeTree(PgParsingResultBag pgParsingResultBag) {
         PgTreeNode root = PgTreeNode.createRoot();
+
+        List<PgTreeNode> nodeList = new ArrayList();
         for (PgParsingResult res : pgParsingResultBag.getResultList()) {
             PgFuncDefined funcDefined = res.getFuncDefined();
             PgTreeNode node = new PgTreeNode(funcDefined);
@@ -19,9 +23,28 @@ public class ParserHelper {
                 node.addChild(child);
             }
 
-            root.putInPlaceNode(node);
+            nodeList.add(node);
         }
-        root.packTree();
+        // sub node м.б. использован дважды , в Null его нельзя переводить
+        for (int i=0; i<nodeList.size(); i++) {
+            PgTreeNode node1 = nodeList.get(i);
+
+                for (int k=0; k<nodeList.size(); k++) {
+                    PgTreeNode node2 = nodeList.get(k);
+                    for (PgTreeNode nd : node2.getChildList()) {
+                        if (node1.equals(nd)) {
+                            node1.setWasUsedAsChild(true);
+                            nd.replaceNodeWithBody(node1);
+                        }
+                    }
+                }
+        }
+
+        for (PgTreeNode nd : nodeList) {
+            if (!nd.isWasUsedAsChild()) {
+                root.addChild(nd);
+            }
+        }
 
         return root;
     }

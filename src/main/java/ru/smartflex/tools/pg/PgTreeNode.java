@@ -13,6 +13,7 @@ public class PgTreeNode {
     private List<PgTreeNode> childList = new ArrayList<>();
 
     private PgTreeNode parentNode = null;
+    private boolean wasUsedAsChild = false;
 
     private PgTreeNode() {
     }
@@ -50,17 +51,6 @@ public class PgTreeNode {
         childList.add(child);
     }
 
-    public void putInPlaceNode(PgTreeNode node) {
-        if (childList.size() == 0) {
-            childList.add(node);
-            return;
-        }
-
-        if (!moveDownToPut(node, this.childList)) {
-            childList.add(node);
-        }
-    }
-
     public void drawTree() {
         PgTreeNodeWalker ptw = new PgTreeNodeWalker(this, new PrintTreeStateNode(10, 0));
 
@@ -76,16 +66,6 @@ public class PgTreeNode {
         };
 
         walkingTree(ptw, ith);
-    }
-
-    public void packTree() {
-        Iterator<PgTreeNode> iter = childList.iterator();
-        while (iter.hasNext()) {
-            PgTreeNode node = iter.next();
-            if (node.childList.size() == 0) {
-                iter.remove();
-            }
-        }
     }
 
     public void walkingTree(PgTreeNodeWalker ptw, ITreeHandler th) {
@@ -125,36 +105,6 @@ public class PgTreeNode {
         потом делаю лямду которая занимается поиском нужного тела и его вставкой
         сделать хинты для принуждения выбора тела ф-ции
     */
-    private boolean moveDownToPut(PgTreeNode node, List<PgTreeNode> list) {
-        boolean fok = false;
-        for (int i = 0; i < list.size(); i++) {
-            PgTreeNode nd = list.get(i);
-            if (nd.equals(node)) {
-                fok = replaceNode(nd, node);
-            } else if (isCanReplaceChildNode(nd, node)) {
-                fok = true;
-                // емняем узел на поддерево
-                list.set(i, node);
-            } else {
-                fok = moveDownToPut(node, nd.childList);
-            }
-        }
-        return fok;
-    }
-
-    /**
-     * замена хвоста
-     */
-    private boolean isCanReplaceChildNode(PgTreeNode srcNode, PgTreeNode destNode) {
-        for (int i = 0; i < destNode.childList.size(); i++) {
-            PgTreeNode nd = destNode.childList.get(i);
-            if (nd.equals(srcNode)) {
-                checkForChildren(srcNode);
-                return true;
-            }
-        }
-        return false;
-    }
 
     private void checkForChildren(PgTreeNode srcNode) {
         if (srcNode.childList.size() > 0) {
@@ -162,11 +112,11 @@ public class PgTreeNode {
         }
     }
 
-    private boolean replaceNode(PgTreeNode srcNode, PgTreeNode destNode) {
-        checkForChildren(srcNode);
+    void replaceNodeWithBody(PgTreeNode destNode) {
+        checkForChildren(this);
 
-        srcNode.childList = destNode.childList;
-        return true;
+        childList = destNode.childList;
+        setFuncDefined(destNode.getFuncDefined());
     }
 
     public boolean equals(PgTreeNode node) {
@@ -196,5 +146,24 @@ public class PgTreeNode {
 
     PgFuncDefined getFuncDefined() {
         return funcDefined;
+    }
+
+    public void setFuncDefined(PgFuncDefined funcDefined) {
+        this.funcDefined = funcDefined;
+    }
+
+    public boolean isWasUsedAsChild() {
+        return wasUsedAsChild;
+    }
+
+    public void setWasUsedAsChild(boolean wasUsedAsChild) {
+        this.wasUsedAsChild = wasUsedAsChild;
+    }
+
+    @Override
+    public String toString() {
+        return "PgTreeNode{" +
+                "pgFuncName='" + pgFuncName + '\'' +
+                '}';
     }
 }

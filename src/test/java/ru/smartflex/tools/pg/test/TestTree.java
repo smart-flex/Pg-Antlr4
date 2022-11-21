@@ -15,7 +15,7 @@ public class TestTree {
         func1_level1.addChild((func2_level2));
         func1_level1.addChild((func3_level2));
 
-        root.putInPlaceNode(func1_level1);
+        root.addChild(func1_level1);
 
         root.drawTree();
 
