@@ -5,25 +5,31 @@ import java.util.List;
 
 public class PgFuncBodyPartBag {
 
-    private PgFuncDefined funcDefined;
-
     private List<FuncBodyPart> listPart = new ArrayList();
 
-    PgFuncBodyPartBag(PgFuncDefined funcDefined) {
-        this.funcDefined = funcDefined;
+    PgFuncBodyPartBag(PgTreeNode node) {
+        // create PgFuncBodyPartBag without children
+        String funcBody = node.getFuncDefined().getFuncBody();
+        listPart.add(new FuncBodyPart(funcBody));
     }
 
-    FuncBodyPart getLastFuncBodyPart() {
-        if (listPart.size() == 0) {
-            // first call
-            String funcBody = funcDefined.getFuncBody();
-            listPart.add(new FuncBodyPart(funcBody));
-        }
+    PgFuncBodyPartBag(String bodyPart) {
+        listPart.add(new FuncBodyPart(bodyPart));
+    }
 
-        if (listPart.size() > 0) {
-            return listPart.get(listPart.size() - 1);
+    void addBodyPart(String bodyPart) {
+        listPart.add(new FuncBodyPart(bodyPart));
+    }
+
+    boolean checkGlue(PgTreeNode node) {
+        StringBuilder sb = new StringBuilder();
+        for (FuncBodyPart fb : listPart) {
+            sb.append(fb.getFuncPart());
         }
-        return null;
+        String gluedBody = sb.toString();
+        String funcBody = node.getFuncDefined().getFuncBody();
+System.out.println(gluedBody);
+        return gluedBody.equals(funcBody);
     }
 
     class FuncBodyPart {

@@ -97,6 +97,8 @@ public class TestPgPlSql {
 
         PgTreeNode root = ParserHelper.makeTree(pgParsingResultBag);
         root.drawTree();
+
+        new PgGenGluedFunctions().glue(root);
     }
 
     @Test

@@ -14,6 +14,7 @@ public class PgTreeNode {
 
     private PgTreeNode parentNode = null;
     private boolean wasUsedAsChild = false;
+    private PgFuncBodyPartBag funcBodyPartBag = null;
 
     private PgTreeNode() {
     }
@@ -51,6 +52,9 @@ public class PgTreeNode {
         childList.add(child);
     }
 
+    /**
+     * Метод для визуального контроля построения дерева вызовов
+     */
     public void drawTree() {
         PgTreeNodeWalker ptw = new PgTreeNodeWalker(this, new PrintTreeStateNode(10, 0));
 
@@ -96,15 +100,6 @@ public class PgTreeNode {
             return new PrintTreeStateNode(depth + 10, indexNested + 1);
         }
     }
-
-    /*
-        делаю метод прохода по дереву сверху вниз
-        в методе возможно нужен аналез выхода на первый уровень
-        делаю лямбду которая печатает дерево
-
-        потом делаю лямду которая занимается поиском нужного тела и его вставкой
-        сделать хинты для принуждения выбора тела ф-ции
-    */
 
     private void checkForChildren(PgTreeNode srcNode) {
         if (srcNode.childList.size() > 0) {
@@ -158,6 +153,22 @@ public class PgTreeNode {
 
     public void setWasUsedAsChild(boolean wasUsedAsChild) {
         this.wasUsedAsChild = wasUsedAsChild;
+    }
+
+    void setFuncBodyPartBag(PgFuncBodyPartBag funcBodyPartBag) {
+        this.funcBodyPartBag = funcBodyPartBag;
+    }
+
+    PgFuncBodyPartBag getFuncBodyPartBag() {
+        return funcBodyPartBag;
+    }
+
+    void addBodyPart(String bodyPart) {
+        if (funcBodyPartBag == null) {
+            funcBodyPartBag = new PgFuncBodyPartBag(bodyPart);
+        } else {
+            funcBodyPartBag.addBodyPart(bodyPart);
+        }
     }
 
     @Override

@@ -49,18 +49,7 @@ public class ParserHelper {
         return root;
     }
 
-    static PgFuncBodyPartBag.FuncBodyPart getLastFuncBodyPart(PgTreeNode node) {
-        PgFuncDefined funcDefined = node.getParentNode().getFuncDefined();
-
-        if (funcDefined == null) {
-            // это второй и более уровни вложенности.
-            // TODO Надо найти и сопоставить определение ХП с учетом полиморфизма
-            return null; // so far
-        }
-
-        return funcDefined.getFuncBodyPartBag().getLastFuncBodyPart();
-    }
-
+/*
     static void makeNewBodyPart(PgFuncInvoked funcInvoked,  PgTreeNode node) {
         PgFuncDefined funcDefined = node.getParentNode().getFuncDefined();
         PgFuncBodyPartBag.FuncBodyPart lastBodyPart = ParserHelper.getLastFuncBodyPart(node);
@@ -81,4 +70,5 @@ public class ParserHelper {
 
 
     }
+    */
 }
