@@ -1,8 +1,8 @@
 package ru.smartflex.tools.pg;
 
-public class PgGenGluedFunctions {
+public class PgGenCutFunctions {
 
-    public void glue(PgTreeNode root) {
+    public void cut(PgTreeNode root) {
 
         PgTreeNodeWalker ptw = new PgTreeNodeWalker(root, new GlueTreeStateNode());
         ITreeHandler<PgTreeNodeWalker> ith = getITreeHandler();
