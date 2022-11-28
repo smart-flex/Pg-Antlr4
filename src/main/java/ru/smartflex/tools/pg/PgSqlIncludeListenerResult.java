@@ -1,5 +1,7 @@
 package ru.smartflex.tools.pg;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import java.util.List;
 
 public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
@@ -66,17 +68,27 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
     }
 
+    @Override
     public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-        PgFuncInvoked funcInvoked = pgParsingResult.addFunctionInvocationsName(ctx.identifier().getText(), ctx.start.getLine(),
-                ctx.start.getCharPositionInLine(), ctx.stop.getLine(), ctx.stop.getCharPositionInLine());
 
-        if (ctx.functionInvocationParamList() == null) {
+    }
+
+    @Override
+    public void enterPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {
+
+        int indexStart = ctx.start.getStartIndex();
+        int indexEnd = ctx.stop.getStopIndex();
+        PgFuncInvoked funcInvoked = pgParsingResult.addFunctionInvocationsName(ctx.functionInvocation().identifier().getText(),
+                indexStart, indexEnd);
+
+        if (ctx.functionInvocation().functionInvocationParamList() == null) {
             return;
         }
 
-        for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocationParamList().functionInvocationParameter()) {
+        for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocation().functionInvocationParamList().functionInvocationParameter()) {
             funcInvoked.addParameter(par.getText());
         }
+
     }
 
 }

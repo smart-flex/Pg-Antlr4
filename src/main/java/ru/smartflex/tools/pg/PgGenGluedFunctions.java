@@ -27,30 +27,25 @@ public class PgGenGluedFunctions {
             // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
             String funcBody = node.getFuncDefined().getFuncBody();
             char[] chars = funcBody.toCharArray();
-            int rowStart= 0;
-            int colStart = 0;
-            int rowEnd = 0;
-            int colEnd = 0;
+
+            int indexStart = 0;
+            int indexEnd = 0;
 
             for (PgTreeNode nd : node.getChildList()) {
 
                 // вырезаем часть главной ХП до вызова подчиненной ХП
-                rowEnd = nd.getFuncInvoked().getLineStart() - 1;
-                colEnd = nd.getFuncInvoked().getColStart() - 1;
-                cutBody(node, chars, rowStart, colStart, rowEnd, colEnd);
+                indexEnd = nd.getFuncInvoked().getIndexStart();
+                cutBody(node, chars, indexStart, indexEnd);
 
-                rowStart = rowEnd;
-                colStart = colEnd;
-                rowEnd = nd.getFuncInvoked().getLineEnd() - 1;
-                colEnd = nd.getFuncInvoked().getColEnd() - 1;
-                cutBody(node, chars, rowStart, colStart, rowEnd, colEnd);
+                indexStart = nd.getFuncInvoked().getIndexStart();
+                indexEnd = nd.getFuncInvoked().getIndexEnd() + 1;
+                cutBody(node, chars, indexStart, indexEnd);
 
-                rowStart = rowEnd;
-                colStart = colEnd;
+                indexStart = indexEnd;
             }
 
             // пишем хвост
-            cutBody(node, chars, rowEnd, colEnd);
+            cutBody(node, chars, indexStart, chars.length);
 
             checkGlue(node);
 
@@ -66,66 +61,9 @@ public class PgGenGluedFunctions {
         }
     }
 
-    private void cutBody(PgTreeNode node, char[] chars, int rowStart, int colStart, int rowEnd, int colEnd) {
-        char lf = '\n';
-        char cr = '\r';
-        boolean signNewLine = false;
-        boolean rowStartMatched = true;
-        int amountReadLines = 0;
-        int indexBegin = 0;
-        int indexEnd = 0;
-
-        for (int i=0; i<chars.length; i++) {
-            char ch = chars[i];
-            if (ch == lf || ch == cr) {
-                signNewLine = true;
-            } else {
-                if (signNewLine) {
-                    amountReadLines++;
-                }
-                signNewLine = false;
-            }
-            if (amountReadLines == rowStart && rowStartMatched) {
-                indexBegin = i + colStart;
-                rowStartMatched = false;
-            }
-            if (amountReadLines == rowEnd) {
-                indexEnd = i + colEnd;
-                break;
-            }
-        }
-
-        char[] partChar = new char[indexEnd - indexBegin];
-        System.arraycopy(chars, indexBegin, partChar, 0, indexEnd - indexBegin);
-        String partString = new String(partChar);
-        node.addBodyPart(partString);
-    }
-
-    private void cutBody(PgTreeNode node, char[] chars, int rowStart, int colStart) {
-        char lf = '\n';
-        char cr = '\r';
-        boolean signNewLine = false;
-        int amountReadLines = 0;
-        int indexBegin = 0;
-
-        for (int i=0; i<chars.length; i++) {
-            char ch = chars[i];
-            if (ch == lf || ch == cr) {
-                signNewLine = true;
-            } else {
-                if (signNewLine) {
-                    amountReadLines++;
-                }
-                signNewLine = false;
-            }
-            if (amountReadLines == rowStart) {
-                indexBegin = i + colStart;
-                break;
-            }
-        }
-
-        char[] partChar = new char[chars.length - indexBegin];
-        System.arraycopy(chars, indexBegin, partChar, 0, partChar.length);
+    private void cutBody(PgTreeNode node, char[] chars, int indexStart, int indexEnd) {
+        char[] partChar = new char[indexEnd - indexStart];
+        System.arraycopy(chars, indexStart, partChar, 0, partChar.length);
         String partString = new String(partChar);
         node.addBodyPart(partString);
     }

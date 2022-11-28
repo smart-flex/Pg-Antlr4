@@ -28,7 +28,7 @@ public class PgFuncBodyPartBag {
         }
         String gluedBody = sb.toString();
         String funcBody = node.getFuncDefined().getFuncBody();
-System.out.println(gluedBody);
+
         return gluedBody.equals(funcBody);
     }
 

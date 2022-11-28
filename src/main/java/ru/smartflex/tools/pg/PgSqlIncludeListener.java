@@ -64,10 +64,6 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     }
 
-    @Override
-    public void enterPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {
-
-    }
 
     @Override
     public void exitPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {

@@ -6,20 +6,15 @@ import java.util.List;
 public class PgFuncInvoked {
 
     private String funcName;
-    private int lineStart = 0;
-    private int colStart = 0;
-    private int lineEnd = 0;
-    private int colEnd = 0;
+    private int indexStart = 0;
+    private int indexEnd = 0;
 
     private List<FuncInvokedParameter> paramList = new ArrayList<>();
 
-
-    PgFuncInvoked(String funcName, int lineStart, int colStart, int lineEnd, int colEnd) {
+    public PgFuncInvoked(String funcName, int indexStart, int indexEnd) {
         this.funcName = funcName;
-        this.lineStart = lineStart;
-        this.colStart = colStart;
-        this.lineEnd = lineEnd;
-        this.colEnd = colEnd;
+        this.indexStart = indexStart;
+        this.indexEnd = indexEnd;
     }
 
     String getFuncName() {
@@ -30,20 +25,12 @@ public class PgFuncInvoked {
         paramList.add(new FuncInvokedParameter((value)));
     }
 
-    int getLineStart() {
-        return lineStart;
+    int getIndexStart() {
+        return indexStart;
     }
 
-    int getColStart() {
-        return colStart;
-    }
-
-    int getLineEnd() {
-        return lineEnd;
-    }
-
-    int getColEnd() {
-        return colEnd;
+    int getIndexEnd() {
+        return indexEnd;
     }
 
     class FuncInvokedParameter {
