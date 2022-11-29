@@ -86,6 +86,24 @@ public class PgTreeNode {
 
     }
 
+    public void walkingTree(PgTreeNode node, ITreeHandler th) {
+        th.apply(node);
+
+        if (node.isChildEmpty()) {
+            return;
+        }
+
+        for (PgTreeNode nd : node.getChildList()) {
+            walkingTree(nd, th);
+        }
+
+    }
+
+    boolean isChildEmpty() {
+        return getChildListsize() == 0 ? true : false;
+    }
+
+
     class PrintTreeStateNode implements ITreeState {
         int depth;
         int indexNested;

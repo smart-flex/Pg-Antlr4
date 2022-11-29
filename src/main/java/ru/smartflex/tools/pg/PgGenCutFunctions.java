@@ -3,17 +3,12 @@ package ru.smartflex.tools.pg;
 public class PgGenCutFunctions {
 
     public void cut(PgTreeNode root) {
-
-        PgTreeNodeWalker ptw = new PgTreeNodeWalker(root, new GlueTreeStateNode());
-        ITreeHandler<PgTreeNodeWalker> ith = getITreeHandler();
-
-        root.walkingTree(ptw, ith);
-
+        ITreeHandler<PgTreeNode> ith = getITreeHandler();
+        root.walkingTree(root, ith);
     }
 
-    private ITreeHandler<PgTreeNodeWalker> getITreeHandler() {
-        ITreeHandler<PgTreeNodeWalker> ith = (w) -> {
-            PgTreeNode node = w.getNode();
+    private ITreeHandler<PgTreeNode> getITreeHandler() {
+        ITreeHandler<PgTreeNode> ith = (node) -> {
             if (node.getFuncDefined() == null) {
                 // it is root node
                 return;
@@ -66,17 +61,6 @@ public class PgGenCutFunctions {
         System.arraycopy(chars, indexStart, partChar, 0, partChar.length);
         String partString = new String(partChar);
         node.addBodyPart(partString);
-    }
-
-    class GlueTreeStateNode implements ITreeState {
-
-        public GlueTreeStateNode() {
-        }
-
-        @Override
-        public ITreeState doState() {
-            return new GlueTreeStateNode();
-        }
     }
 
 }
