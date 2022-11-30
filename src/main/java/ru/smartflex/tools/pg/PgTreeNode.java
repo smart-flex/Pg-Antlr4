@@ -40,6 +40,13 @@ public class PgTreeNode {
         return root;
     }
 
+    boolean isPossibleCreateBodyForInsert() {
+        if (funcDefined != null && funcBodyPartBag != null) {
+            return true;
+        }
+        return false;
+    }
+
     int getChildListsize() {
         return childList.size();
     }

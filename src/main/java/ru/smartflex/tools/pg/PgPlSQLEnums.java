@@ -11,6 +11,7 @@ public enum PgPlSQLEnums {
     P01_VOID_PERFORM_V1("plpgsql\\p01_void_perform_v1.sql"),
     P02_INT4("plpgsql\\p02_int4.sql"),
     P02_INT4_V1("plpgsql\\p02_int4_v1.sql"),
+    P02_INT4_V3("plpgsql\\p02_int4_v3.sql"),
     P02_VOID_PERFORM("plpgsql\\p02_void_perform.sql"),
     P03_TABLE("plpgsql\\p03_table.sql"),
     P04_INT8("plpgsql\\p04_int8.sql"),
