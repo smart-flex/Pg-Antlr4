@@ -10,6 +10,7 @@ public class PgFuncDefined {
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
+    private FunctionBlockStatement functionBlockStatement = new FunctionBlockStatement();
 
     PgFuncDefined() {
     }
@@ -85,6 +86,20 @@ public class PgFuncDefined {
         public String getParType() {
             return parType;
         }
+    }
+
+    void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
+        functionBlockStatement.indexStart = indexStart;
+        functionBlockStatement.indexEnd = indexEnd;
+    }
+
+    FunctionBlockStatement getFunctionBlockStatement() {
+        return functionBlockStatement;
+    }
+
+    class FunctionBlockStatement {
+        int indexStart = 0;
+        int indexEnd = 0;
     }
 
     class FuncParameter {

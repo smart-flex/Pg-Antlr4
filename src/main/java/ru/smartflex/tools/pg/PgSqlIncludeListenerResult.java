@@ -68,12 +68,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
     }
 
-    @Override
-    public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
 
-    }
-
-    @Override
     public void enterPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {
 
         int indexStart = ctx.start.getStartIndex();
@@ -89,6 +84,12 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             funcInvoked.addParameter(par.getText());
         }
 
+    }
+
+    public void enterFunctionBlockStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {
+        int indexStart = ctx.start.getStartIndex();
+        int indexEnd = ctx.stop.getStopIndex();
+        pgParsingResult.setFunctionBlockStatementIndexes(indexStart, indexEnd);
     }
 
 }

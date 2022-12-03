@@ -7,12 +7,6 @@ public class PgFuncBodyPartBag {
 
     private List<FuncBodyPart> listPart = new ArrayList();
 
-    PgFuncBodyPartBag(PgTreeNode node) {
-        // create PgFuncBodyPartBag without children
-        String funcBody = node.getFuncDefined().getFuncBody();
-        listPart.add(new FuncBodyPart(funcBody));
-    }
-
     PgFuncBodyPartBag(String bodyPart) {
         listPart.add(new FuncBodyPart(bodyPart));
     }
@@ -35,6 +29,9 @@ public class PgFuncBodyPartBag {
     class FuncBodyPart {
 
         private String funcPart;
+
+        //??
+        @Deprecated
         private int rowOffsetBody = 0;
 
         FuncBodyPart(String funcPart) {

@@ -62,6 +62,10 @@ public class PgParsingResult {
         return parsingErrorHappened;
     }
 
+    void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
+        funcDefined.setFunctionBlockStatementIndexes(indexStart, indexEnd);
+    }
+
     @Override
     public String toString() {
         return "PgParsingResult{" +

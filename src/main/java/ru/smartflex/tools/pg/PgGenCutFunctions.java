@@ -13,18 +13,17 @@ public class PgGenCutFunctions {
                 // it is root node
                 return;
             }
-            // child can be not exists, but for sameness we have to build PgFuncBodyPartBag
-            if (node.getChildListsize() == 0) {
-                node.setFuncBodyPartBag(new PgFuncBodyPartBag(node));
-                return;
-            }
+
             // create body parts
             // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
             String funcBody = node.getFuncDefined().getFuncBody();
             char[] chars = funcBody.toCharArray();
 
             int indexStart = 0;
-            int indexEnd = 0;
+            int indexEnd = node.getFuncDefined().getFunctionBlockStatement().indexStart;
+            // блок begin ХП
+            cutBody(node, chars, indexStart, indexEnd);
+            indexStart = indexEnd;
 
             for (PgTreeNode nd : node.getChildList()) {
 
@@ -39,12 +38,15 @@ public class PgGenCutFunctions {
                 indexStart = indexEnd;
             }
 
+            indexEnd = node.getFuncDefined().getFunctionBlockStatement().indexEnd + 1;
+            // блок end ХП (+1 чтобы захватиь D в операторе END)
+            cutBody(node, chars, indexStart, indexEnd);
+            indexStart = indexEnd;
+
             // пишем хвост
             cutBody(node, chars, indexStart, chars.length);
 
             checkGlue(node);
-
-            return;
         };
 
         return ith;
@@ -60,6 +62,7 @@ public class PgGenCutFunctions {
         char[] partChar = new char[indexEnd - indexStart];
         System.arraycopy(chars, indexStart, partChar, 0, partChar.length);
         String partString = new String(partChar);
+System.out.println("************\n"+partString+"\n");
         node.addBodyPart(partString);
     }
 

@@ -12,10 +12,7 @@ functionDefinition
     (seqOfFunctionAttributes)*
     AS
     DECL_DOLLAR
-    labelClause?
-    DECLARE? variableDefinitions
-    BEGIN (seqOfStatements)? (returnStatement)?
-    END
+    functionBlockStatement
     ( (SEMI DECL_DOLLAR seqOfFunctionAttributes SEMI)
       |
       (DECL_DOLLAR SEMI)
@@ -26,6 +23,13 @@ functionDefinition
 
 functionTitle
    : functionCreateDef identifier functionParamsDef functionReturns
+   ;
+
+functionBlockStatement
+   : labelClause?
+     DECLARE? variableDefinitions
+     BEGIN (seqOfStatements)? (returnStatement)?
+     END
    ;
 
 identifier
