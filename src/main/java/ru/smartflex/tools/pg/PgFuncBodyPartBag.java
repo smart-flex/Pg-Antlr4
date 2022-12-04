@@ -7,12 +7,12 @@ public class PgFuncBodyPartBag {
 
     private List<FuncBodyPart> listPart = new ArrayList();
 
-    PgFuncBodyPartBag(String bodyPart) {
-        listPart.add(new FuncBodyPart(bodyPart));
+    PgFuncBodyPartBag(String bodyPart, PgTreeNode nodeInvoked) {
+        listPart.add(new FuncBodyPart(bodyPart, nodeInvoked));
     }
 
-    void addBodyPart(String bodyPart) {
-        listPart.add(new FuncBodyPart(bodyPart));
+    void addBodyPart(String bodyPart, PgTreeNode nodeInvoked) {
+        listPart.add(new FuncBodyPart(bodyPart, nodeInvoked));
     }
 
     boolean checkGlue(PgTreeNode node) {
@@ -26,24 +26,29 @@ public class PgFuncBodyPartBag {
         return gluedBody.equals(funcBody);
     }
 
+    List<FuncBodyPart> getListPart() {
+        return listPart;
+    }
+
     class FuncBodyPart {
-
         private String funcPart;
-
-        //??
-        @Deprecated
-        private int rowOffsetBody = 0;
+        private PgTreeNode nodeInvoked = null;
 
         FuncBodyPart(String funcPart) {
             this.funcPart = funcPart;
         }
 
-        int getRowOffsetBody() {
-            return rowOffsetBody;
+        FuncBodyPart(String funcPart, PgTreeNode nodeInvoked) {
+            this.funcPart = funcPart;
+            this.nodeInvoked = nodeInvoked;
         }
 
         String getFuncPart() {
             return funcPart;
+        }
+
+        PgTreeNode getNodeInvoked() {
+            return nodeInvoked;
         }
     }
 }

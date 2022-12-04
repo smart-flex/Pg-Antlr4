@@ -33,7 +33,7 @@ public class PgGenCutFunctions {
 
                 indexStart = nd.getFuncInvoked().getIndexStart();
                 indexEnd = nd.getFuncInvoked().getIndexEnd() + 1;
-                cutBody(node, chars, indexStart, indexEnd);
+                cutBody(node, chars, indexStart, indexEnd, nd);
 
                 indexStart = indexEnd;
             }
@@ -59,11 +59,14 @@ public class PgGenCutFunctions {
     }
 
     private void cutBody(PgTreeNode node, char[] chars, int indexStart, int indexEnd) {
+        cutBody(node, chars, indexStart, indexEnd, null);
+    }
+
+    private void cutBody(PgTreeNode node, char[] chars, int indexStart, int indexEnd, PgTreeNode nodeInvoked) {
         char[] partChar = new char[indexEnd - indexStart];
         System.arraycopy(chars, indexStart, partChar, 0, partChar.length);
         String partString = new String(partChar);
-System.out.println("************\n"+partString+"\n");
-        node.addBodyPart(partString);
+        node.addBodyPart(partString, nodeInvoked);
     }
 
 }

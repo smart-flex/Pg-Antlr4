@@ -15,6 +15,10 @@ public class PgFuncDefined {
     PgFuncDefined() {
     }
 
+    String getFunctionBlockStatementAsString() {
+        return funcBody.substring(functionBlockStatement.indexStart, functionBlockStatement.indexEnd + 1);
+    }
+
     public String getFuncName() {
         return funcName;
     }

@@ -1,12 +1,7 @@
 package ru.smartflex.tools.pg;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 public class ParserHelper {
 

@@ -55,6 +55,13 @@ public class PgTreeNode {
         return childList;
     }
 
+    String getFunctionBlockStatement() {
+        if (funcDefined != null) {
+            return funcDefined.getFunctionBlockStatementAsString();
+        }
+        return null;
+    }
+
     public void addChild(PgTreeNode child) {
         childList.add(child);
     }
@@ -189,12 +196,18 @@ public class PgTreeNode {
     }
 
     void addBodyPart(String bodyPart) {
+        addBodyPart(bodyPart, null);
+    }
+
+    void addBodyPart(String bodyPart, PgTreeNode nodeInvoked) {
         if (funcBodyPartBag == null) {
-            funcBodyPartBag = new PgFuncBodyPartBag(bodyPart);
+            funcBodyPartBag = new PgFuncBodyPartBag(bodyPart, nodeInvoked);
         } else {
-            funcBodyPartBag.addBodyPart(bodyPart);
+            funcBodyPartBag.addBodyPart(bodyPart, nodeInvoked);
         }
     }
+
+
 
     @Override
     public String toString() {
