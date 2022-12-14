@@ -15,6 +15,7 @@ public class ParserHelper {
 
             for (PgFuncInvoked inv : res.getFunctionInvocationsList()) {
                 PgTreeNode child = new PgTreeNode(node, inv);
+                inv.setChildNode(child);
                 node.addChild(child);
             }
 

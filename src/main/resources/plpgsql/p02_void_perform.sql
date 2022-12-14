@@ -8,7 +8,7 @@ DECLARE
 BEGIN
 
    NULL;PERFORM p02_int4_v2(m_par1, 
-                       m_par2);NULL;
+                       m_par2) ; NULL;
    NULL;PERFORM p02_int4_v2(m_par1, 
                        m_par3);NULL;
    NULL;PERFORM p02_int4_inout(m_par1, 

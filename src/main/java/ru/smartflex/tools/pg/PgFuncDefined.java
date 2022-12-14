@@ -12,7 +12,17 @@ public class PgFuncDefined {
     private String funcBody;
     private FunctionBlockStatement functionBlockStatement = new FunctionBlockStatement();
 
+    private PgFuncBodyPartsBag funcBodyPartsBag = new PgFuncBodyPartsBag();
+
     PgFuncDefined() {
+    }
+
+    void addPart(PgFuncReplacementPart part) {
+        funcBodyPartsBag.addPart(part);
+    }
+
+    List<PgFuncReplacementPart> getParts() {
+        return funcBodyPartsBag.getParts();
     }
 
     String getFunctionBlockStatementAsString() {

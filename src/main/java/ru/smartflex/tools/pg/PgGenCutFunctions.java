@@ -1,5 +1,6 @@
 package ru.smartflex.tools.pg;
 
+@Deprecated
 public class PgGenCutFunctions {
 
     public void cut(PgTreeNode root) {

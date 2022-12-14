@@ -3,6 +3,7 @@ package ru.smartflex.tools.pg;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class PgFuncBodyPartBag {
 
     private List<FuncBodyPart> listPart = new ArrayList();
@@ -29,6 +30,7 @@ public class PgFuncBodyPartBag {
     List<FuncBodyPart> getListPart() {
         return listPart;
     }
+
 
     class FuncBodyPart {
         private String funcPart;

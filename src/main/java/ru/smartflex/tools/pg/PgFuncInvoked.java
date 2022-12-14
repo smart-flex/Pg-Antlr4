@@ -1,43 +1,27 @@
 package ru.smartflex.tools.pg;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PgFuncInvoked {
-
+class PgFuncInvoked extends PgFuncReplacementPart {
     private String funcName;
-    private int indexStart = 0;
-    private int indexEnd = 0;
-
-    private List<FuncInvokedParameter> paramList = new ArrayList<>();
+    private PgTreeNode childNode = null;
 
     public PgFuncInvoked(String funcName, int indexStart, int indexEnd) {
+        super(PgPlSqlElEnum.PERFORM, funcName, indexStart, indexEnd);
         this.funcName = funcName;
-        this.indexStart = indexStart;
-        this.indexEnd = indexEnd;
     }
 
     String getFuncName() {
         return funcName;
     }
 
-    void addParameter(String value) {
-        paramList.add(new FuncInvokedParameter((value)));
+    void addParameter(String value, int indexStart, int indexEnd) {
+        addSubPart(value, indexStart, indexEnd);
     }
 
-    int getIndexStart() {
-        return indexStart;
+    PgTreeNode getChildNode() {
+        return childNode;
     }
 
-    int getIndexEnd() {
-        return indexEnd;
-    }
-
-    class FuncInvokedParameter {
-        private String value;
-
-        public FuncInvokedParameter(String value) {
-            this.value = value;
-        }
+    void setChildNode(PgTreeNode childNode) {
+        this.childNode = childNode;
     }
 }

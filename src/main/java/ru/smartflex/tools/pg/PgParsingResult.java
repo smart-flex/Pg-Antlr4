@@ -47,6 +47,7 @@ public class PgParsingResult {
     PgFuncInvoked addFunctionInvocationsName(String funcName, int indexStart, int indexEnd) {
         PgFuncInvoked invoked = new PgFuncInvoked(funcName, indexStart, indexEnd);
         functionInvocationsList.add(invoked);
+        funcDefined.addPart(invoked);
         return invoked;
     }
 
@@ -64,6 +65,8 @@ public class PgParsingResult {
 
     void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
         funcDefined.setFunctionBlockStatementIndexes(indexStart, indexEnd);
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.FUNCTION_DECLARE_BLOCK, null, indexStart, indexEnd);
+        funcDefined.addPart(part);
     }
 
     @Override

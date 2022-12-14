@@ -1,5 +1,6 @@
 package ru.smartflex.tools.pg;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
@@ -81,9 +82,46 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         }
 
         for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocation().functionInvocationParamList().functionInvocationParameter()) {
-            funcInvoked.addParameter(par.getText());
+            funcInvoked.addParameter(par.getText(), par.start.getStartIndex(), par.stop.getStopIndex());
         }
 
+        // todo идем вверх до declare или до параметров
+        // не идем вверх если в параметрах константа
+        // todo оберунть один из вызовов ХП в DECLARE begin end;
+
+        goBack(ctx);
+
+    }
+
+    private void goBack(ParserRuleContext ctx) {
+        boolean toBack = true;
+        for (ParseTree child : ctx.children) {
+            if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext) {
+                goBackFunctionBlockStatementContext((ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext) child);
+            }
+            if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext) {
+
+            }
+        }
+
+        if (toBack) {
+            if (ctx.getParent() == null) {
+                return;
+            }
+            goBack(ctx.getParent());
+        }
+    }
+
+    private void goBackFunctionBlockStatementContext(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {
+        ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext vCtx = ctx.variableDefinitions();
+        if (vCtx == null) {
+            return;
+        }
+
+        List<ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext> list = vCtx.variableDefinition();
+        for (ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext vd : list) {
+            System.out.println("+++++++++++++ "+vd.identifier().getText());
+        }
     }
 
     public void enterFunctionBlockStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {

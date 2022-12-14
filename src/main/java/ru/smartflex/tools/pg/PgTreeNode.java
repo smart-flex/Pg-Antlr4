@@ -47,6 +47,17 @@ public class PgTreeNode {
         return false;
     }
 
+    boolean isPossibleGenerateBody() {
+        if (funcDefined != null) {
+            return true;
+        }
+        return false;
+    }
+
+    List<PgFuncReplacementPart> getParts() {
+        return funcDefined.getParts();
+    }
+
     int getChildListsize() {
         return childList.size();
     }
