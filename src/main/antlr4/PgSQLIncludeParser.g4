@@ -27,8 +27,9 @@ functionTitle
 
 functionBlockStatement
    : labelClause?
-     DECLARE? variableDefinitions
-     BEGIN (seqOfStatements)? (returnStatement)?
+     (DECLARE variableDefinitions)?
+     BEGIN (seqOfStatements)?
+     ( EXCEPTION trappingErrorList )?
      END
    ;
 

@@ -26,8 +26,8 @@ BEGIN
    
    RAISE NOTICE 'Called p02_void_perform';
 
---EXCEPTION
---   WHEN others THEN RAISE NOTICE 'Catch exeption for p02_void_perform';
+EXCEPTION
+   WHEN others THEN RAISE NOTICE 'Catch exeption for p02_void_perform';
 END;
 $$
 LANGUAGE 'plpgsql';

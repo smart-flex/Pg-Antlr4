@@ -115,6 +115,11 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
                         funcInvoked);
             }
             if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext) {
+                ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext vCtx =
+                        ((ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext)child).variableDefinitions();
+                if (vCtx != null) {
+                    goBackVariableDefinition(vCtx, funcInvoked);
+                }
 
             }
         }
@@ -134,6 +139,11 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             return;
         }
 
+        goBackVariableDefinition(vCtx, funcInvoked);
+    }
+
+    private void goBackVariableDefinition(ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext vCtx,
+                                          PgFuncInvoked funcInvoked) {
         List<ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext> list = vCtx.variableDefinition();
 
         for (ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext vd : list) {
@@ -167,6 +177,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
                 }
             }
         }
+
     }
 
     public void enterFunctionBlockStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {
