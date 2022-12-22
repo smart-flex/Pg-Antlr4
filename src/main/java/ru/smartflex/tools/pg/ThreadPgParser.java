@@ -68,7 +68,7 @@ public class ThreadPgParser implements Callable<PgParsingResult> {
             } while (amount != -1);
 
         } catch (Exception e) {
-            throw new PgSQLIncludeException("There is error with SQL reading", e);
+            throw new PgSQLQjuException("There is error with SQL reading", e);
         }
 
         return out;

@@ -69,6 +69,14 @@ public class PgParsingResult {
         funcDefined.addPart(part);
     }
 
+    PgFuncReplacementPart getPart(int indexStart) {
+        return funcDefined.getPart(indexStart);
+    }
+
+    void addPart(PgFuncReplacementPart part) {
+        funcDefined.addPart(part);
+    }
+
     @Override
     public String toString() {
         return "PgParsingResult{" +

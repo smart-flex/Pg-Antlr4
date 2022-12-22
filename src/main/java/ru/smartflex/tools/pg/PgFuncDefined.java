@@ -25,6 +25,10 @@ public class PgFuncDefined {
         return funcBodyPartsBag.getParts();
     }
 
+    PgFuncReplacementPart getPart(int indexStart) {
+        return funcBodyPartsBag.getPart(indexStart);
+    }
+
     String getFunctionBlockStatementAsString() {
         return funcBody.substring(functionBlockStatement.indexStart, functionBlockStatement.indexEnd + 1);
     }

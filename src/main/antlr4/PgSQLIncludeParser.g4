@@ -92,7 +92,7 @@ functionInvocationParamList
     ;
 
 functionInvocationParameter
-    : (identifier | constantExpression | string | anonymousParameter | refExpression | functionInvocation)
+    : (identifier | constantExpression | anonymousParameter | refExpression | functionInvocation)
     ;
 
 functionCreateDef

@@ -25,7 +25,7 @@ public class ParserBuilder {
             wrapper = new PgSQLIncludeParserWrapper(new CommonTokenStream(lexer));
             wrapper.setLexer(lexer);
         } catch (Exception e) {
-            throw new PgSQLIncludeException("Parser creation exception", e);
+            throw new PgSQLQjuException("Parser creation exception", e);
         }
 
         return wrapper;

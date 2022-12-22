@@ -82,22 +82,37 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         }
 
         for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationParameterContext par : ctx.functionInvocation().functionInvocationParamList().functionInvocationParameter()) {
-            funcInvoked.addParameter(par.getText(), par.start.getStartIndex(), par.stop.getStopIndex());
+            //фиксируем типы параметров через enum
+            PgPlSqlElEnum elType = null;
+            if (par.identifier() != null) {
+                elType = PgPlSqlElEnum.DECL_IDENT;
+            } else if (par.constantExpression() != null) {
+                elType = PgPlSqlElEnum.DECL_CONST;
+            } else if (par.anonymousParameter() != null) {
+                elType = PgPlSqlElEnum.DECL_ANON_PAR;
+            } else if (par.refExpression() != null) {
+                elType = PgPlSqlElEnum.DECL_REF_EXPR;
+            } else if (par.functionInvocation() != null) {
+                elType = PgPlSqlElEnum.DECL_FUNC;
+            }
+
+            funcInvoked.addParameter(elType, par.getText(), par.start.getStartIndex(), par.stop.getStopIndex());
         }
 
         // todo идем вверх до declare или до параметров
         // не идем вверх если в параметрах константа
         // todo оберунть один из вызовов ХП в DECLARE begin end;
 
-        goBack(ctx);
+        goBack(ctx, funcInvoked);
 
     }
 
-    private void goBack(ParserRuleContext ctx) {
+    private void goBack(ParserRuleContext ctx, PgFuncInvoked funcInvoked) {
         boolean toBack = true;
         for (ParseTree child : ctx.children) {
             if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext) {
-                goBackFunctionBlockStatementContext((ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext) child);
+                goBackFunctionBlockStatementContext((ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext) child,
+                        funcInvoked);
             }
             if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext) {
 
@@ -108,19 +123,49 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             if (ctx.getParent() == null) {
                 return;
             }
-            goBack(ctx.getParent());
+            goBack(ctx.getParent(), funcInvoked);
         }
     }
 
-    private void goBackFunctionBlockStatementContext(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {
+    private void goBackFunctionBlockStatementContext(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx,
+                                                     PgFuncInvoked funcInvoked) {
         ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext vCtx = ctx.variableDefinitions();
         if (vCtx == null) {
             return;
         }
 
         List<ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext> list = vCtx.variableDefinition();
+
         for (ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext vd : list) {
-            System.out.println("+++++++++++++ "+vd.identifier().getText());
+            PgPlSqlElEnum declareType = ParserHelper.defineDataType(vd.dataType());
+            String declareName = vd.identifier().getText();
+            String declareNameLower = vd.identifier().getText().toLowerCase();
+            List<PgFuncReplacementPart> lp = funcInvoked.getListSubPart();
+            int startIndex = vd.start.getStartIndex();
+            int stopindex = vd.stop.getStopIndex();
+            for (PgFuncReplacementPart invokedPart : lp) {
+                if (invokedPart.getElementType() == PgPlSqlElEnum.PERFORM) {
+                    if (invokedPart.getElementSubType() == PgPlSqlElEnum.DECL_IDENT) {
+                        String parNameLower = invokedPart.getValue().toLowerCase();
+                        if (parNameLower.equals(declareNameLower)) {
+                            PgFuncReplacementPart abovePart = pgParsingResult.getPart(startIndex);
+                            if (abovePart == null) {
+                                abovePart = new PgFuncReplacementPart(PgPlSqlElEnum.VAR_DECLARE_BLOCK, declareName, startIndex, stopindex);
+                                abovePart.addSubPart(PgPlSqlElEnum.DECL_IDENT, declareName,
+                                        vd.identifier().start.getStartIndex(), vd.identifier().stop.getStopIndex());
+                                abovePart.addSubPart(declareType, null,
+                                        vd.dataType().start.getStartIndex(), vd.dataType().stop.getStopIndex());
+                                pgParsingResult.addPart(abovePart);
+                            }
+                            invokedPart.setAbovePart(abovePart);
+                        }
+                    }
+
+                } else {
+                    // TODO дописать обработку для anonymousParameter и refExpression
+                    throw new PgSQLQjuException("There is no parameter handler for: " + invokedPart.getElementType());
+                }
+            }
         }
     }
 

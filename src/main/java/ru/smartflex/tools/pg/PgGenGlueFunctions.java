@@ -96,7 +96,7 @@ public class PgGenGlueFunctions {
 
         for (PgFuncReplacementPart part : list) {
             if (part.getElementType() == PgPlSqlElEnum.PERFORM) {
-                indexEnd = part.getIndexStart();;
+                indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
 
                 PgFuncInvoked inv = (PgFuncInvoked) part;
@@ -119,7 +119,27 @@ public class PgGenGlueFunctions {
                 sb.append("\n");
 
                 indexStart = part.getIndexEnd() + 1;
+            } else if (part.getElementType() == PgPlSqlElEnum.VAR_DECLARE_BLOCK) {
+                indexEnd = part.getIndexStart();
+                glue(sb, funcBody, indexStart, indexEnd);
+
+                List<PgFuncReplacementPart> lsp = part.getListSubPart();
+                for (PgFuncReplacementPart pdcl : lsp) {
+                    if (pdcl.getElementSubType() == PgPlSqlElEnum.DECL_IDENT) {
+                        String varName = part.getNameWithSuffix();
+                        sb.append(varName);
+                        indexStart = pdcl.getIndexEnd();
+                    } else {
+                        // хвост от объявления переменной
+                        indexStart++;
+                        indexEnd = pdcl.getIndexEnd();
+                        glue(sb, funcBody, indexStart, indexEnd);
+                    }
+                }
+
+                indexStart = indexEnd + 1;
             }
+
         }
 
         // блок end ХП (+1 чтобы захватиь D в операторе END)

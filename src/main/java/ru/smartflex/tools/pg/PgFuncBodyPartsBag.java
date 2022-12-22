@@ -20,4 +20,17 @@ class PgFuncBodyPartsBag {
         }
         return listPart;
     }
+
+    PgFuncReplacementPart getPart(int indexStart) {
+        PgFuncReplacementPart part = null;
+
+        for (PgFuncReplacementPart p : listPart) {
+            if (p.getIndexStart() == indexStart) {
+                part = p;
+                break;
+            }
+        }
+
+        return part;
+    }
 }

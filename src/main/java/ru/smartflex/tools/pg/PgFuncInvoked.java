@@ -13,8 +13,8 @@ class PgFuncInvoked extends PgFuncReplacementPart {
         return funcName;
     }
 
-    void addParameter(String value, int indexStart, int indexEnd) {
-        addSubPart(value, indexStart, indexEnd);
+    void addParameter(PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
+        addSubPart(elementSubType, value, indexStart, indexEnd);
     }
 
     PgTreeNode getChildNode() {

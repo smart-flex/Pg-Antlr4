@@ -55,7 +55,7 @@ public class PgGenCutFunctions {
 
     private void checkGlue(PgTreeNode node) {
         if (!node.getFuncBodyPartBag().checkGlue((node))) {
-            throw new PgSQLIncludeException("Glued function is not equals original body");
+            throw new PgSQLQjuException("Glued function is not equals original body");
         }
     }
 
