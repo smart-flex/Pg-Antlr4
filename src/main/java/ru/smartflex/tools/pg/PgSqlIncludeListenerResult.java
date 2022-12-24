@@ -186,4 +186,8 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         pgParsingResult.setFunctionBlockStatementIndexes(indexStart, indexEnd);
     }
 
+    public void enterAnonymousParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.AnonymousParameterContext ctx) {
+        pgParsingResult.getFuncDefined().addPart(new PgAnonymousParameter(ctx));
+    }
+
 }

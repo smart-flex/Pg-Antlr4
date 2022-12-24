@@ -101,7 +101,7 @@ public class PgGenGlueFunctions {
 
                 PgFuncInvoked inv = (PgFuncInvoked) part;
                 PgTreeNode nd = inv.getChildNode();
-                String bodyInvoked = getBodyPart(nd);
+                String bodyInvoked = getBodyPart(nd, inv);
                 sb.append("\n");
                 sb.append("--");
                 sb.append("\n");
@@ -138,6 +138,10 @@ public class PgGenGlueFunctions {
                 }
 
                 indexStart = indexEnd + 1;
+            } else if (part.getElementType() == PgPlSqlElEnum.ANONYMOUS_PARAMETER) {
+                indexEnd = part.getIndexStart();
+                glue(sb, funcBody, indexStart, indexEnd);
+
             }
 
         }
@@ -158,18 +162,51 @@ public class PgGenGlueFunctions {
     }
 
     // TODO рекурсивный вызов дописать (учесть под-вызовы ХП)
-    private String getBodyPart(PgTreeNode nd) {
-        String ret = null;
+    private String getBodyPart(PgTreeNode nd, PgFuncInvoked inv) {
+
+        String funcBody = nd.getFuncDefined().getFuncBody();
+
+        int indexStartFDBlock = 0;
+        int indexEndFDBlock = 0;
         List<PgFuncReplacementPart> list = nd.getParts();
         for (PgFuncReplacementPart part : list) {
             if (part.getElementType() == PgPlSqlElEnum.FUNCTION_DECLARE_BLOCK) {
-                part.getIndexStart();
-                String body = nd.getFuncDefined().getFuncBody();
-                ret = body.substring(part.getIndexStart(), part.getIndexEnd() + 1) + ";";
+                indexStartFDBlock = part.getIndexStart();;
+                indexEndFDBlock = part.getIndexEnd();
+                break;
             }
         }
 
-        return ret;
+        StringBuilder sb = new StringBuilder();
+        int indexStart = indexStartFDBlock;
+        int indexEnd = indexEndFDBlock;
+
+        for (PgFuncReplacementPart part : list) {
+            if (part.getElementType() == PgPlSqlElEnum.ANONYMOUS_PARAMETER) {
+                indexEnd = part.getIndexStart();
+                glue(sb, funcBody, indexStart, indexEnd);
+
+                PgAnonymousParameter aPar = (PgAnonymousParameter) part;
+
+                int i = 1;
+                for (PgFuncReplacementPart invokedPart : inv.getListSubPart()) {
+                    if (i == aPar.getOrder()) {
+                        PgFuncReplacementPart above = invokedPart.getAbovePart();
+                        sb.append(above.getNameWithSuffix());
+                        indexStart = part.getIndexEnd() + 1;
+                        break;
+                    }
+                    i++;
+                }
+
+            }
+        }
+
+        glue(sb, funcBody, indexStart, indexEndFDBlock + 1);
+
+        sb.append(";");
+
+        return sb.toString();
     }
 
     private String getPart(PgFuncBodyPartBag.FuncBodyPart part) {
