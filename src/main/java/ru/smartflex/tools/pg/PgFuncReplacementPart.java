@@ -75,7 +75,9 @@ class PgFuncReplacementPart implements Comparable {
     }
 
     void setAbovePart(PgFuncReplacementPart abovePart) {
-        this.abovePart = abovePart;
+        if (this.abovePart == null) {
+            this.abovePart = abovePart;
+        }
     }
 
     PgFuncReplacementPart getAbovePart() {
