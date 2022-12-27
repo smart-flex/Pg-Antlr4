@@ -143,7 +143,7 @@ functionParamDefinitionList
     ;
 
 functionParamDefinition
-    : argMode? identifier? pgTypeEnum
+    : argMode? identifier? pgTypeFull
     ;
 
 seqOfFunctionAttributes
@@ -288,13 +288,17 @@ dataType
     | cursorType
     ;
 
+// with semi at end
 booleanType : BOOL_VAL_START BOOL_ASSIGN? BOOL_VAL? BOOL_VAL_END;
 
+pgTypeFull
+    : pgTypeEnum
+    | (identifier PERCENT ROWTYPE)
+    | tableRefColumnType
+    ;
+
 usualType
-    : (   pgTypeEnum
-        | (identifier PERCENT ROWTYPE)
-        | tableRefColumnType
-      )
+    : pgTypeFull
       precisionClause?
       NOT_NULL?
       (DEFAULT | ASSIGN)?

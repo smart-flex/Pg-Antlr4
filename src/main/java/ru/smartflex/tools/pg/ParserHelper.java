@@ -45,6 +45,46 @@ public class ParserHelper {
         return root;
     }
 
+    static PgPlSqlElEnum defineDataType(ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeFullContext ctxFull) {
+        PgPlSqlElEnum ret = null;
+
+        if (ctxFull.pgTypeEnum() != null) {
+            ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeEnumContext pctx = ctxFull.pgTypeEnum();
+
+            if (pctx.SMALLINT() != null || pctx.INT2() != null) {
+                ret = PgPlSqlElEnum.DT_INT2;
+            } else if (pctx.INT() != null || pctx.INT4() != null || pctx.INTEGER() != null || pctx.SERIAL() != null
+                    || pctx.SERIAL4() != null) {
+                ret = PgPlSqlElEnum.DT_INT4;
+            } else if (pctx.BIGINT() != null || pctx.INT8() != null || pctx.BIGSERIAL() != null || pctx.SERIAL8() != null) {
+                ret = PgPlSqlElEnum.DT_INT8;
+            } else if (pctx.REAL() != null || pctx.FLOAT4() != null) {
+                ret = PgPlSqlElEnum.DT_FLOAT;
+            } else if (pctx.DOUBLE_PRECISION() != null || pctx.FLOAT8() != null) {
+                ret = PgPlSqlElEnum.DT_DOUBLE;
+            } else if (pctx.DECIMAL() != null || pctx.NUMERIC() != null || pctx.MONEY() != null) {
+                ret = PgPlSqlElEnum.DT_NUMERIC;
+            } else if (pctx.CHAR() != null || pctx.CHARACTER() != null) {
+                ret = PgPlSqlElEnum.DT_CHAR;
+            } else if (pctx.VARCHAR() != null || pctx.TEXT() != null) {
+                ret = PgPlSqlElEnum.DT_VARCHAR;
+            } else if (pctx.DATE() != null) {
+                ret = PgPlSqlElEnum.DT_DATE;
+            } else if (pctx.TIME() != null || pctx.TIME_WITHOUT_TIME_ZONE() != null || pctx.TIME_WITH_TIME_ZONE() != null ||
+                    pctx.TIMETZ() != null || pctx.TIMESTAMP() != null || pctx.TIMESTAMP_WITHOUT_TIME_ZONE() != null ||
+                    pctx.TIMESTAMP_WITH_TIME_ZONE() != null || pctx.TIMESTAMPTZ() != null) {
+                ret = PgPlSqlElEnum.DT_TIME;
+            }
+
+        } else {
+            //TODO ? дописать для (identifier PERCENT ROWTYPE) и tableRefColumnType
+            // TODO обрабатываем rowtype, column type и пр
+            // There is no matching for: t09_yyyymm%ROWTYPE;
+            ret = PgPlSqlElEnum.DT_TODO;
+        }
+        return ret;
+    }
+
     static PgPlSqlElEnum defineDataType(ru.smartflex.tools.pg.PgSQLIncludeParser.DataTypeContext ctx) {
         PgPlSqlElEnum ret = null;
         if (ctx.booleanType() != null) {
@@ -52,32 +92,8 @@ public class ParserHelper {
         } else if (ctx.cursorType() != null) {
             ret = PgPlSqlElEnum.DT_CURSOR;
         } else if (ctx.usualType() != null) {
-            ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeEnumContext pctx = ctx.usualType().pgTypeEnum();
-            if (pctx != null) {
-                if (pctx.SMALLINT() != null || pctx.INT2() != null) {
-                    ret = PgPlSqlElEnum.DT_INT2;
-                } else if (pctx.INT() != null || pctx.INT4() != null || pctx.INTEGER() != null || pctx.SERIAL() != null
-                        || pctx.SERIAL4() != null) {
-                    ret = PgPlSqlElEnum.DT_INT4;
-                } else if (pctx.BIGINT() != null || pctx.INT8() != null || pctx.BIGSERIAL() != null || pctx.SERIAL8() != null) {
-                    ret = PgPlSqlElEnum.DT_INT8;
-                } else if (pctx.REAL() != null || pctx.FLOAT4() != null) {
-                    ret = PgPlSqlElEnum.DT_FLOAT;
-                } else if (pctx.DOUBLE_PRECISION() != null || pctx.FLOAT8() != null) {
-                    ret = PgPlSqlElEnum.DT_DOUBLE;
-                } else if (pctx.DECIMAL() != null || pctx.NUMERIC() != null || pctx.MONEY() != null) {
-                    ret = PgPlSqlElEnum.DT_NUMERIC;
-                } else if (pctx.CHAR() != null || pctx.CHARACTER() != null) {
-                    ret = PgPlSqlElEnum.DT_CHAR;
-                } else if (pctx.VARCHAR() != null || pctx.TEXT() != null) {
-                    ret = PgPlSqlElEnum.DT_VARCHAR;
-                } else if (pctx.DATE() != null) {
-                    ret = PgPlSqlElEnum.DT_DATE;
-                } else if (pctx.TIME() != null || pctx.TIME_WITHOUT_TIME_ZONE() != null || pctx.TIME_WITH_TIME_ZONE() != null ||
-                        pctx.TIMETZ() != null || pctx.TIMESTAMP() != null || pctx.TIMESTAMP_WITHOUT_TIME_ZONE() != null ||
-                        pctx.TIMESTAMP_WITH_TIME_ZONE() != null || pctx.TIMESTAMPTZ() != null) {
-                    ret = PgPlSqlElEnum.DT_TIME;
-                }
+            if (ctx.usualType().pgTypeFull() != null) {
+                ret = defineDataType(ctx.usualType().pgTypeFull());
             } else {
                 // TODO обрабатываем rowtype, column type и пр
                 ret = PgPlSqlElEnum.DT_TODO;

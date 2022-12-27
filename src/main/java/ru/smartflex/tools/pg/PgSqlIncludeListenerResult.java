@@ -20,15 +20,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionListContext cntx = ctx.functionParamsDef().functionParamDefinitionList();
         if (cntx != null) {
             for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext param : cntx.functionParamDefinition()) {
-                ru.smartflex.tools.pg.PgSQLIncludeParser.ArgModeContext argMode = param.argMode();
-                ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = param.identifier();
-                ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeEnumContext pgType = param.pgTypeEnum();
-
-                pgParsingResult.addFuncParameter(
-                        (argMode != null ? argMode.getText() : null),
-                        (ident != null ? ident.getText() : null),
-                        (pgType != null ? pgType.getText() : null)
-                );
+                pgParsingResult.addFuncParameter(param);
             }
         }
 

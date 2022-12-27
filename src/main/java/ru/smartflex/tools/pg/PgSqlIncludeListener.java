@@ -671,4 +671,13 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
     public void exitEveryRule(ParserRuleContext parserRuleContext) {
 
     }
+
+    public void enterPgTypeFull(ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeFullContext ctx) {
+
+    }
+
+    public void exitPgTypeFull(ru.smartflex.tools.pg.PgSQLIncludeParser.PgTypeFullContext ctx) {
+
+    }
+
 }

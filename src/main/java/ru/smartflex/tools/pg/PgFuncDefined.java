@@ -49,8 +49,13 @@ public class PgFuncDefined {
         return funcBody;
     }
 
-    void addFuncParameter(String argMode, String argName, String argType) {
-        parList.add(new FuncParameter(argMode, argName, argType));
+    void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
+        ru.smartflex.tools.pg.PgSQLIncludeParser.ArgModeContext argMode = parCtx.argMode();
+        ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = parCtx.identifier();
+        PgPlSqlElEnum type = ParserHelper.defineDataType(parCtx.pgTypeFull());
+
+        parList.add(new FuncParameter((argMode != null ? argMode.getText() : null),
+                (ident != null ? ident.getText() : null), type));
     }
 
     void setFuncReturnSetOf(String dataTypeName) {
@@ -123,9 +128,9 @@ public class PgFuncDefined {
     class FuncParameter {
         String argMode;
         String argName;
-        String argType;
+        PgPlSqlElEnum argType;
 
-        public FuncParameter(String argMode, String argName, String argType) {
+        FuncParameter(String argMode, String argName, PgPlSqlElEnum argType) {
             this.argMode = argMode;
             this.argName = argName;
             this.argType = argType;

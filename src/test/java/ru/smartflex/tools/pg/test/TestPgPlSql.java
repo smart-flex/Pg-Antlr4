@@ -102,16 +102,4 @@ public class TestPgPlSql {
         new PgGenGlueFunctions().glue(root);
     }
 
-    @Test
-    public void testMakeTree() {
-        /*
-        PgParsingResult pr1 = new PgParsingResult();
-        pr1.setFunctionName("func_1");
-
-        PgGenResultBag bag = new PgGenResultBag();
-        bag.addResult(pr1);
-*/
-
-        // TODO make tree
-    }
 }

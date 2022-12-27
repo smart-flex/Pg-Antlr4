@@ -40,8 +40,8 @@ public class PgParsingResult {
         return funcDefined;
     }
 
-    void addFuncParameter(String argMode, String argName, String argType) {
-        funcDefined.addFuncParameter(argMode, argName, argType);
+    void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
+        funcDefined.addFuncParameter(parCtx);
     }
 
     PgFuncInvoked addFunctionInvocationsName(String funcName, int indexStart, int indexEnd) {
