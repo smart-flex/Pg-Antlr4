@@ -49,6 +49,10 @@ public class PgFuncDefined {
         return funcBody;
     }
 
+    List<FuncParameter> getParList() {
+        return parList;
+    }
+
     void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
         ru.smartflex.tools.pg.PgSQLIncludeParser.ArgModeContext argMode = parCtx.argMode();
         ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = parCtx.identifier();
@@ -134,6 +138,10 @@ public class PgFuncDefined {
             this.argMode = argMode;
             this.argName = argName;
             this.argType = argType;
+        }
+
+        String getArgName() {
+            return argName;
         }
     }
 }

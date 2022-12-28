@@ -199,6 +199,33 @@ public class PgGenGlueFunctions {
                     i++;
                 }
 
+            } else if (part.getElementType() == PgPlSqlElEnum.VARIABLE_USAGE) {
+
+                int indexFound = 0;
+                PgFuncReplacementPart invokedPart = null;
+                List<PgFuncDefined.FuncParameter> parList = nd.getFuncDefined().getParList();
+                for (PgFuncDefined.FuncParameter par : parList) {
+                    if (par.getArgName() != null) {
+                        if (par.getArgName().equalsIgnoreCase(part.getValue())) {
+                            invokedPart = inv.getPgFuncReplacementPart(indexFound);
+                            break;
+                        }
+                    }
+                    indexFound++;
+                }
+
+                if (invokedPart != null) {
+                    PgFuncReplacementPart above = invokedPart.getAbovePart();
+                    if (above != null) {
+                        indexEnd = part.getIndexStart();
+                        glue(sb, funcBody, indexStart, indexEnd);
+
+                        sb.append(above.getNameWithSuffix());
+                        indexStart = part.getIndexEnd() + 1;
+                    }
+
+                }
+
             }
         }
 

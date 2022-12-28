@@ -108,7 +108,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             }
             if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext) {
                 ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext vCtx =
-                        ((ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext)child).variableDefinitions();
+                        ((ru.smartflex.tools.pg.PgSQLIncludeParser.BlockStatementContext) child).variableDefinitions();
                 if (vCtx != null) {
                     goBackVariableDefinition(vCtx, funcInvoked);
                 }
@@ -180,6 +180,31 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
     public void enterAnonymousParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.AnonymousParameterContext ctx) {
         pgParsingResult.getFuncDefined().addPart(new PgAnonymousParameter(ctx));
+    }
+
+    public void enterAssignedStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext ctx) {
+        addParameter(ctx.identifier());
+
+        if (ctx.complexExpression() != null) {
+            addParameter(ctx.complexExpression().identifier());
+
+            if (ctx.complexExpression().seqOfRightPartExpression() != null) {
+                List<ru.smartflex.tools.pg.PgSQLIncludeParser.RightPartExpressionContext> list =
+                        ctx.complexExpression().seqOfRightPartExpression().rightPartExpression();
+                for (ru.smartflex.tools.pg.PgSQLIncludeParser.RightPartExpressionContext rp : list) {
+                    addParameter(rp.identifier());
+                }
+            }
+        }
+    }
+
+    private void addParameter(ParserRuleContext ctx) {
+        if (ctx == null) {
+            return;
+        }
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.VARIABLE_USAGE, ctx.getText(),
+                ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+        pgParsingResult.addPart(part);
     }
 
 }

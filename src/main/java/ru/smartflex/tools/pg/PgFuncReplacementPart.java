@@ -43,6 +43,10 @@ class PgFuncReplacementPart implements Comparable {
         return listSub;
     }
 
+    PgFuncReplacementPart getPgFuncReplacementPart(int ind) {
+        return listSub.get(ind);
+    }
+
     int getIndexStart() {
         return indexStart;
     }
