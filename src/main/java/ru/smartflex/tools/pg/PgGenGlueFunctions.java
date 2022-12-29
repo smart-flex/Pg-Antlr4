@@ -5,69 +5,20 @@ import java.util.List;
 public class PgGenGlueFunctions {
 
     public void glue(PgTreeNode root) {
-        ITreeHandler<PgTreeNode> ith = getITreeHandler1();
+        ITreeHandler<PgTreeNode> ith = getITreeHandler();
         root.walkingTree(root, ith);
     }
 
     private ITreeHandler<PgTreeNode> getITreeHandler() {
         ITreeHandler<PgTreeNode> ith = (node) -> {
-            if (!node.isPossibleCreateBodyForInsert()) {
-                return;
-            }
-
-            PgFuncBodyPartBag funcBodyPartBag = node.getFuncBodyPartBag();
-            List<PgFuncBodyPartBag.FuncBodyPart> list =  funcBodyPartBag.getListPart();
-
-            StringBuilder sb = new StringBuilder();
-
-            for (PgFuncBodyPartBag.FuncBodyPart part : list) {
-                sb.append(getPart(part));
-            }
-
-            System.out.println(sb.toString()+ "\n*************\n");
-
-
-        };
-        return ith;
-    }
-
-    private ITreeHandler<PgTreeNode> getITreeHandler1() {
-        ITreeHandler<PgTreeNode> ith = (node) -> {
             if (!node.isPossibleGenerateBody()) {
                 return;
             }
 
-            // проход с применением getParent
-            // - регистриуем верхний begin end блок
-            // - вставляем тело вызываемой ф-ции
+            // TODO вывести результат генерации в файл в OUT каталог
             String gen = generateBody(node);
             System.out.println(gen);
-            /*
-            List<PgFuncReplacementPart> list = node.getParts();
-            for (PgFuncReplacementPart part : list) {
-                if (part.getElementType() == PgPlSqlElEnum.PERFORM) {
-                    PgFuncInvoked inv = (PgFuncInvoked) part;
-                    PgTreeNode nd = inv.getChildNode();
-                    String pstr = getBodyPart(nd);
-                    System.out.println(nd.getPgFuncName()+"\n"+ pstr+"\n*************\n");
 
-                }
-
-            }
-            */
-/*
-            PgFuncBodyPartBag funcBodyPartBag = node.getFuncBodyPartBag();
-            List<PgFuncBodyPartBag.FuncBodyPart> list =  funcBodyPartBag.getListPart();
-
-            StringBuilder sb = new StringBuilder();
-
-            for (PgFuncBodyPartBag.FuncBodyPart part : list) {
-                sb.append(getPart(part));
-            }
-
-            System.out.println(sb.toString()+ "\n*************\n");
-
-*/
         };
         return ith;
     }
@@ -75,7 +26,6 @@ public class PgGenGlueFunctions {
     private String generateBody(PgTreeNode node) {
         // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
         String funcBody = node.getFuncDefined().getFuncBody();
-        char[] chars = funcBody.toCharArray();
 
         int indexStartFDBlock = 0;
         int indexEndFDBlock = 0;
@@ -271,24 +221,5 @@ public class PgGenGlueFunctions {
 
         return part.getIndexEnd();
     }
-    private String getPart(PgFuncBodyPartBag.FuncBodyPart part) {
-        String pt = part.getFuncPart();
 
-        if (part.getNodeInvoked() != null) {
-            pt = part.getNodeInvoked().getFunctionBlockStatement() + ";";
-        }
-
-        return pt;
-    }
-
-    private void genBodiesAggregate(PgTreeNode node) {
-        if (!node.isPossibleCreateBodyForInsert()) {
-            return;
-        }
-
-        for (PgTreeNode nd : node.getChildList()) {
-            genBodiesAggregate(nd);
-        }
-
-    }
 }

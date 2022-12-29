@@ -14,7 +14,6 @@ public class PgTreeNode {
 
     private PgTreeNode parentNode = null;
     private boolean wasUsedAsChild = false;
-    private PgFuncBodyPartBag funcBodyPartBag = null;
 
     private PgTreeNode() {
     }
@@ -38,13 +37,6 @@ public class PgTreeNode {
         PgTreeNode root = new PgTreeNode();
         root.pgFuncName = ROOT_NODE_NAME;
         return root;
-    }
-
-    boolean isPossibleCreateBodyForInsert() {
-        if (funcDefined != null && funcBodyPartBag != null) {
-            return true;
-        }
-        return false;
     }
 
     boolean isPossibleGenerateBody() {
@@ -197,28 +189,6 @@ public class PgTreeNode {
     public void setWasUsedAsChild(boolean wasUsedAsChild) {
         this.wasUsedAsChild = wasUsedAsChild;
     }
-
-    void setFuncBodyPartBag(PgFuncBodyPartBag funcBodyPartBag) {
-        this.funcBodyPartBag = funcBodyPartBag;
-    }
-
-    PgFuncBodyPartBag getFuncBodyPartBag() {
-        return funcBodyPartBag;
-    }
-
-    void addBodyPart(String bodyPart) {
-        addBodyPart(bodyPart, null);
-    }
-
-    void addBodyPart(String bodyPart, PgTreeNode nodeInvoked) {
-        if (funcBodyPartBag == null) {
-            funcBodyPartBag = new PgFuncBodyPartBag(bodyPart, nodeInvoked);
-        } else {
-            funcBodyPartBag.addBodyPart(bodyPart, nodeInvoked);
-        }
-    }
-
-
 
     @Override
     public String toString() {
