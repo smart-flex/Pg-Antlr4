@@ -68,10 +68,6 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     }
 
-    public void enterReturnStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.ReturnStatementContext ctx) {
-
-    }
-
     public void exitReturnStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.ReturnStatementContext ctx) {
 
     }

@@ -183,49 +183,58 @@ public class PgGenGlueFunctions {
 
         for (PgFuncReplacementPart part : list) {
             if (part.getElementType() == PgPlSqlElEnum.ANONYMOUS_PARAMETER) {
-                indexEnd = part.getIndexStart();
-                glue(sb, funcBody, indexStart, indexEnd);
 
-                PgAnonymousParameter aPar = (PgAnonymousParameter) part;
+                if (isReplacementAllowed(inv, part, list)) {
+                    indexEnd = part.getIndexStart();
+                    glue(sb, funcBody, indexStart, indexEnd);
 
-                int i = 1;
-                for (PgFuncReplacementPart invokedPart : inv.getListSubPart()) {
-                    if (i == aPar.getOrder()) {
-                        PgFuncReplacementPart above = invokedPart.getAbovePart();
-                        sb.append(above.getNameWithSuffix());
-                        indexStart = part.getIndexEnd() + 1;
-                        break;
-                    }
-                    i++;
-                }
+                    PgAnonymousParameter aPar = (PgAnonymousParameter) part;
 
-            } else if (part.getElementType() == PgPlSqlElEnum.VARIABLE_USAGE) {
-
-                int indexFound = 0;
-                PgFuncReplacementPart invokedPart = null;
-                List<PgFuncDefined.FuncParameter> parList = nd.getFuncDefined().getParList();
-                for (PgFuncDefined.FuncParameter par : parList) {
-                    if (par.getArgName() != null) {
-                        if (par.getArgName().equalsIgnoreCase(part.getValue())) {
-                            invokedPart = inv.getPgFuncReplacementPart(indexFound);
+                    int i = 1;
+                    for (PgFuncReplacementPart invokedPart : inv.getListSubPart()) {
+                        if (i == aPar.getOrder()) {
+                            PgFuncReplacementPart above = invokedPart.getAbovePart();
+                            sb.append(above.getNameWithSuffix());
+                            indexStart = part.getIndexEnd() + 1;
                             break;
                         }
+                        i++;
                     }
-                    indexFound++;
+                }
+            } else if (part.getElementType() == PgPlSqlElEnum.VARIABLE_USAGE) {
+
+                if (isReplacementAllowed(inv, part, list)) {
+                    int indexFound = 0;
+                    PgFuncReplacementPart invokedPart = null;
+                    List<PgFuncDefined.FuncParameter> parList = nd.getFuncDefined().getParList();
+                    for (PgFuncDefined.FuncParameter par : parList) {
+                        if (par.getArgName() != null) {
+                            if (par.getArgName().equalsIgnoreCase(part.getValue())) {
+                                invokedPart = inv.getPgFuncReplacementPart(indexFound);
+                                break;
+                            }
+                        }
+                        indexFound++;
+                    }
+
+                    if (invokedPart != null) {
+                        PgFuncReplacementPart above = invokedPart.getAbovePart();
+                        if (above != null) {
+                            indexEnd = part.getIndexStart();
+                            glue(sb, funcBody, indexStart, indexEnd);
+
+                            sb.append(above.getNameWithSuffix());
+                            indexStart = part.getIndexEnd() + 1;
+                        }
+                    }
                 }
 
-                if (invokedPart != null) {
-                    PgFuncReplacementPart above = invokedPart.getAbovePart();
-                    if (above != null) {
-                        indexEnd = part.getIndexStart();
-                        glue(sb, funcBody, indexStart, indexEnd);
-
-                        sb.append(above.getNameWithSuffix());
-                        indexStart = part.getIndexEnd() + 1;
-                    }
-
+            } else if (part.getElementType() == PgPlSqlElEnum.RETURN_STATEMENT) {
+                indexEnd = part.getIndexStart();
+                glue(sb, funcBody, indexStart, indexEnd);
+                if (inv.getElementType() == PgPlSqlElEnum.PERFORM) {
+                    indexStart = returnHandlingPerform(part, sb, funcBody) + 1;
                 }
-
             }
         }
 
@@ -236,6 +245,32 @@ public class PgGenGlueFunctions {
         return sb.toString();
     }
 
+    private boolean isReplacementAllowed(PgFuncInvoked inv, PgFuncReplacementPart part, List<PgFuncReplacementPart> list) {
+        boolean fok = true;
+
+        if (inv.getElementType() == PgPlSqlElEnum.PERFORM) {
+            int index = part.getIndexStart();
+            for (PgFuncReplacementPart rp : list) {
+                if (rp.getElementType() == PgPlSqlElEnum.RETURN_STATEMENT) {
+                    if (rp.getIndexStart() < index && index < rp.getIndexEnd()) {
+                        // находимся в зоне return
+                        fok = false;
+                    }
+                }
+            }
+        }
+
+        return fok;
+    }
+
+    private int returnHandlingPerform(PgFuncReplacementPart part, StringBuilder sb, String funcBody) {
+        String retStatement = funcBody.substring(part.getIndexStart(), part.getIndexEnd() + 1);
+        sb.append("/* RETURN disabled because PERFORM: ");
+        sb.append(retStatement);
+        sb.append("*/");
+
+        return part.getIndexEnd();
+    }
     private String getPart(PgFuncBodyPartBag.FuncBodyPart part) {
         String pt = part.getFuncPart();
 

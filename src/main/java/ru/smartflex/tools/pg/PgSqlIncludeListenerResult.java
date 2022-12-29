@@ -207,4 +207,10 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         pgParsingResult.addPart(part);
     }
 
+    public void enterReturnStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.ReturnStatementContext ctx) {
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.RETURN_STATEMENT, ctx.getText(),
+                ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+        pgParsingResult.addPart(part);
+    }
+
 }
