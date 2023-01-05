@@ -302,7 +302,7 @@ usualType
       precisionClause?
       NOT_NULL?
       (DEFAULT | ASSIGN)?
-      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation)?
+      (identifier | string | intValue | realValue | escapeString | bitString | functionInvocation | NULL)?
       SEMI
      ;
 

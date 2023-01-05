@@ -4,8 +4,8 @@ class PgFuncInvoked extends PgFuncReplacementPart {
     private String funcName;
     private PgTreeNode childNode = null;
 
-    public PgFuncInvoked(String funcName, int indexStart, int indexEnd) {
-        super(PgPlSqlElEnum.PERFORM, funcName, indexStart, indexEnd);
+    public PgFuncInvoked(PgPlSqlElEnum elementType, String funcName, int indexStart, int indexEnd) {
+        super(elementType, funcName, indexStart, indexEnd);
         this.funcName = funcName;
     }
 

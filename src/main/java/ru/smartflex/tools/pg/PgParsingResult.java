@@ -44,8 +44,8 @@ public class PgParsingResult {
         funcDefined.addFuncParameter(parCtx);
     }
 
-    PgFuncInvoked addFunctionInvocationsName(String funcName, int indexStart, int indexEnd) {
-        PgFuncInvoked invoked = new PgFuncInvoked(funcName, indexStart, indexEnd);
+    PgFuncInvoked addFunctionInvocation(PgPlSqlElEnum elementType, String funcName, int indexStart, int indexEnd) {
+        PgFuncInvoked invoked = new PgFuncInvoked(elementType, funcName, indexStart, indexEnd);
         functionInvocationsList.add(invoked);
         funcDefined.addPart(invoked);
         return invoked;

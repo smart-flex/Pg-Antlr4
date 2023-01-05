@@ -72,10 +72,6 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     }
 
-    public void enterFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
-
-    }
-
     public void exitFunctionInvocation(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx) {
 
     }

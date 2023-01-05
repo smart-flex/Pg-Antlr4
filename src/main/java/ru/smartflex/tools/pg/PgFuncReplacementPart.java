@@ -8,7 +8,6 @@ class PgFuncReplacementPart implements Comparable {
     private int indexEnd = 0;
     private String value = null;
     private PgPlSqlElEnum elementType = null;
-    private PgPlSqlElEnum elementSubType = null;
     private int suffixInt = 0;
     private PgFuncReplacementPart abovePart = null;
 
@@ -21,21 +20,12 @@ class PgFuncReplacementPart implements Comparable {
         this.indexEnd = indexEnd;
     }
 
-    PgFuncReplacementPart (PgPlSqlElEnum elementType, PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
-        this.elementType = elementType;
-        this.elementSubType = elementSubType;
-        this.value = value;
-        this.indexStart = indexStart;
-        this.indexEnd = indexEnd;
-    }
-
-    void addSubPart(String value, int indexStart, int indexEnd) {
-        PgFuncReplacementPart part = new PgFuncReplacementPart(this.elementType, value, indexStart, indexEnd);
+    void addSubPart(PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
+        PgFuncReplacementPart part = new PgFuncReplacementPart(elementSubType, value, indexStart, indexEnd);
         listSub.add(part);
     }
 
-    void addSubPart(PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
-        PgFuncReplacementPart part = new PgFuncReplacementPart(this.elementType, elementSubType, value, indexStart, indexEnd);
+    void addSubPart(PgFuncReplacementPart part) {
         listSub.add(part);
     }
 
@@ -57,10 +47,6 @@ class PgFuncReplacementPart implements Comparable {
 
     PgPlSqlElEnum getElementType() {
         return elementType;
-    }
-
-    PgPlSqlElEnum getElementSubType() {
-        return elementSubType;
     }
 
     String getValue() {

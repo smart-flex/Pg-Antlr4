@@ -20,7 +20,7 @@ BEGIN
    DECLARE
       m_par2   int2:= 50;
    BEGIN
-      -- some parsing error PERFORM p02_int4_v2(m_par1,m_par2) ;
+      -- TODO fix some parsing error PERFORM p02_int4_v2(m_par1,m_par2) ;
       PERFORM p02_int4_v2(m_par1, m_par2) ;
    END;
    

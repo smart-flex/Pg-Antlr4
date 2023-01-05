@@ -45,7 +45,7 @@ public class PgGenGlueFunctions {
         indexStart = indexEnd;
 
         for (PgFuncReplacementPart part : list) {
-            if (part.getElementType() == PgPlSqlElEnum.PERFORM) {
+            if (part.getElementType() == PgPlSqlElEnum.PERFORM_STATEMENT) {
                 indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
 
@@ -75,7 +75,7 @@ public class PgGenGlueFunctions {
 
                 List<PgFuncReplacementPart> lsp = part.getListSubPart();
                 for (PgFuncReplacementPart pdcl : lsp) {
-                    if (pdcl.getElementSubType() == PgPlSqlElEnum.DECL_IDENT) {
+                    if (pdcl.getElementType() == PgPlSqlElEnum.DECL_IDENT) {
                         String varName = part.getNameWithSuffix();
                         sb.append(varName);
                         indexStart = pdcl.getIndexEnd();
@@ -182,7 +182,7 @@ public class PgGenGlueFunctions {
             } else if (part.getElementType() == PgPlSqlElEnum.RETURN_STATEMENT) {
                 indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
-                if (inv.getElementType() == PgPlSqlElEnum.PERFORM) {
+                if (inv.getElementType() == PgPlSqlElEnum.PERFORM_STATEMENT) {
                     indexStart = returnHandlingPerform(part, sb, funcBody) + 1;
                 }
             }
@@ -198,7 +198,7 @@ public class PgGenGlueFunctions {
     private boolean isReplacementAllowed(PgFuncInvoked inv, PgFuncReplacementPart part, List<PgFuncReplacementPart> list) {
         boolean fok = true;
 
-        if (inv.getElementType() == PgPlSqlElEnum.PERFORM) {
+        if (inv.getElementType() == PgPlSqlElEnum.PERFORM_STATEMENT) {
             int index = part.getIndexStart();
             for (PgFuncReplacementPart rp : list) {
                 if (rp.getElementType() == PgPlSqlElEnum.RETURN_STATEMENT) {
