@@ -29,6 +29,10 @@ public class PgFuncDefined {
         return funcBodyPartsBag.getPart(indexStart);
     }
 
+    PgFuncReplacementPart getPart(int indexStart, PgPlSqlElEnum elementType) {
+        return funcBodyPartsBag.getPart(indexStart, elementType);
+    }
+
     String getFunctionBlockStatementAsString() {
         return funcBody.substring(functionBlockStatement.indexStart, functionBlockStatement.indexEnd + 1);
     }

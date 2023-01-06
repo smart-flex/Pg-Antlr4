@@ -52,6 +52,8 @@ public class PgGenGlueFunctions {
                 PgFuncInvoked inv = (PgFuncInvoked) part;
                 PgTreeNode nd = inv.getChildNode();
                 String bodyInvoked = getBodyPart(nd, inv);
+                insertBody(sb, bodyInvoked, inv.getFuncName());
+/*
                 sb.append("\n");
                 sb.append("--");
                 sb.append("\n");
@@ -67,7 +69,7 @@ public class PgGenGlueFunctions {
                 sb.append("\n");
                 sb.append("--");
                 sb.append("\n");
-
+*/
                 indexStart = part.getIndexEnd() + 1;
             } else if (part.getElementType() == PgPlSqlElEnum.VAR_DECLARE_BLOCK) {
                 indexEnd = part.getIndexStart();
@@ -92,6 +94,27 @@ public class PgGenGlueFunctions {
                 indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
 
+            }  else if (part.getElementType() == PgPlSqlElEnum.ASSIGN_STATEMENT) {
+                // подразумевается. что в ASSIGN_STATEMENT присутствует вызов ХП
+
+                // пишем хвост
+                indexEnd = part.getIndexStart();
+                glue(sb, funcBody, indexStart, indexEnd);
+
+                // склеиваем в цикле
+                PgFuncReplacementPart assignPart = part;
+                int iStart = assignPart.getIndexStart();
+                List<PgFuncReplacementPart> listSp = assignPart.getListSubPart(); // 1+x вызовов ХП
+                for (PgFuncReplacementPart pp : listSp) {
+                    int iEnd = pp.getIndexStart();
+                    String assignPartFunc = funcBody.substring(iStart, iEnd);
+                    PgFuncInvoked pgi = (PgFuncInvoked) pp;
+                    PgTreeNode nd = pgi.getChildNode();
+                    String bodyInvoked = getBodyPart(nd, pgi, assignPartFunc);
+                    iStart = pp.getIndexEnd() + 1;
+                    insertBody(sb, bodyInvoked, pgi.getFuncName());
+                }
+                indexStart = part.getIndexEnd() + 1;
             }
 
         }
@@ -107,12 +130,73 @@ public class PgGenGlueFunctions {
         return sb.toString();
     }
 
+    private void insertBody(StringBuilder sb, String partBody, String funcName) {
+        sb.append("\n");
+        sb.append("--");
+        sb.append("\n");
+        sb.append("-- ***** insert sub-body BEGIN *****: \"");
+        sb.append(funcName);
+        sb.append("\"");
+        sb.append("\n");
+        sb.append("--");
+        sb.append("\n");
+
+        String offsetPartBody = getOffsetPartBody(partBody);
+        sb.append(offsetPartBody);
+
+        sb.append("\n");
+        sb.append("--");
+        sb.append("\n");
+        sb.append("-- ***** insert sub-body END *****: \"");
+        sb.append(funcName);
+        sb.append("\"");
+        sb.append("\n");
+        sb.append("--");
+        sb.append("\n");
+    }
+
+    private String getOffsetPartBody(String partBody) {
+        String offsett = "      ";
+        char lf = '\n';
+        char cr = '\r';
+        char[] chars = partBody.toCharArray();
+        int indexStartLine = 0;
+        int indexEndLine = -1;
+        int index = -1;
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<chars.length; i++) {
+            index = i;
+            char ch = chars[i];
+            if (ch == lf || ch == cr) {
+                indexEndLine = i;
+            } else {
+                if (indexEndLine != -1) {
+                    String part = new String(chars, indexStartLine, indexEndLine - indexStartLine + 1);
+                    sb.append(offsett);
+                    sb.append(part);
+                    indexStartLine = indexEndLine + 1;
+                    indexEndLine = -1;
+                }
+            }
+        }
+        if (indexStartLine < index) {
+            String part = new String(chars, indexStartLine, index - indexStartLine + 1);
+            sb.append(offsett);
+            sb.append(part);
+        }
+        return sb.toString();
+    }
     private void glue(StringBuilder sb, String body, int indexStart, int indexEnd) {
         sb.append(body.substring(indexStart, indexEnd));
     }
 
-    // TODO рекурсивный вызов дописать (учесть под-вызовы ХП)
     private String getBodyPart(PgTreeNode nd, PgFuncInvoked inv) {
+        return  getBodyPart(nd, inv, null);
+    }
+
+    // TODO рекурсивный вызов дописать (учесть под-вызовы ХП)
+
+    private String getBodyPart(PgTreeNode nd, PgFuncInvoked inv, String assignPartFunc) {
 
         String funcBody = nd.getFuncDefined().getFuncBody();
 
@@ -184,6 +268,11 @@ public class PgGenGlueFunctions {
                 glue(sb, funcBody, indexStart, indexEnd);
                 if (inv.getElementType() == PgPlSqlElEnum.PERFORM_STATEMENT) {
                     indexStart = returnHandlingPerform(part, sb, funcBody) + 1;
+                } else if (inv.getElementType() == PgPlSqlElEnum.FUNC_INVOKE_STATEMENT) {
+                    // смещаем индекс для сокрытия RETURN
+                    indexStart = indexEnd + "RETURN".length() + 1;
+                    // добавляем часть assign statement из головного ХП
+                    sb.append(assignPartFunc);
                 }
             }
         }

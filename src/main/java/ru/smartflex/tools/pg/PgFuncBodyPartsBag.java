@@ -10,6 +10,7 @@ class PgFuncBodyPartsBag {
     private boolean sorted = false;
 
     void addPart(PgFuncReplacementPart part) {
+        sorted = false;
         listPart.add(part);
     }
 
@@ -22,15 +23,27 @@ class PgFuncBodyPartsBag {
     }
 
     PgFuncReplacementPart getPart(int indexStart) {
+        return getPart(indexStart, null);
+    }
+
+    PgFuncReplacementPart getPart(int indexStart, PgPlSqlElEnum elementType) {
         PgFuncReplacementPart part = null;
 
         for (PgFuncReplacementPart p : listPart) {
             if (p.getIndexStart() == indexStart) {
-                part = p;
-                break;
+                if (elementType != null) {
+                    if (p.getElementType() == elementType) {
+                        part = p;
+                        break;
+                    }
+                } else {
+                    part = p;
+                    break;
+                }
             }
         }
 
         return part;
     }
+
 }

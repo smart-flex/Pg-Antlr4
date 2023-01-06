@@ -73,6 +73,10 @@ public class PgParsingResult {
         return funcDefined.getPart(indexStart);
     }
 
+    PgFuncReplacementPart getPart(int indexStart, PgPlSqlElEnum elementType) {
+        return funcDefined.getPart(indexStart, elementType);
+    }
+
     void addPart(PgFuncReplacementPart part) {
         funcDefined.addPart(part);
     }

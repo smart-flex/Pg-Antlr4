@@ -114,7 +114,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             if (child instanceof ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext) {
                 int startIndex = ((ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext) child).start.getStartIndex();
 
-                PgFuncReplacementPart assignPart = pgParsingResult.getPart(startIndex);
+                PgFuncReplacementPart assignPart = pgParsingResult.getPart(startIndex, PgPlSqlElEnum.ASSIGN_STATEMENT);
                 // т.к. в выражении типа assign ХП м.б. вызвана неколько раз, то assign Блок может уже быть зарегистрирован
                 if (assignPart == null) {
                     int stopindex = ((ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext) child).stop.getStopIndex();
@@ -123,9 +123,11 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
                 }
                 int indexStart = fiCtx.start.getStartIndex();
                 int indexEnd = fiCtx.stop.getStopIndex();
-                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.PERFORM_STATEMENT, indexStart, indexEnd);
-//                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, indexStart, indexEnd);
+//                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.PERFORM_STATEMENT, indexStart, indexEnd);
+                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, indexStart, indexEnd);
                 assignPart.addSubPart(funcInvoked);
+
+                goBack(ctx, funcInvoked);
 
             }
         }
