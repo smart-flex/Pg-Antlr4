@@ -102,7 +102,7 @@ public class TestPgPlSql {
     }
 
     @Test
-    public void testGeneratingOutCall() {
+    public void testGeneratingOutAssign() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p02_int4_v2.sql",
                 "p02_void_call.sql");
         PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
