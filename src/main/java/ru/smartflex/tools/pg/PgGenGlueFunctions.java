@@ -1,5 +1,7 @@
 package ru.smartflex.tools.pg;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class PgGenGlueFunctions {
@@ -24,6 +26,7 @@ public class PgGenGlueFunctions {
     }
 
     private String generateBody(PgTreeNode node) {
+        boolean wasGenerated = false;
         // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
         String funcBody = node.getFuncDefined().getFuncBody();
 
@@ -55,6 +58,8 @@ public class PgGenGlueFunctions {
                 insertBody(sb, bodyInvoked, inv.getFuncName());
 
                 indexStart = part.getIndexEnd() + 1;
+
+                wasGenerated = true;
             } else if (part.getElementType() == PgPlSqlElEnum.VAR_DECLARE_BLOCK) {
                 indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
@@ -99,6 +104,8 @@ public class PgGenGlueFunctions {
                     insertBody(sb, bodyInvoked, pgi.getFuncName());
                 }
                 indexStart = part.getIndexEnd() + 1;
+
+                wasGenerated = true;
             }
 
         }
@@ -111,7 +118,28 @@ public class PgGenGlueFunctions {
         indexStart = indexEnd;
         glue(sb, funcBody, indexStart, funcBody.length());
 
+        writeGeneratedSQL(sb, node.getFuncDefined().getFuncName(), wasGenerated);
+
         return sb.toString();
+    }
+
+    private void writeGeneratedSQL(StringBuilder sb, String fileName, boolean wasGenerated) {
+        if (!wasGenerated) {
+            return;
+        }
+        String dir = System.getProperty("user.dir").toLowerCase();
+        File outCat = new File(dir, "out");
+        outCat.mkdir();
+        File outSql = new File(outCat, fileName + ".sql");
+        outSql.delete();
+        try (FileOutputStream fos = new FileOutputStream(outSql)) {
+            fos.write(sb.toString().getBytes());
+            fos.close();
+        } catch (Exception e){
+
+        }
+
+
     }
 
     private void insertBody(StringBuilder sb, String partBody, String funcName) {
