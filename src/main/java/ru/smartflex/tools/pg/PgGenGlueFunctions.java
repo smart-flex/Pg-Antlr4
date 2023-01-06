@@ -53,23 +53,7 @@ public class PgGenGlueFunctions {
                 PgTreeNode nd = inv.getChildNode();
                 String bodyInvoked = getBodyPart(nd, inv);
                 insertBody(sb, bodyInvoked, inv.getFuncName());
-/*
-                sb.append("\n");
-                sb.append("--");
-                sb.append("\n");
-                sb.append("-- ***** insert sub-body BEGIN ***** ");
-                sb.append("\n");
-                sb.append("--");
-                sb.append("\n");
-                sb.append(bodyInvoked);
-                sb.append("\n");
-                sb.append("--");
-                sb.append("\n");
-                sb.append("-- ***** insert sub-body END ***** ");
-                sb.append("\n");
-                sb.append("--");
-                sb.append("\n");
-*/
+
                 indexStart = part.getIndexEnd() + 1;
             } else if (part.getElementType() == PgPlSqlElEnum.VAR_DECLARE_BLOCK) {
                 indexEnd = part.getIndexStart();
