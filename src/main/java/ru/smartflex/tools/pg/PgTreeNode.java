@@ -58,13 +58,6 @@ public class PgTreeNode {
         return childList;
     }
 
-    String getFunctionBlockStatement() {
-        if (funcDefined != null) {
-            return funcDefined.getFunctionBlockStatementAsString();
-        }
-        return null;
-    }
-
     public void addChild(PgTreeNode child) {
         childList.add(child);
     }

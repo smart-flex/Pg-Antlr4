@@ -17,9 +17,9 @@ public class PgGenGlueFunctions {
                 return;
             }
 
-            // TODO вывести результат генерации в файл в OUT каталог
             String gen = generateBody(node);
             System.out.println(gen);
+//            System.out.println(node.getPgFuncName());
 
         };
         return ith;
@@ -82,6 +82,7 @@ public class PgGenGlueFunctions {
             } else if (part.getElementType() == PgPlSqlElEnum.ANONYMOUS_PARAMETER) {
                 indexEnd = part.getIndexStart();
                 glue(sb, funcBody, indexStart, indexEnd);
+                indexStart = indexEnd + 1;
 
             }  else if (part.getElementType() == PgPlSqlElEnum.ASSIGN_STATEMENT) {
                 // подразумевается. что в ASSIGN_STATEMENT присутствует вызов ХП
@@ -130,16 +131,13 @@ public class PgGenGlueFunctions {
         String dir = System.getProperty("user.dir").toLowerCase();
         File outCat = new File(dir, "out");
         outCat.mkdir();
-        File outSql = new File(outCat, fileName + ".sql");
+        File outSql = new File(outCat, fileName + "_sf_result.sql");
         outSql.delete();
         try (FileOutputStream fos = new FileOutputStream(outSql)) {
             fos.write(sb.toString().getBytes());
-            fos.close();
         } catch (Exception e){
-
+            // TODO transfer exception to logger or something else
         }
-
-
     }
 
     private void insertBody(StringBuilder sb, String partBody, String funcName) {

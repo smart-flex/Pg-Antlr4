@@ -15,6 +15,9 @@ public class PgParseFunctions {
     private static final int THREAD_AMOUNT = 2;
     private static AtomicInteger suffix = new AtomicInteger();
 
+    public PgParseFunctions() {
+        suffix.set(0);
+    }
     public PgParsingResultBag parseFromEnum(Stream<PgPlSQLEnums> stream) {
 
         Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
