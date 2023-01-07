@@ -1,5 +1,8 @@
 package ru.smartflex.tools.pg;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,26 +112,38 @@ public class ParserHelper {
         return ret;
     }
 
-/*
-    static void makeNewBodyPart(PgFuncInvoked funcInvoked,  PgTreeNode node) {
-        PgFuncDefined funcDefined = node.getParentNode().getFuncDefined();
-        PgFuncBodyPartBag.FuncBodyPart lastBodyPart = ParserHelper.getLastFuncBodyPart(node);
-
-        int rowOffsetBody = lastBodyPart.getRowOffsetBody();
-        int lineStart = funcInvoked.getLineStart() - rowOffsetBody;
-        int lineEnd = funcInvoked.getLineEnd() - rowOffsetBody;
-//todo насытить p02_void_perform комментами-ловушками // -- и пр.
-        Reader reader = new StringReader(lastBodyPart.getFuncPart());
-        Stream<String> lines = new BufferedReader(reader).lines();
-        AtomicInteger idLine = new AtomicInteger(0);
-        lines.forEach(line -> {
-
-            idLine.incrementAndGet();
-        });
-
-
-
-
+    public static String getHash(String text) {
+        return  getHash(text, "UTF-8");
     }
-    */
+
+    public static String getHash(String text, String enc) {
+        String hash = null;
+        byte[] bytesOfMessage = null;
+        try {
+            bytesOfMessage = text.getBytes(enc);
+        } catch (UnsupportedEncodingException e) {
+            PgSQLQjuException pe = new PgSQLQjuException("Encoding error");
+            pe.addSuppressed(e);
+            throw pe;
+        }
+
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            byte[] thedigest = md.digest(bytesOfMessage);
+            StringBuffer hashBuffer = new StringBuffer();
+            for (int i = 0; i < thedigest.length; i++) {
+                int val = (thedigest[i] & 255) | 0x100;
+                hashBuffer = hashBuffer.append(Integer.toHexString(val)
+                        .substring(1));
+            }
+            hash = hashBuffer.toString();
+        } catch (NoSuchAlgorithmException e) {
+            PgSQLQjuException pe = new PgSQLQjuException("Hash error");
+            pe.addSuppressed(e);
+            throw pe;
+        }
+
+        return hash;
+    }
 }

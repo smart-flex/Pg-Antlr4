@@ -14,10 +14,13 @@ public class PgParseFunctions {
 
     private static final int THREAD_AMOUNT = 2;
     private static AtomicInteger suffix = new AtomicInteger();
+    private static StringBuffer generatedBodies = null;
 
     public PgParseFunctions() {
         suffix.set(0);
+        generatedBodies = new StringBuffer();
     }
+
     public PgParsingResultBag parseFromEnum(Stream<PgPlSQLEnums> stream) {
 
         Function<PgPlSQLEnums, InputStream> funcIStream = pgEum -> {
@@ -61,6 +64,15 @@ public class PgParseFunctions {
 
         return pgParsingResultBag;
     }
+
+    static void addGeneratedBody(String body) {
+        generatedBodies.append(body);
+    }
+
+    public static String getGeneratedBodies() {
+        return generatedBodies.toString();
+    }
+
 
     static Integer nextSuffix() {
         return suffix.incrementAndGet();

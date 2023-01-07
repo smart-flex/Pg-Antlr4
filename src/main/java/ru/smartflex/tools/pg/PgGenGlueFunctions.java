@@ -17,15 +17,12 @@ public class PgGenGlueFunctions {
                 return;
             }
 
-            String gen = generateBody(node);
-            System.out.println(gen);
-//            System.out.println(node.getPgFuncName());
-
+            generateBody(node);
         };
         return ith;
     }
 
-    private String generateBody(PgTreeNode node) {
+    private void generateBody(PgTreeNode node) {
         boolean wasGenerated = false;
         // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
         String funcBody = node.getFuncDefined().getFuncBody();
@@ -121,7 +118,9 @@ public class PgGenGlueFunctions {
 
         writeGeneratedSQL(sb, node.getFuncDefined().getFuncName(), wasGenerated);
 
-        return sb.toString();
+        if (wasGenerated) {
+            PgParseFunctions.addGeneratedBody(sb.toString());
+        }
     }
 
     private void writeGeneratedSQL(StringBuilder sb, String fileName, boolean wasGenerated) {

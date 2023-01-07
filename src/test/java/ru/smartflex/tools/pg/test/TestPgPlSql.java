@@ -99,6 +99,10 @@ public class TestPgPlSql {
         root.drawTree();
 
         new PgGenGlueFunctions().glue(root);
+
+        String bodies = PgParseFunctions.getGeneratedBodies();
+        String hash = ParserHelper.getHash(bodies);
+        assertEquals("037923206d7affac13572943ad55bcaf", hash);
     }
 
     @Test
@@ -111,6 +115,10 @@ public class TestPgPlSql {
         root.drawTree();
 
         new PgGenGlueFunctions().glue(root);
+
+        String bodies = PgParseFunctions.getGeneratedBodies();
+        String hash = ParserHelper.getHash(bodies);
+        assertEquals("277185d5e56040679b83a0d905e8fa01", hash);
     }
 
 }
