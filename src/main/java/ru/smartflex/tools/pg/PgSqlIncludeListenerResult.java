@@ -64,19 +64,15 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 
     public void enterPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {
 
-        int indexStart = ctx.start.getStartIndex();
-        int indexEnd = ctx.stop.getStopIndex();
-        PgFuncInvoked funcInvoked = createFunctionInvoked(ctx.functionInvocation(), PgPlSqlElEnum.PERFORM_STATEMENT,
-                indexStart, indexEnd);
+        PgFuncInvoked funcInvoked = createFunctionInvoked(ctx.functionInvocation(), PgPlSqlElEnum.PERFORM_STATEMENT, ctx);
 
         goBack(ctx, funcInvoked);
     }
 
     private PgFuncInvoked createFunctionInvoked(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionInvocationContext ctx,
-                                       PgPlSqlElEnum elementType, int indexStart, int indexEnd) {
+                                       PgPlSqlElEnum elementType, ParserRuleContext prc) {
 
-        PgFuncInvoked funcInvoked = pgParsingResult.addFunctionInvocation(elementType, ctx.identifier().getText(),
-                indexStart, indexEnd);
+        PgFuncInvoked funcInvoked = pgParsingResult.addFunctionInvocation(elementType, ctx.identifier().getText(), prc);
 
         if (ctx.functionInvocationParamList() == null) {
             return funcInvoked;
@@ -97,7 +93,7 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
                 elType = PgPlSqlElEnum.DECL_FUNC;
             }
 
-            funcInvoked.addParameter(elType, par.getText(), par.start.getStartIndex(), par.stop.getStopIndex());
+            funcInvoked.addParameter(elType, par.getText(), par);
         }
 
         return funcInvoked;
@@ -117,14 +113,11 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
                 PgFuncReplacementPart assignPart = pgParsingResult.getPart(startIndex, PgPlSqlElEnum.ASSIGN_STATEMENT);
                 // т.к. в выражении типа assign ХП м.б. вызвана неколько раз, то assign Блок может уже быть зарегистрирован
                 if (assignPart == null) {
-                    int stopindex = ((ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext) child).stop.getStopIndex();
-                    assignPart = new PgFuncReplacementPart(PgPlSqlElEnum.ASSIGN_STATEMENT, ctx.getText(), startIndex, stopindex);
+                    assignPart = new PgFuncReplacementPart(PgPlSqlElEnum.ASSIGN_STATEMENT, ctx.getText(),
+                            (ru.smartflex.tools.pg.PgSQLIncludeParser.AssignedStatementContext)child);
                     pgParsingResult.addPart(assignPart);
                 }
-                int indexStart = fiCtx.start.getStartIndex();
-                int indexEnd = fiCtx.stop.getStopIndex();
-//                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.PERFORM_STATEMENT, indexStart, indexEnd);
-                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, indexStart, indexEnd);
+                PgFuncInvoked funcInvoked = createFunctionInvoked(fiCtx, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, fiCtx);
                 assignPart.addSubPart(funcInvoked);
 
                 goBack(ctx, funcInvoked);
@@ -180,18 +173,15 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
             String declareNameLower = vd.identifier().getText().toLowerCase();
             List<PgFuncReplacementPart> lp = funcInvoked.getListSubPart();
             int startIndex = vd.start.getStartIndex();
-            int stopindex = vd.stop.getStopIndex();
             for (PgFuncReplacementPart invokedPart : lp) {
                 if (invokedPart.getElementType() == PgPlSqlElEnum.DECL_IDENT) {
                     String parNameLower = invokedPart.getValue().toLowerCase();
                     if (parNameLower.equals(declareNameLower)) {
                         PgFuncReplacementPart abovePart = pgParsingResult.getPart(startIndex);
                         if (abovePart == null) {
-                            abovePart = new PgFuncReplacementPart(PgPlSqlElEnum.VAR_DECLARE_BLOCK, declareName, startIndex, stopindex);
-                            abovePart.addSubPart(PgPlSqlElEnum.DECL_IDENT, declareName,
-                                    vd.identifier().start.getStartIndex(), vd.identifier().stop.getStopIndex());
-                            abovePart.addSubPart(declareType, null,
-                                    vd.dataType().start.getStartIndex(), vd.dataType().stop.getStopIndex());
+                            abovePart = new PgFuncReplacementPart(PgPlSqlElEnum.VAR_DECLARE_BLOCK, declareName, vd);
+                            abovePart.addSubPart(PgPlSqlElEnum.DECL_IDENT, declareName, vd.identifier());
+                            abovePart.addSubPart(declareType, null, vd.dataType());
                             pgParsingResult.addPart(abovePart);
                         }
                         invokedPart.setAbovePart(abovePart);
@@ -211,9 +201,11 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
     }
 
     public void enterFunctionBlockStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionBlockStatementContext ctx) {
-        int indexStart = ctx.start.getStartIndex();
-        int indexEnd = ctx.stop.getStopIndex();
-        pgParsingResult.setFunctionBlockStatementIndexes(indexStart, indexEnd);
+
+//        int indexStart = ctx.start.getStartIndex();
+//        int indexEnd = ctx.stop.getStopIndex();
+        pgParsingResult.setFunctionBlockStatementIndexes(ctx);
+
     }
 
     public void enterAnonymousParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.AnonymousParameterContext ctx) {
@@ -240,14 +232,12 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
         if (ctx == null) {
             return;
         }
-        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.VARIABLE_USAGE, ctx.getText(),
-                ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.VARIABLE_USAGE, ctx.getText(), ctx);
         pgParsingResult.addPart(part);
     }
 
     public void enterReturnStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.ReturnStatementContext ctx) {
-        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.RETURN_STATEMENT, ctx.getText(),
-                ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.RETURN_STATEMENT, ctx.getText(), ctx);
         pgParsingResult.addPart(part);
     }
 

@@ -5,8 +5,7 @@ class PgAnonymousParameter extends PgFuncReplacementPart {
     private Integer order = null;
 
     PgAnonymousParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.AnonymousParameterContext ctx) {
-        super(PgPlSqlElEnum.ANONYMOUS_PARAMETER, ctx.ANONYMOUS_PAR().getText(),
-                ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+        super(PgPlSqlElEnum.ANONYMOUS_PARAMETER, ctx.ANONYMOUS_PAR().getText(), ctx);
 
         init(ctx);
     }

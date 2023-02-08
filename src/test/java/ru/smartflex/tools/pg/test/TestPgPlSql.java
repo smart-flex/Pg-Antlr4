@@ -102,7 +102,8 @@ public class TestPgPlSql {
 
         String bodies = PgParseFunctions.getGeneratedBodies();
         String hash = ParserHelper.getHash(bodies);
-        assertEquals("037923206d7affac13572943ad55bcaf", hash);
+        assertEquals("e5b7c1bdbd543a7ca9e757c6c1ec86f8", hash);
+
     }
 
     @Test
@@ -119,6 +120,40 @@ public class TestPgPlSql {
         String bodies = PgParseFunctions.getGeneratedBodies();
         String hash = ParserHelper.getHash(bodies);
         assertEquals("277185d5e56040679b83a0d905e8fa01", hash);
+    }
+
+
+    @Test
+    public void testGeneratingOutThreeLevel() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_v2.sql",
+                "p02_int4_v4.sql", "p02_void_call_perf.sql");
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
+
+        PgTreeNode root = ParserHelper.makeTree(pgParsingResultBag);
+        root.drawTree();
+
+        new PgGenGlueFunctions().glue(root);
+
+//        String bodies = PgParseFunctions.getGeneratedBodies();
+//        String hash = ParserHelper.getHash(bodies);
+//        System.out.println(bodies);
+//        assertEquals("277185d5e56040679b83a0d905e8fa01", hash);
+    }
+
+    @Test
+    public void testGeneratingOutPerformSimple() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql",
+                "p01_void.sql");
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
+
+        PgTreeNode root = ParserHelper.makeTree(pgParsingResultBag);
+        root.drawTree();
+
+        new PgGenGlueFunctions().glue(root);
+
+//        String bodies = PgParseFunctions.getGeneratedBodies();
+//        String hash = ParserHelper.getHash(bodies);
+//        assertEquals("037923206d7affac13572943ad55bcaf", hash);
     }
 
 }

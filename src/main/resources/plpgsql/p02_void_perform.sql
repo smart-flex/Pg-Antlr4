@@ -7,6 +7,8 @@ DECLARE
    m_par3 int4 := 30;
 BEGIN
 
+perform to_date();
+
    NULL;PERFORM p02_int4_v2(m_par1, 
                        m_par2) ; NULL;
    NULL;PERFORM p02_int4_v2(m_par1, 

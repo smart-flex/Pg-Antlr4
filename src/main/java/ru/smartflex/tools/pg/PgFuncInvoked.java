@@ -1,11 +1,13 @@
 package ru.smartflex.tools.pg;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 class PgFuncInvoked extends PgFuncReplacementPart {
     private String funcName;
     private PgTreeNode childNode = null;
 
-    public PgFuncInvoked(PgPlSqlElEnum elementType, String funcName, int indexStart, int indexEnd) {
-        super(elementType, funcName, indexStart, indexEnd);
+    public PgFuncInvoked(PgPlSqlElEnum elementType, String funcName, ParserRuleContext prc) {
+        super(elementType, funcName, prc);
         this.funcName = funcName;
     }
 
@@ -13,8 +15,8 @@ class PgFuncInvoked extends PgFuncReplacementPart {
         return funcName;
     }
 
-    void addParameter(PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
-        addSubPart(elementSubType, value, indexStart, indexEnd);
+    void addParameter(PgPlSqlElEnum elementSubType, String value, ParserRuleContext prc) {
+        addSubPart(elementSubType, value, prc);
     }
 
     PgTreeNode getChildNode() {

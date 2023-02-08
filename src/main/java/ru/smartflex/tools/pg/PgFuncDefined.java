@@ -10,7 +10,7 @@ public class PgFuncDefined {
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
-    private FunctionBlockStatement functionBlockStatement = new FunctionBlockStatement();
+//    private FunctionBlockStatement functionBlockStatement = new FunctionBlockStatement();
 
     private PgFuncBodyPartsBag funcBodyPartsBag = new PgFuncBodyPartsBag();
 
@@ -32,11 +32,11 @@ public class PgFuncDefined {
     PgFuncReplacementPart getPart(int indexStart, PgPlSqlElEnum elementType) {
         return funcBodyPartsBag.getPart(indexStart, elementType);
     }
-
+/*
     String getFunctionBlockStatementAsString() {
         return funcBody.substring(functionBlockStatement.indexStart, functionBlockStatement.indexEnd + 1);
     }
-
+*/
     public String getFuncName() {
         return funcName;
     }
@@ -118,7 +118,7 @@ public class PgFuncDefined {
             return parType;
         }
     }
-
+/*
     void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
         functionBlockStatement.indexStart = indexStart;
         functionBlockStatement.indexEnd = indexEnd;
@@ -127,12 +127,13 @@ public class PgFuncDefined {
     FunctionBlockStatement getFunctionBlockStatement() {
         return functionBlockStatement;
     }
-
+*/
+/*
     class FunctionBlockStatement {
         int indexStart = 0;
         int indexEnd = 0;
     }
-
+*/
     class FuncParameter {
         String argMode;
         String argName;

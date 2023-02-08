@@ -1,11 +1,15 @@
 package ru.smartflex.tools.pg;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class PgFuncReplacementPart implements Comparable {
     private int indexStart = 0;
     private int indexEnd = 0;
+    private int lineStart = 0;
+    private int lineEnd = 0;
     private String value = null;
     private PgPlSqlElEnum elementType = null;
     private int suffixInt = 0;
@@ -13,15 +17,17 @@ class PgFuncReplacementPart implements Comparable {
 
     private List<PgFuncReplacementPart> listSub = new ArrayList<>();
 
-    PgFuncReplacementPart (PgPlSqlElEnum elementType, String value, int indexStart, int indexEnd) {
+    PgFuncReplacementPart (PgPlSqlElEnum elementType, String value, ParserRuleContext prc) {
         this.elementType = elementType;
         this.value = value;
-        this.indexStart = indexStart;
-        this.indexEnd = indexEnd;
+        this.indexStart = prc.start.getStartIndex();
+        this.indexEnd = prc.stop.getStopIndex();
+        this.lineStart = prc.start.getLine();
+        this.lineEnd = prc.stop.getLine();
     }
 
-    void addSubPart(PgPlSqlElEnum elementSubType, String value, int indexStart, int indexEnd) {
-        PgFuncReplacementPart part = new PgFuncReplacementPart(elementSubType, value, indexStart, indexEnd);
+    void addSubPart(PgPlSqlElEnum elementSubType, String value, ParserRuleContext prc) {
+        PgFuncReplacementPart part = new PgFuncReplacementPart(elementSubType, value, prc);
         listSub.add(part);
     }
 
@@ -43,6 +49,14 @@ class PgFuncReplacementPart implements Comparable {
 
     int getIndexEnd() {
         return indexEnd;
+    }
+
+    int getLineStart() {
+        return lineStart;
+    }
+
+    int getLineEnd() {
+        return lineEnd;
     }
 
     PgPlSqlElEnum getElementType() {
@@ -88,4 +102,18 @@ class PgFuncReplacementPart implements Comparable {
 
         return ret;
     }
-}
+
+    public boolean equals(Object other) {
+        if ((this == other)) return true;
+        if ((other == null)) return false;
+        if (!(other instanceof PgFuncReplacementPart)) return false;
+        PgFuncReplacementPart castOther = (PgFuncReplacementPart) other;
+        boolean fok = false;
+        if (getIndexStart() == castOther.getIndexStart() && getIndexEnd() == castOther.getIndexEnd() &&
+                getLineStart() == castOther.getLineStart() && getLineEnd() == castOther.getLineEnd()) {
+            fok = true;
+        }
+        return fok;
+    }
+
+    }

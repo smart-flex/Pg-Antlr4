@@ -1,5 +1,7 @@
 package ru.smartflex.tools.pg;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +46,8 @@ public class PgParsingResult {
         funcDefined.addFuncParameter(parCtx);
     }
 
-    PgFuncInvoked addFunctionInvocation(PgPlSqlElEnum elementType, String funcName, int indexStart, int indexEnd) {
-        PgFuncInvoked invoked = new PgFuncInvoked(elementType, funcName, indexStart, indexEnd);
+    PgFuncInvoked addFunctionInvocation(PgPlSqlElEnum elementType, String funcName, ParserRuleContext prc) {
+        PgFuncInvoked invoked = new PgFuncInvoked(elementType, funcName, prc);
         functionInvocationsList.add(invoked);
         funcDefined.addPart(invoked);
         return invoked;
@@ -63,9 +65,9 @@ public class PgParsingResult {
         return parsingErrorHappened;
     }
 
-    void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
-        funcDefined.setFunctionBlockStatementIndexes(indexStart, indexEnd);
-        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.FUNCTION_DECLARE_BLOCK, null, indexStart, indexEnd);
+    void setFunctionBlockStatementIndexes(ParserRuleContext prc) {
+        //funcDefined.setFunctionBlockStatementIndexes(indexStart, indexEnd);
+        PgFuncReplacementPart part = new PgFuncReplacementPart(PgPlSqlElEnum.FUNCTION_DECLARE_BLOCK, null, prc);
         funcDefined.addPart(part);
     }
 
