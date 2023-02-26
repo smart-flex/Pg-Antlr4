@@ -29,5 +29,7 @@ public class PgVarDefinition extends PgFuncReplacementPart {
         type = ParserHelper.defineDataType(ctx.dataType());
     }
 
-
+    int getOrder() {
+        return order;
+    }
 }

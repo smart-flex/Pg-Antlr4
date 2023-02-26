@@ -29,7 +29,7 @@ public class PgGenGlueFunctions {
         AtomicBoolean wasGenerated = new AtomicBoolean(false);
         StringBuilder sb = new StringBuilder();
 
-        generateBody(node, null, null, null, wasGenerated, sb, 0, Collections.emptyList());
+        generateBody(node, null, null, null, wasGenerated, sb, 0, null);
 
         writeGeneratedSQL(sb, node.getFuncDefined().getFuncName(), wasGenerated.get());
         if (wasGenerated.get()) {
@@ -38,7 +38,7 @@ public class PgGenGlueFunctions {
     }
 
     private void generateBody(PgTreeNode node, PgPlSqlElEnum typeOfCall, PgFuncInvoked inv, String assignPartFunc,
-                              AtomicBoolean wasGenerated, StringBuilder sb, int indexNested, List<String> outerParameters) {
+                              AtomicBoolean wasGenerated, StringBuilder sb, int indexNested, TransferParameters outerParameters) {
         boolean rootNodeMode = true;
         if (typeOfCall != null) {
             rootNodeMode = false;
@@ -81,13 +81,13 @@ if (typeOfCall == null) {
         for (PgFuncReplacementPart part : list) {
             switch (part.getElementType()) {
                 case PERFORM_STATEMENT:
-                    handlePerformStatement(part, sb, ind, funcBody, wasGenerated, indexNested);
+                    handlePerformStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
                     break;
-                case VAR_DECLARE_BLOCK:
-                    handleVarDeclareBlock(part, sb, ind, funcBody, indexNested);
-                    break;
+//                case VAR_DECLARE_BLOCK:
+//                    handleVarDeclareBlock(part, sb, ind, funcBody, indexNested);
+//                    break;
                 case ASSIGN_STATEMENT:
-                    handleAssignStatement(part, sb, ind, funcBody, wasGenerated, indexNested);
+                    handleAssignStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
                     break;
                 case ANONYMOUS_PARAMETER:
                     handleAnonymousParameter(part, inv, sb, ind, funcBody, indexNested, usedLines);
@@ -220,7 +220,7 @@ if (typeOfCall == null) {
      * Подразумевается. что в ASSIGN_STATEMENT присутствует вызов ХП
      */
     private void handleAssignStatement(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
-                                       AtomicBoolean wasGenerated, int indexNested) {
+                                       AtomicBoolean wasGenerated, int indexNested, TransferParameters outerParameters) {
 
         // пишем хвост
         ind.fillEndFromStart(part);
@@ -237,10 +237,10 @@ if (typeOfCall == null) {
                 int iEnd = pp.getIndexStart();
                 String assignPartFunc = funcBody.substring(iStart, iEnd);
 
-                List<String> pars = makeOuterParametersList(pp);
+                TransferParameters downOuter = makeOuterParameters(pgi, outerParameters);
 
                 generateBody(nd, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, pgi, assignPartFunc, wasGenerated, sb, ++indexNested,
-                        pars);
+                        downOuter);
 
                 iStart = pp.getIndexEnd() + 1;
 
@@ -250,18 +250,30 @@ if (typeOfCall == null) {
         ind.indexStart = part.getIndexEnd() + 1;
     }
 
-    private List<String> makeOuterParametersList(PgFuncReplacementPart prp) {
-        List<String> pars = new ArrayList<>();
-        for (PgFuncReplacementPart p : prp.getListSubPart()) {
-            String pName = p.getAbovePart().getNameWithSuffix();
-            pars.add(pName);
+    private TransferParameters makeOuterParameters(PgFuncInvoked pgi, TransferParameters upOuterParameters) {
+        TransferParameters downOuter = new TransferParameters();
+        for (PgFuncReplacementPart pr : pgi.getListSubPart()) {
+            PgVarDefinition var = pr.getLinkedVariable();
+            switch (var.getElementType()) {
+                case VARIABLE_DECLARE:
+                    downOuter.add(var);
+                    break;
+                case FUNCTION_PARAMETER_DECLARE:
+                    if (upOuterParameters != null) {
+                        int order = var.getOrder();
+                        PgVarDefinition varUp = upOuterParameters.getVarByOrder(order);
+                        downOuter.add(varUp);
+                    }
+                    break;
+            }
         }
-        return pars;
+        return downOuter;
     }
 
     /**
      * Работа с переменными внутри DECLARE BEGIN блока: добавление сцффикса _sf к имени при необходимости
      */
+    @Deprecated
     private void handleVarDeclareBlock(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
                                        int indexNested) {
         ind.fillEndFromStart(part);
@@ -289,7 +301,7 @@ if (typeOfCall == null) {
      * Работа с PERFORM оператором: рекурсивный вызов generate сверху-вниз
      */
     private void handlePerformStatement(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
-                                        AtomicBoolean wasGenerated, int indexNested) {
+                                        AtomicBoolean wasGenerated, int indexNested, TransferParameters outerParameters) {
         PgFuncInvoked inv = (PgFuncInvoked) part;
         PgTreeNode nd = inv.getChildNode();
 
@@ -297,8 +309,10 @@ if (typeOfCall == null) {
             ind.fillEndFromStart(part);
             glue(sb, funcBody, ind, indexNested);
 
+            TransferParameters downOuter = makeOuterParameters(inv, outerParameters);
+
             generateBody(nd, PgPlSqlElEnum.PERFORM_STATEMENT, inv, null, wasGenerated, sb, ++indexNested,
-                    Collections.emptyList());
+                    downOuter);
 
             ind.indexStart = part.getIndexEnd() + 1;
             ind.lineStart = part.getLineEnd();
