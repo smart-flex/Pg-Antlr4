@@ -2,9 +2,7 @@ package ru.smartflex.tools.pg;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PgGenGlueFunctions {
@@ -31,7 +29,7 @@ public class PgGenGlueFunctions {
         AtomicBoolean wasGenerated = new AtomicBoolean(false);
         StringBuilder sb = new StringBuilder();
 
-        generateBody(node, null, null, null, wasGenerated, sb, 0);
+        generateBody(node, null, null, null, wasGenerated, sb, 0, Collections.emptyList());
 
         writeGeneratedSQL(sb, node.getFuncDefined().getFuncName(), wasGenerated.get());
         if (wasGenerated.get()) {
@@ -40,7 +38,7 @@ public class PgGenGlueFunctions {
     }
 
     private void generateBody(PgTreeNode node, PgPlSqlElEnum typeOfCall, PgFuncInvoked inv, String assignPartFunc,
-                              AtomicBoolean wasGenerated, StringBuilder sb, int indexNested) {
+                              AtomicBoolean wasGenerated, StringBuilder sb, int indexNested, List<String> outerParameters) {
         boolean rootNodeMode = true;
         if (typeOfCall != null) {
             rootNodeMode = false;
@@ -125,6 +123,9 @@ if (typeOfCall == null) {
         }
     }
 
+    /**
+     * Работа с RETURN оператором.
+     */
     private void handleReturnStatement(PgFuncReplacementPart part, PgFuncInvoked inv, StringBuilder sb,
                                        IndexBag ind, String funcBody, String assignPartFunc, int indexNested,
                                        Set<Integer> usedLines) {
@@ -146,6 +147,9 @@ if (typeOfCall == null) {
         }
     }
 
+    /**
+     * Работа с заменой параметров ХП в выражениях типа: p2 := p1 + p2 + 200; на переменные с суффиксами.
+     */
     private void handleVariableUsage(PgTreeNode node, PgFuncReplacementPart part, PgFuncInvoked inv, StringBuilder sb,
                                      IndexBag ind, String funcBody, int indexNested, Set<Integer> usedLines) {
         if (inv == null) {
@@ -181,6 +185,9 @@ if (typeOfCall == null) {
         }
     }
 
+    /**
+     * Работа с анонимными переменными типа $1. Замена на именованные переменные.
+     */
     private void handleAnonymousParameter(PgFuncReplacementPart partAnonPar, PgFuncInvoked inv, StringBuilder sb, IndexBag ind,
                                           String funcBody, int indexNested, Set<Integer> usedLines) {
         if (inv == null) {
@@ -208,9 +215,12 @@ if (typeOfCall == null) {
         }
     }
 
+    /**
+     * Работа с выражениями присваивания, например: m_res := p02_int4_v4(m_par1, m_par2);
+     * Подразумевается. что в ASSIGN_STATEMENT присутствует вызов ХП
+     */
     private void handleAssignStatement(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
                                        AtomicBoolean wasGenerated, int indexNested) {
-        // подразумевается. что в ASSIGN_STATEMENT присутствует вызов ХП
 
         // пишем хвост
         ind.fillEndFromStart(part);
@@ -227,7 +237,10 @@ if (typeOfCall == null) {
                 int iEnd = pp.getIndexStart();
                 String assignPartFunc = funcBody.substring(iStart, iEnd);
 
-                generateBody(nd, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, pgi, assignPartFunc, wasGenerated, sb, ++indexNested);
+                List<String> pars = makeOuterParametersList(pp);
+
+                generateBody(nd, PgPlSqlElEnum.FUNC_INVOKE_STATEMENT, pgi, assignPartFunc, wasGenerated, sb, ++indexNested,
+                        pars);
 
                 iStart = pp.getIndexEnd() + 1;
 
@@ -237,6 +250,18 @@ if (typeOfCall == null) {
         ind.indexStart = part.getIndexEnd() + 1;
     }
 
+    private List<String> makeOuterParametersList(PgFuncReplacementPart prp) {
+        List<String> pars = new ArrayList<>();
+        for (PgFuncReplacementPart p : prp.getListSubPart()) {
+            String pName = p.getAbovePart().getNameWithSuffix();
+            pars.add(pName);
+        }
+        return pars;
+    }
+
+    /**
+     * Работа с переменными внутри DECLARE BEGIN блока: добавление сцффикса _sf к имени при необходимости
+     */
     private void handleVarDeclareBlock(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
                                        int indexNested) {
         ind.fillEndFromStart(part);
@@ -251,7 +276,7 @@ if (typeOfCall == null) {
             } else {
                 // хвост от объявления переменной
                 ind.indexStart++;
-                ind.indexEnd = pdcl.getIndexEnd();
+                ind.indexEnd = pdcl.getIndexEnd() + 1; //+ 1 для дозаписи ;
                 ind.lineEnd = pdcl.getLineEnd();
                 glue(sb, funcBody, ind, indexNested);
             }
@@ -260,6 +285,9 @@ if (typeOfCall == null) {
         ind.indexStart = ind.indexEnd + 1;
     }
 
+    /**
+     * Работа с PERFORM оператором: рекурсивный вызов generate сверху-вниз
+     */
     private void handlePerformStatement(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
                                         AtomicBoolean wasGenerated, int indexNested) {
         PgFuncInvoked inv = (PgFuncInvoked) part;
@@ -269,7 +297,8 @@ if (typeOfCall == null) {
             ind.fillEndFromStart(part);
             glue(sb, funcBody, ind, indexNested);
 
-            generateBody(nd, PgPlSqlElEnum.PERFORM_STATEMENT, inv, null, wasGenerated, sb, ++indexNested);
+            generateBody(nd, PgPlSqlElEnum.PERFORM_STATEMENT, inv, null, wasGenerated, sb, ++indexNested,
+                    Collections.emptyList());
 
             ind.indexStart = part.getIndexEnd() + 1;
             ind.lineStart = part.getLineEnd();

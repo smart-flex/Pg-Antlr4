@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class PgParseFunctions {
 
-    private static final int THREAD_AMOUNT = 2;
+    private static final int THREAD_AMOUNT = 1;
     private static AtomicInteger suffix = new AtomicInteger();
     private static StringBuffer generatedBodies = null;
 

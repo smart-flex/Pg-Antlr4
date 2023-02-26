@@ -10,8 +10,8 @@ class PgFuncReplacementPart implements Comparable {
     private int indexEnd = 0;
     private int lineStart = 0;
     private int lineEnd = 0;
-    private String value = null;
     private PgPlSqlElEnum elementType = null;
+    private String value = null;
     private int suffixInt = 0;
     private PgFuncReplacementPart abovePart = null;
 
@@ -116,4 +116,11 @@ class PgFuncReplacementPart implements Comparable {
         return fok;
     }
 
+    @Override
+    public String toString() {
+        return "PgFuncReplacementPart{" +
+                "elementType=" + elementType +
+                ", value='" + value + '\'' +
+                '}';
     }
+}
