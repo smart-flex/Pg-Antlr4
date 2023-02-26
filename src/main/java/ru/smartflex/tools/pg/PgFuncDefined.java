@@ -7,6 +7,7 @@ public class PgFuncDefined {
     private String funcName;
     private ReturnTypeEnum returnType;
     private String dataTypeName;
+    @Deprecated
     private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
@@ -57,6 +58,7 @@ public class PgFuncDefined {
         return parList;
     }
 
+    @Deprecated
     void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
         ru.smartflex.tools.pg.PgSQLIncludeParser.ArgModeContext argMode = parCtx.argMode();
         ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = parCtx.identifier();
@@ -134,6 +136,7 @@ public class PgFuncDefined {
         int indexEnd = 0;
     }
 */
+    @Deprecated
     class FuncParameter {
         String argMode;
         String argName;

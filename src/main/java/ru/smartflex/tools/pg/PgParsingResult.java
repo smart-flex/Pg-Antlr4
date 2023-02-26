@@ -42,6 +42,7 @@ public class PgParsingResult {
         return funcDefined;
     }
 
+    @Deprecated
     void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
         funcDefined.addFuncParameter(parCtx);
     }

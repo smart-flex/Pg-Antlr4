@@ -6,7 +6,12 @@ public enum PgPlSqlElEnum {
     // самый верхний блок DECLARE-BEGIN-END в ХП, определяющий тело ХП
     FUNCTION_DECLARE_BLOCK,
     VAR_DECLARE_BLOCK, VARIABLE_USAGE, RETURN_STATEMENT, ASSIGN_STATEMENT,
+    @Deprecated
     FUNCTION_PARAM_DECLARE_BLOCK,
+
+    FUNCTION_PARAMETER_DECLARE,
+    VARIABLE_DECLARE,
+
     FUNC_INVOKE_STATEMENT,
     ANONYMOUS_PARAMETER,
 
@@ -15,5 +20,6 @@ public enum PgPlSqlElEnum {
     DT_DATE, DT_TIME,
 
     // TODO удалить по завершении
+    @Deprecated
     DT_TODO;
 }

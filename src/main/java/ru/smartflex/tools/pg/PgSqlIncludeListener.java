@@ -328,10 +328,6 @@ public abstract class PgSqlIncludeListener implements ru.smartflex.tools.pg.PgSQ
 
     }
 
-    public void enterVariableDefinitions(ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext ctx) {
-
-    }
-
     public void exitVariableDefinitions(ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext ctx) {
 
     }

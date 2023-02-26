@@ -19,8 +19,12 @@ public class PgSqlIncludeListenerResult extends PgSqlIncludeListener {
 System.out.println("===================== func name "+ctx.identifier().getText());
         ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionListContext cntx = ctx.functionParamsDef().functionParamDefinitionList();
         if (cntx != null) {
+            int order = 0;
             for (ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext param : cntx.functionParamDefinition()) {
+                order++;
                 pgParsingResult.addFuncParameter(param);
+
+                pgParsingResult.addPart(new PgVarDefinition(param, order));
             }
         }
 
@@ -61,6 +65,13 @@ System.out.println("===================== func name "+ctx.identifier().getText()
 
     }
 
+    public void enterVariableDefinitions(ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionsContext ctx) {
+
+        List<ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext> list = ctx.variableDefinition();
+        for (ru.smartflex.tools.pg.PgSQLIncludeParser.VariableDefinitionContext v : list) {
+            pgParsingResult.addPart(new PgVarDefinition(v));
+        }
+    }
 
     public void enterPerformStatement(ru.smartflex.tools.pg.PgSQLIncludeParser.PerformStatementContext ctx) {
 
