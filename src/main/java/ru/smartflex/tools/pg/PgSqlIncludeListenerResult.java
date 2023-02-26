@@ -223,13 +223,15 @@ System.out.println("     > ===================== step3 ");
         List<PgFuncReplacementPart> lp = funcInvoked.getListSubPart();
         int startIndex = prc.start.getStartIndex();
         for (PgFuncReplacementPart invokedPart : lp) {
-            PgFuncReplacementPart abovePart = null;
+            PgVarDefinition linkedVariable = null;
             PgPlSqlElEnum typeParam = invokedPart.getElementType();
             switch (typeParam) {
                 case DECL_IDENT:
                     String parNameLower = invokedPart.getValue().toLowerCase();
                     if (parNameLower.equals(declareNameLower)) {
-                        abovePart = pgParsingResult.getPart(startIndex);
+                        linkedVariable = (PgVarDefinition) pgParsingResult.getPart(startIndex);
+                        invokedPart.setLinkedVariable(linkedVariable);
+/*
                         if (abovePart == null) {
                             abovePart = new PgFuncReplacementPart(defPlace, declareName, prc);
                             abovePart.addSubPart(PgPlSqlElEnum.DECL_IDENT, declareName, identifier);
@@ -237,12 +239,15 @@ System.out.println("     > ===================== step3 ");
                             pgParsingResult.addPart(abovePart);
                         }
                         invokedPart.setAbovePart(abovePart);
+ */
                     }
                     break;
                 case DECL_ANON_PAR:
                     int order = Integer.parseInt(invokedPart.getValue().substring(1));
                     if (order == funcParameterOrder) {
-                        abovePart = pgParsingResult.getPart(startIndex);
+                        linkedVariable = (PgVarDefinition) pgParsingResult.getPart(startIndex);
+                        invokedPart.setLinkedVariable(linkedVariable);
+/*
                         if (abovePart == null) {
                             abovePart = new PgFuncReplacementPart(defPlace, invokedPart.getValue(), prc);
 //                            abovePart.addSubPart(PgPlSqlElEnum.DECL_ANON_PAR, declareName, identifier);
@@ -250,13 +255,14 @@ System.out.println("     > ===================== step3 ");
                             pgParsingResult.addPart(abovePart);
                         }
                         invokedPart.setAbovePart(abovePart);
+*/
                     }
                     break;
                 default:
                     System.err.println("No handler for type: "+typeParam+" ");
                     break;
             }
-System.err.println("********* abovePart: "+abovePart);
+//System.err.println("********* abovePart: "+abovePart);
 
         }
 

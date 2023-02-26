@@ -15,8 +15,10 @@ public class PgVarDefinition extends PgFuncReplacementPart {
         ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = parCtx.identifier();
         if (ident != null) {
             identifier = ident.getText();
+            setValue(identifier);
         } else {
             anonymous = true;
+            setValue(parCtx.pgTypeFull().getText());
         }
         type = ParserHelper.defineDataType(parCtx.pgTypeFull());
     }

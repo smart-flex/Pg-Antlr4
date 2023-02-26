@@ -12,7 +12,9 @@ import java.util.stream.Stream;
 
 public class PgParseFunctions {
 
+    // TODO set to 2
     private static final int THREAD_AMOUNT = 1;
+    @Deprecated
     private static AtomicInteger suffix = new AtomicInteger();
     private static StringBuffer generatedBodies = null;
 
@@ -74,6 +76,7 @@ public class PgParseFunctions {
     }
 
 
+    @Deprecated
     static Integer nextSuffix() {
         return suffix.incrementAndGet();
     }

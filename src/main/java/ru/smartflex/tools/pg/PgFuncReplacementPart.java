@@ -13,7 +13,9 @@ class PgFuncReplacementPart implements Comparable {
     private PgPlSqlElEnum elementType = null;
     private String value = null;
     private int suffixInt = 0;
+    @Deprecated
     private PgFuncReplacementPart abovePart = null;
+    private PgVarDefinition linkedVariable = null;
 
     private List<PgFuncReplacementPart> listSub = new ArrayList<>();
 
@@ -67,6 +69,11 @@ class PgFuncReplacementPart implements Comparable {
         return value;
     }
 
+    void setValue(String value) {
+        this.value = value;
+    }
+
+    @Deprecated
     String getNameWithSuffix() {
         String ret = null;
 
@@ -78,14 +85,24 @@ class PgFuncReplacementPart implements Comparable {
         return ret;
     }
 
+    @Deprecated
     void setAbovePart(PgFuncReplacementPart abovePart) {
         if (this.abovePart == null) {
             this.abovePart = abovePart;
         }
     }
 
+    @Deprecated
     PgFuncReplacementPart getAbovePart() {
         return abovePart;
+    }
+
+    PgVarDefinition getLinkedVariable() {
+        return linkedVariable;
+    }
+
+    void setLinkedVariable(PgVarDefinition linkedVariable) {
+        this.linkedVariable = linkedVariable;
     }
 
     @Override
