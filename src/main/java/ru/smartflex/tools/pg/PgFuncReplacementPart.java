@@ -19,6 +19,8 @@ class PgFuncReplacementPart implements Comparable {
 
     private List<PgFuncReplacementPart> listSub = new ArrayList<>();
 
+    private boolean overLoaded = false;
+
     PgFuncReplacementPart (PgPlSqlElEnum elementType, String value, ParserRuleContext prc) {
         this.elementType = elementType;
         this.value = value;
@@ -108,6 +110,14 @@ class PgFuncReplacementPart implements Comparable {
 
     void setLinkedVariable(PgVarDefinition linkedVariable) {
         this.linkedVariable = linkedVariable;
+    }
+
+    boolean isOverLoaded() {
+        return overLoaded;
+    }
+
+    void setOverLoaded(boolean overLoaded) {
+        this.overLoaded = overLoaded;
     }
 
     @Override

@@ -42,4 +42,8 @@ public class PgVarDefinition extends PgFuncReplacementPart {
     String getIdentifier() {
         return identifier;
     }
+
+    boolean isAnonymous() {
+        return anonymous;
+    }
 }

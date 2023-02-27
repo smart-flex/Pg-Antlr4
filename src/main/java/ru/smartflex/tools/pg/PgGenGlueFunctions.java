@@ -97,7 +97,7 @@ if (sb.length()==1362) {
                     handleAnonymousParameter(part, inv, sb, ind, funcBody, indexNested, usedLines, outerParameters);
                     break;
                 case VARIABLE_USAGE:
-                    handleVariableUsage(node, part, inv, sb, ind, funcBody, indexNested, usedLines);
+                    handleVariableUsage(node, part, inv, sb, ind, funcBody, indexNested, usedLines, outerParameters);
                     break;
                 case RETURN_STATEMENT:
                     handleReturnStatement(part, inv, sb, ind, funcBody, assignPartFunc, indexNested, usedLines);
@@ -157,7 +157,8 @@ System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()
      * Работа с заменой параметров ХП в выражениях типа: p2 := p1 + p2 + 200; на переменные с суффиксами.
      */
     private void handleVariableUsage(PgTreeNode node, PgFuncReplacementPart part, PgFuncInvoked inv, StringBuilder sb,
-                                     IndexBag ind, String funcBody, int indexNested, Set<Integer> usedLines) {
+                                     IndexBag ind, String funcBody, int indexNested, Set<Integer> usedLines,
+                                     TransferParameters outerParameters) {
         if (inv == null) {
             return;
         }
@@ -165,30 +166,45 @@ System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()
         List<PgFuncReplacementPart> list = inv.getChildNode().getParts();
 
         if (isReplacementAllowed(inv, part, list)) {
-            int indexFound = 0;
-            PgFuncReplacementPart invokedPart = null;
-            List<PgFuncDefined.FuncParameter> parList = node.getFuncDefined().getParList();
-            for (PgFuncDefined.FuncParameter par : parList) {
-                if (par.getArgName() != null) {
-                    if (par.getArgName().equalsIgnoreCase(part.getValue())) {
-                        invokedPart = inv.getPgFuncReplacementPart(indexFound);
-                        break;
+System.out.println("+++++++++++++++++++++++++++ GLUE start ind "+ind+" "+part.getValue()+" part-start-end "+part.getIndexStart()+" "+part.getIndexEnd());
+            if (part.isOverLoaded()) {
+                // переменная переопределена в declare, не трогаем, вписываем как есть
+                ind.fillEndFromStart(part);
+                glue(sb, funcBody, ind, indexNested, usedLines);
+
+                append(sb, part.getValue(), indexNested, ind, usedLines);
+                ind.indexStart = part.getIndexEnd() + 1;
+            } else {
+                // ищем в параметрах
+
+                Integer order = null;
+                List<PgFuncReplacementPart> lp = node.getFuncDefined().getFuncParamParts();
+                for (PgFuncReplacementPart par : lp) {
+                    PgVarDefinition vPar = (PgVarDefinition) par;
+                    if (!vPar.isAnonymous()) {
+                        if (vPar.getIdentifier().equalsIgnoreCase(part.getValue())) {
+                            // наш параметр
+                            order = vPar.getOrder();
+                        }
                     }
                 }
-                indexFound++;
-            }
 
-            if (invokedPart != null) {
-                PgFuncReplacementPart above = invokedPart.getAbovePart();
-                if (above != null) {
+                if (order != null) {
+                    PgVarDefinition var = outerParameters.getVarByOrder(order);
+                    String identifier = var.getIdentifier();
+
                     ind.fillEndFromStart(part);
                     glue(sb, funcBody, ind, indexNested, usedLines);
 
-                    append(sb, above.getNameWithSuffix(), indexNested, ind, usedLines);
+                    append(sb, identifier, indexNested, ind, usedLines);
                     ind.indexStart = part.getIndexEnd() + 1;
+
                 }
+
             }
+System.out.println("+++++++++++++++++++++++++++ GLUE end ind "+ind);
         }
+
     }
 
     /**
@@ -374,6 +390,14 @@ System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()
 
         public Object clone() throws CloneNotSupportedException {
             return super.clone();
+        }
+
+        @Override
+        public String toString() {
+            return "IndexBag{" +
+                    "indexStart=" + indexStart +
+                    ", indexEnd=" + indexEnd +
+                    '}';
         }
     }
     private void writeGeneratedSQL(StringBuilder sb, String fileName, boolean wasGenerated) {
