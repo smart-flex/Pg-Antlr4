@@ -3,6 +3,7 @@ package ru.smartflex.tools.pg;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class PgFuncBodyPartsBag {
 
@@ -20,6 +21,14 @@ class PgFuncBodyPartsBag {
             sorted = true;
         }
         return listPart;
+    }
+
+    List<PgFuncReplacementPart> getFuncParamParts() {
+        if (!sorted) {
+            Collections.sort(listPart);
+            sorted = true;
+        }
+        return listPart.stream().filter(it -> it.getElementType() == PgPlSqlElEnum.FUNCTION_PARAMETER_DECLARE).collect(Collectors.toList());
     }
 
     PgFuncReplacementPart getPart(int indexStart) {

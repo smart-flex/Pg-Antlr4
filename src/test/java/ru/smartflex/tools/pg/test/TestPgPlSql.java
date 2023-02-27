@@ -141,6 +141,23 @@ public class TestPgPlSql {
     }
 
     @Test
+    public void testGeneratingOutThreeLevelSub() {
+        Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_v2.sql",
+                "p02_int4_v4.sql");
+        PgParsingResultBag pgParsingResultBag = new PgParseFunctions().parseFromEnum(stream);
+
+        PgTreeNode root = ParserHelper.makeTree(pgParsingResultBag);
+        root.drawTree();
+
+        new PgGenGlueFunctions().glue(root);
+
+//        String bodies = PgParseFunctions.getGeneratedBodies();
+//        String hash = ParserHelper.getHash(bodies);
+//        System.out.println(bodies);
+//        assertEquals("277185d5e56040679b83a0d905e8fa01", hash);
+    }
+
+    @Test
     public void testGeneratingOutPerformSimple() {
         Stream<PgPlSQLEnums> stream = PgPlSQLEnums.getPlPgSQLResources("p01_void_perform.sql",
                 "p02_int4_v2_int4.sql");

@@ -28,6 +28,11 @@ class PgFuncReplacementPart implements Comparable {
         this.lineEnd = prc.stop.getLine();
     }
 
+    PgFuncReplacementPart (PgPlSqlElEnum elementType, String value) {
+        this.elementType = elementType;
+        this.value = value;
+    }
+
     void addSubPart(PgPlSqlElEnum elementSubType, String value, ParserRuleContext prc) {
         PgFuncReplacementPart part = new PgFuncReplacementPart(elementSubType, value, prc);
         listSub.add(part);

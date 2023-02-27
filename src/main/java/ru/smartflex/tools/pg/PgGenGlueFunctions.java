@@ -79,6 +79,10 @@ if (typeOfCall == null) {
         }
 
         for (PgFuncReplacementPart part : list) {
+System.out.println("****** ------>> "+indexNested+" "+node.getFuncDefined().getFuncName()+ " "+typeOfCall+"  >> "+part.getElementType()+" sb "+sb.length()+" list "+list.size() );
+if (sb.length()==1362) {
+    boolean stop = true;
+}
             switch (part.getElementType()) {
                 case PERFORM_STATEMENT:
                     handlePerformStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
@@ -90,7 +94,7 @@ if (typeOfCall == null) {
                     handleAssignStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
                     break;
                 case ANONYMOUS_PARAMETER:
-                    handleAnonymousParameter(part, inv, sb, ind, funcBody, indexNested, usedLines);
+                    handleAnonymousParameter(part, inv, sb, ind, funcBody, indexNested, usedLines, outerParameters);
                     break;
                 case VARIABLE_USAGE:
                     handleVariableUsage(node, part, inv, sb, ind, funcBody, indexNested, usedLines);
@@ -101,6 +105,8 @@ if (typeOfCall == null) {
             }
 
         }
+
+System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()+ " "+typeOfCall+" sb "+sb.length()+" list "+list.size()+" wasGenerated "+wasGenerated );
 
         // блок end ХП (+1 чтобы захватиь D в операторе END)
         ind.indexEnd = indClone.indexEnd + 1;
@@ -189,7 +195,7 @@ if (typeOfCall == null) {
      * Работа с анонимными переменными типа $1. Замена на именованные переменные.
      */
     private void handleAnonymousParameter(PgFuncReplacementPart partAnonPar, PgFuncInvoked inv, StringBuilder sb, IndexBag ind,
-                                          String funcBody, int indexNested, Set<Integer> usedLines) {
+                                          String funcBody, int indexNested, Set<Integer> usedLines, TransferParameters outerParameters) {
         if (inv == null) {
             return;
         }
@@ -202,6 +208,11 @@ if (typeOfCall == null) {
 
             PgAnonymousParameter aPar = (PgAnonymousParameter) partAnonPar;
 
+            PgVarDefinition var = outerParameters.getVarByOrder(aPar.getOrder());
+            String identifier = var.getIdentifier();
+            append(sb, identifier, indexNested, ind, usedLines);
+            ind.indexStart = partAnonPar.getIndexEnd() + 1;
+/*
             int i = 1;
             for (PgFuncReplacementPart invokedPart : inv.getListSubPart()) {
                 if (i == aPar.getOrder()) {
@@ -212,6 +223,7 @@ if (typeOfCall == null) {
                 }
                 i++;
             }
+*/
         }
     }
 
@@ -263,6 +275,8 @@ if (typeOfCall == null) {
                         int order = var.getOrder();
                         PgVarDefinition varUp = upOuterParameters.getVarByOrder(order);
                         downOuter.add(varUp);
+                    } else {
+                        downOuter.add(var);
                     }
                     break;
             }

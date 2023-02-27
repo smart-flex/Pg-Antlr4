@@ -258,6 +258,11 @@ System.out.println("     > ===================== step3 ");
 */
                     }
                     break;
+                case DECL_CONST:
+                    // фитктивный параметр ХП
+                    linkedVariable = new PgVarDefinition(invokedPart.getValue());
+                    invokedPart.setLinkedVariable(linkedVariable);
+                    break;
                 default:
                     System.err.println("No handler for type: "+typeParam+" ");
                     break;

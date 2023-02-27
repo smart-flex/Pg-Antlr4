@@ -18,6 +18,7 @@ public class PgVarDefinition extends PgFuncReplacementPart {
             setValue(identifier);
         } else {
             anonymous = true;
+            identifier = "$" + order;
             setValue(parCtx.pgTypeFull().getText());
         }
         type = ParserHelper.defineDataType(parCtx.pgTypeFull());
@@ -29,7 +30,16 @@ public class PgVarDefinition extends PgFuncReplacementPart {
         type = ParserHelper.defineDataType(ctx.dataType());
     }
 
+    PgVarDefinition(String  const_) {
+        super(PgPlSqlElEnum.FUNCTION_PARAMETER_DECLARE, const_);
+        identifier = const_;
+    }
+
     int getOrder() {
         return order;
+    }
+
+    String getIdentifier() {
+        return identifier;
     }
 }
