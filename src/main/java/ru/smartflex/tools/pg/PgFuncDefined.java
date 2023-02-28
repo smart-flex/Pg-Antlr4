@@ -7,11 +7,8 @@ public class PgFuncDefined {
     private String funcName;
     private ReturnTypeEnum returnType;
     private String dataTypeName;
-    @Deprecated
-    private List<FuncParameter> parList = new ArrayList<>();
     private List<TableRetParameter> tableRetParlist = new ArrayList<>();
     private String funcBody;
-//    private FunctionBlockStatement functionBlockStatement = new FunctionBlockStatement();
 
     private PgFuncBodyPartsBag funcBodyPartsBag = new PgFuncBodyPartsBag();
 
@@ -56,20 +53,6 @@ public class PgFuncDefined {
 
     String getFuncBody() {
         return funcBody;
-    }
-
-    List<FuncParameter> getParList() {
-        return parList;
-    }
-
-    @Deprecated
-    void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
-        ru.smartflex.tools.pg.PgSQLIncludeParser.ArgModeContext argMode = parCtx.argMode();
-        ru.smartflex.tools.pg.PgSQLIncludeParser.IdentifierContext ident = parCtx.identifier();
-        PgPlSqlElEnum type = ParserHelper.defineDataType(parCtx.pgTypeFull());
-
-        parList.add(new FuncParameter((argMode != null ? argMode.getText() : null),
-                (ident != null ? ident.getText() : null), type));
     }
 
     void setFuncReturnSetOf(String dataTypeName) {
@@ -122,38 +105,6 @@ public class PgFuncDefined {
 
         public String getParType() {
             return parType;
-        }
-    }
-/*
-    void setFunctionBlockStatementIndexes(int indexStart, int indexEnd) {
-        functionBlockStatement.indexStart = indexStart;
-        functionBlockStatement.indexEnd = indexEnd;
-    }
-
-    FunctionBlockStatement getFunctionBlockStatement() {
-        return functionBlockStatement;
-    }
-*/
-/*
-    class FunctionBlockStatement {
-        int indexStart = 0;
-        int indexEnd = 0;
-    }
-*/
-    @Deprecated
-    class FuncParameter {
-        String argMode;
-        String argName;
-        PgPlSqlElEnum argType;
-
-        FuncParameter(String argMode, String argName, PgPlSqlElEnum argType) {
-            this.argMode = argMode;
-            this.argName = argName;
-            this.argType = argType;
-        }
-
-        String getArgName() {
-            return argName;
         }
     }
 }

@@ -77,6 +77,13 @@ public class ParserHelper {
                     pctx.TIMETZ() != null || pctx.TIMESTAMP() != null || pctx.TIMESTAMP_WITHOUT_TIME_ZONE() != null ||
                     pctx.TIMESTAMP_WITH_TIME_ZONE() != null || pctx.TIMESTAMPTZ() != null) {
                 ret = PgPlSqlElEnum.DT_TIME;
+            } else if (pctx.RECORD() != null) {
+                ret = PgPlSqlElEnum.DT_RECORD;
+            } else if (pctx.BYTEA() != null) {
+                ret = PgPlSqlElEnum.DT_BYTEA;
+            } else {
+                // TODO дописать для всех типов
+                ret = PgPlSqlElEnum.DT_TODO;
             }
 
         } else {

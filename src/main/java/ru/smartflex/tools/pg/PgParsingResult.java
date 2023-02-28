@@ -42,11 +42,6 @@ public class PgParsingResult {
         return funcDefined;
     }
 
-    @Deprecated
-    void addFuncParameter(ru.smartflex.tools.pg.PgSQLIncludeParser.FunctionParamDefinitionContext parCtx) {
-        funcDefined.addFuncParameter(parCtx);
-    }
-
     PgFuncInvoked addFunctionInvocation(PgPlSqlElEnum elementType, String funcName, ParserRuleContext prc) {
         PgFuncInvoked invoked = new PgFuncInvoked(elementType, funcName, prc);
         functionInvocationsList.add(invoked);

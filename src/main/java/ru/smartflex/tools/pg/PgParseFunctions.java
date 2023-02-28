@@ -6,20 +6,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class PgParseFunctions {
 
-    // TODO set to 2
-    private static final int THREAD_AMOUNT = 1;
-    @Deprecated
-    private static AtomicInteger suffix = new AtomicInteger();
+    private static final int THREAD_AMOUNT = 2;  // set to 1 for trace
     private static StringBuffer generatedBodies = null;
 
     public PgParseFunctions() {
-        suffix.set(0);
         generatedBodies = new StringBuffer();
     }
 
@@ -75,9 +70,4 @@ public class PgParseFunctions {
         return generatedBodies.toString();
     }
 
-
-    @Deprecated
-    static Integer nextSuffix() {
-        return suffix.incrementAndGet();
-    }
 }

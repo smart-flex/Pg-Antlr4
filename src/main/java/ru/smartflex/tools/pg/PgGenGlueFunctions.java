@@ -48,11 +48,6 @@ public class PgGenGlueFunctions {
 
         // строку в массив char и режем на части, после цикла клеим и сраниваем с оригиналом
         String funcBody = node.getFuncDefined().getFuncBody();
-if (typeOfCall == null) {
-    System.out.println("****** "+node.getFuncDefined().getFuncName()+ " "+typeOfCall);
-} else {
-    System.out.println("****** "+node.getFuncDefined().getFuncName()+ " "+typeOfCall);
-}
 
         IndexBag ind = null;
         List<PgFuncReplacementPart> list = node.getParts();
@@ -79,17 +74,10 @@ if (typeOfCall == null) {
         }
 
         for (PgFuncReplacementPart part : list) {
-System.out.println("****** ------>> "+indexNested+" "+node.getFuncDefined().getFuncName()+ " "+typeOfCall+"  >> "+part.getElementType()+" sb "+sb.length()+" list "+list.size() );
-if (sb.length()==1362) {
-    boolean stop = true;
-}
             switch (part.getElementType()) {
                 case PERFORM_STATEMENT:
                     handlePerformStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
                     break;
-//                case VAR_DECLARE_BLOCK:
-//                    handleVarDeclareBlock(part, sb, ind, funcBody, indexNested);
-//                    break;
                 case ASSIGN_STATEMENT:
                     handleAssignStatement(part, sb, ind, funcBody, wasGenerated, indexNested, outerParameters);
                     break;
@@ -103,10 +91,7 @@ if (sb.length()==1362) {
                     handleReturnStatement(part, inv, sb, ind, funcBody, assignPartFunc, indexNested, usedLines);
                     break;
             }
-
         }
-
-System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()+ " "+typeOfCall+" sb "+sb.length()+" list "+list.size()+" wasGenerated "+wasGenerated );
 
         // блок end ХП (+1 чтобы захватиь D в операторе END)
         ind.indexEnd = indClone.indexEnd + 1;
@@ -166,7 +151,6 @@ System.out.println("****** ------>> FINISH "+node.getFuncDefined().getFuncName()
         List<PgFuncReplacementPart> list = inv.getChildNode().getParts();
 
         if (isReplacementAllowed(inv, part, list)) {
-System.out.println("+++++++++++++++++++++++++++ GLUE start ind "+ind+" "+part.getValue()+" part-start-end "+part.getIndexStart()+" "+part.getIndexEnd());
             if (part.isOverLoaded()) {
                 // переменная переопределена в declare, не трогаем, вписываем как есть
                 ind.fillEndFromStart(part);
@@ -198,13 +182,9 @@ System.out.println("+++++++++++++++++++++++++++ GLUE start ind "+ind+" "+part.ge
 
                     append(sb, identifier, indexNested, ind, usedLines);
                     ind.indexStart = part.getIndexEnd() + 1;
-
                 }
-
             }
-System.out.println("+++++++++++++++++++++++++++ GLUE end ind "+ind);
         }
-
     }
 
     /**
@@ -228,18 +208,6 @@ System.out.println("+++++++++++++++++++++++++++ GLUE end ind "+ind);
             String identifier = var.getIdentifier();
             append(sb, identifier, indexNested, ind, usedLines);
             ind.indexStart = partAnonPar.getIndexEnd() + 1;
-/*
-            int i = 1;
-            for (PgFuncReplacementPart invokedPart : inv.getListSubPart()) {
-                if (i == aPar.getOrder()) {
-                    PgFuncReplacementPart above = invokedPart.getAbovePart();
-                    append(sb, above.getNameWithSuffix(), indexNested, ind, usedLines);
-                    ind.indexStart = partAnonPar.getIndexEnd() + 1;
-                    break;
-                }
-                i++;
-            }
-*/
         }
     }
 
@@ -298,33 +266,6 @@ System.out.println("+++++++++++++++++++++++++++ GLUE end ind "+ind);
             }
         }
         return downOuter;
-    }
-
-    /**
-     * Работа с переменными внутри DECLARE BEGIN блока: добавление сцффикса _sf к имени при необходимости
-     */
-    @Deprecated
-    private void handleVarDeclareBlock(PgFuncReplacementPart part, StringBuilder sb, IndexBag ind, String funcBody,
-                                       int indexNested) {
-        ind.fillEndFromStart(part);
-        glue(sb, funcBody, ind, indexNested);
-
-        List<PgFuncReplacementPart> lsp = part.getListSubPart();
-        for (PgFuncReplacementPart pdcl : lsp) {
-            if (pdcl.getElementType() == PgPlSqlElEnum.DECL_IDENT) {
-                String varName = part.getNameWithSuffix();
-                append(sb, varName, indexNested);
-                ind.fillStartFromEnd(pdcl);
-            } else {
-                // хвост от объявления переменной
-                ind.indexStart++;
-                ind.indexEnd = pdcl.getIndexEnd() + 1; //+ 1 для дозаписи ;
-                ind.lineEnd = pdcl.getLineEnd();
-                glue(sb, funcBody, ind, indexNested);
-            }
-        }
-
-        ind.indexStart = ind.indexEnd + 1;
     }
 
     /**
