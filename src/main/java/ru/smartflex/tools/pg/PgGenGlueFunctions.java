@@ -158,6 +158,7 @@ public class PgGenGlueFunctions {
 
                 append(sb, part.getValue(), indexNested, ind, usedLines);
                 ind.indexStart = part.getIndexEnd() + 1;
+                ind.lineStart = part.getLineEnd();;
             } else {
                 // ищем в параметрах
 
@@ -182,6 +183,7 @@ public class PgGenGlueFunctions {
 
                     append(sb, identifier, indexNested, ind, usedLines);
                     ind.indexStart = part.getIndexEnd() + 1;
+                    ind.lineStart = part.getLineEnd();
                 }
             }
         }
@@ -208,6 +210,7 @@ public class PgGenGlueFunctions {
             String identifier = var.getIdentifier();
             append(sb, identifier, indexNested, ind, usedLines);
             ind.indexStart = partAnonPar.getIndexEnd() + 1;
+            ind.lineStart = partAnonPar.getLineEnd();
         }
     }
 
@@ -338,6 +341,8 @@ public class PgGenGlueFunctions {
             return "IndexBag{" +
                     "indexStart=" + indexStart +
                     ", indexEnd=" + indexEnd +
+                    ", lineStart=" + lineStart +
+                    ", lineEnd=" + lineEnd +
                     '}';
         }
     }

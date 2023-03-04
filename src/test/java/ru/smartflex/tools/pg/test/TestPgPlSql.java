@@ -102,7 +102,7 @@ public class TestPgPlSql {
 
         String bodies = PgParseFunctions.getGeneratedBodies();
         String hash = ParserHelper.getHash(bodies);
-        assertEquals("19505aab2eba8d868ade0c203a18d7e6", hash);
+        assertEquals("94d281dd8ce77a3338cc23c780273d0c", hash);
 
     }
 
@@ -119,7 +119,7 @@ public class TestPgPlSql {
 
         String bodies = PgParseFunctions.getGeneratedBodies();
         String hash = ParserHelper.getHash(bodies);
-        assertEquals("9012bb06c47f2a0c71729e210967ce9b", hash);
+        assertEquals("8b225d7516337e65db257aac45de9cf8", hash);
     }
 
 
@@ -134,10 +134,9 @@ public class TestPgPlSql {
 
         new PgGenGlueFunctions().glue(root);
 
-//        String bodies = PgParseFunctions.getGeneratedBodies();
-//        String hash = ParserHelper.getHash(bodies);
-//        System.out.println(bodies);
-//        assertEquals("277185d5e56040679b83a0d905e8fa01", hash);
+        String bodies = PgParseFunctions.getGeneratedBodies();
+        String hash = ParserHelper.getHash(bodies);
+        assertEquals("cbbef0980bc632599199cc390b345b15", hash);
     }
 
 
@@ -152,9 +151,9 @@ public class TestPgPlSql {
 
         new PgGenGlueFunctions().glue(root);
 
-//        String bodies = PgParseFunctions.getGeneratedBodies();
-//        String hash = ParserHelper.getHash(bodies);
-//        assertEquals("037923206d7affac13572943ad55bcaf", hash);
+        String bodies = PgParseFunctions.getGeneratedBodies();
+        String hash = ParserHelper.getHash(bodies);
+        assertEquals("85a27e2f9849e104dfb211670498c795", hash);
     }
 
 }
