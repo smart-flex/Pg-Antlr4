@@ -1,24 +1,22 @@
 # Pg-Antrl4
 ****
-**Краткое описание на русском:** Pg-Antrl4 - инструмент для генерации оптимизированных хранимых процедур 
-PostgreSql, реализованная с использованием библиотеки [Antrl4](https://github.com/antlr/antlr4), описаны правила для лексера и парсера для языка plpgsql. 
+**Краткое описание на русском:** Pg-Antrl4 - Java инструмент для генерации оптимизированных хранимых процедур Postgres, реализованная с использованием библиотеки [Antrl4](https://github.com/antlr/antlr4), описаны правила для лексера и парсера для языка plpgsql.
 
+Основной функционал Pg-Antrl4 - парсинг хранимой процедуры, в которой имеются вызовы подпроцедур, и ее модификация с целью оптимизации. На выходе мы получаем новую хранимую процедуру с исключенными вызовами подпроцедур, что ускоряет ее выполнение т.к. в результате ее вызова не требуется хранить стек вызовов. Особенно разница заметна при вызовах подпроцедур в цикле. Далее приводим сравнение времени работы оригинальных хранимых процедур и их оптимизированных вариантов.
 
-Основной функционал Pg-Antrl4 - парсинг входной ХП с вызовами подХП и их модификация с целью оптимизации. На выходе мы получаем новую ХП с исключенными вызовами подпроцедур, что ускоряет ее выполнение т.к. в результате ее вызова не требуется хранить стек вызовов. Особенно разница заметна при вызовах подпроцедур в цикле. Далее привели сравнение времени работы оригинальных ХП и их оптимизированных вариантов.
-
-**Pg-Antrl4** is Java Tool for optimization Postgres stored procedures using Antrl4 parser. It's aimed to optimize stored procedures by modifying their bodies using [Antrl4](https://github.com/antlr/antlr4) lib. The main idea is to replace subcalls of stored procedures with their actual bodies. This replacement makes real difference if we have calls of subprocedures in a loop. After some researches, we got great results for these cases.  Below we give some comparing of time for regular stored procedures and optimized ones.
+**Pg-Antrl4** is Java Tool for optimization Postgres stored procedures using [Antrl4](https://github.com/antlr/antlr4) parser. It's aimed to improve performance of stored procedures execution. Having a stored procedure with subcalls of others stored procedures, Pg-Antlr4 modifies body of main procedure by replacing subcalls of stored procedures with their actual bodies. This replacement makes real difference if we have calls of subprocedures in a loop. After some researches, we got great results for these cases. Below we give some comparison of time increasing for regular stored procedures and optimized ones.
 
 There's a common
 
 
-Для тестирования работы можно написать тесты с
+**Usage**
 
 
 **Некоторые результаты**
 
-Приведем примеры времени работы процедур и оптимизированных процедур.
+Приведем примеры времени работы оригинальных хранимых процедур и оптимизированных процедур.
 1) Имея 2 уровня вложенности вызовов ХП, на первом уровне вложенности имея вызов подпроцедуры в цикле, был замечен прирост времени выполнения объединенной ХП, начиная с цикла = 10000 (был прирост в 1.27 раз), на цикле = 300000 наблюдали прирост в 1.68 раз.
-2) Передавая бОльшее число параметров и имея больший уровень вложенности (например, 3) при вызове ХП в цикле мы получаем лучший результат. В результате тестирования получили прирост = 1.69 начиная с 1000 итераций, а с 5000 наблюдали прирост почти в 2 раза (1.92).
+2) Передавая бо́льшее число параметров и имея больший уровень вложенности (например, 3) при вызове ХП в цикле мы получаем лучший результат. В результате тестирования получили прирост = 1.69 начиная с 1000 итераций, а с 5000 наблюдали прирост почти в 2 раза (1.92).
 
 **Some results**
 
