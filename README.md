@@ -21,3 +21,7 @@
 Let's give some examples of time comparison between regular stored procedures and optimized ones.
 1) When we had 2 levels of nesting of stored procedures, and in the first level having call of procedure in a loop, we got 1.27 times increase for 10000 iterations; in a loop for 300000 iterations we got 1.68 times increase.
 2) When we got more params and having more levels of nesting, we can generate stored procedure with greater performance. E.g. having 3 levels of nesting and sending more params (in our case, 6) we already got increase 1.69x from 1000 iterations and almost 2 times (1.92x) from 5000 iterations.
+
+**Support**
+
+If you have any issues or questions or suggestions you can send us a letter by any of emails: [gali.shaimardanov@gmail.com](), [anarochkakot@gmail.com]().
